@@ -5,6 +5,7 @@ from .vgg import vgg16
 from .resnet import resnet18, resnet34, resnet50, resnet101, resnet152
 from .alexnet import alexnet
 from .mobilenetv2 import mobilenetv2
+from .wide_resnet import wide_resnet_28_2
 from .cnn_digitsdg import cnn_digitsdg
 from .shufflenetv2 import (
     shufflenet_v2_x0_5, shufflenet_v2_x1_0, shufflenet_v2_x1_5,
