@@ -20,7 +20,7 @@ class MixMatch(TrainerXU):
         self.weight_u = cfg.TRAINER.MIXMATCH.WEIGHT_U
         self.temp = cfg.TRAINER.MIXMATCH.TEMP
         self.beta = cfg.TRAINER.MIXMATCH.MIXUP_BETA
-        self.ramup = cfg.TRAINER.MIXMATCH.RAMPUP
+        self.rampup = cfg.TRAINER.MIXMATCH.RAMPUP
 
     def check_cfg(self, cfg):
         assert cfg.DATALOADER.K_TRANSFORMS > 1
@@ -69,9 +69,7 @@ class MixMatch(TrainerXU):
         output_u = F.softmax(self.model(input_u), 1)
         loss_u = ((label_u - output_u)**2).sum(1).mean()
 
-        weight_u = self.weight_u * linear_rampup(
-            global_step, self.rampup_length
-        )
+        weight_u = self.weight_u * linear_rampup(global_step, self.rampup)
         loss = loss_x + loss_u*weight_u
         self.model_backward_and_update(loss)
 
