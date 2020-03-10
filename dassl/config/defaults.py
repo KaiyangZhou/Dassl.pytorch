@@ -67,7 +67,6 @@ _C.DATALOADER = CN()
 _C.DATALOADER.NUM_WORKERS = 4
 # Apply transformations to an image K times (during training)
 _C.DATALOADER.K_TRANSFORMS = 1
-
 # Setting for train_x data-loader
 _C.DATALOADER.TRAIN_X = CN()
 _C.DATALOADER.TRAIN_X.SAMPLER = 'RandomSampler'
@@ -128,6 +127,11 @@ _C.TRAINER.CG.ALPHA_D = 0.5
 # EntMin
 _C.TRAINER.ENTMIN = CN()
 _C.TRAINER.ENTMIN.LMDA = 1e-3
+# MixMatch
+_C.TRAINER.MIXMATCH = CN()
+_C.TRAINER.MIXMATCH.WEIGHT_U = 100.
+_C.TRAINER.MIXMATCH.TEMP = 2.
+_C.TRAINER.MIXMATCH.MIXUP_BETA = 0.75
 
 # -------------------------------------------------- #
 # Model
