@@ -69,7 +69,7 @@ conda activate dassl
 # Install dependencies
 pip install -r requirements.txt
 
-# Install torch and torchvision (select a version that suits your device)
+# Install torch and torchvision (select a version that suits your machine)
 conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
 
 # Install this library (no need to re-build if the source code is modified)
@@ -99,7 +99,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 
 `$DATA` denotes the path to the dataset folder.
 
-To use multiple sources, namely the multi-source domain adaptation task, one just needs to add more sources to the `--source-domains` argument. For instance, to train a source-only baseline on miniDomainNet, one can do
+To use multiple sources, namely the multi-source domain adaptation task, one just needs to add more sources to `--source-domains`. For instance, to train a source-only baseline on miniDomainNet, one can do
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python tools/train.py \
@@ -112,4 +112,4 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 --output-dir output/source_only_minidn
 ```
 
-After the training finishes, the model weights will be saved under the specified output directory, along with the log file and tensorboard file for visualization.
+After the training finishes, the model weights will be saved under the specified output directory, along with a log file and a tensorboard file for visualization.
