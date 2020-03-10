@@ -37,15 +37,25 @@ def create_onehot(label, num_classes):
 
 
 def sigmoid_rampup(current, rampup_length):
-    """Exponential rampup from https://arxiv.org/abs/1610.02242.
+    """Exponential rampup.
 
     Args:
         current (int): current step.
-        rampup_length (int): number of steps to rampup.
+        rampup_length (int): maximum step.
     """
-    if rampup_length == 0:
-        return 1.0
-    else:
-        current = np.clip(current, 0.0, rampup_length)
-        phase = 1.0 - current/rampup_length
-        return float(np.exp(-5.0 * phase * phase))
+    assert rampup_length > 0
+    current = np.clip(current, 0.0, rampup_length)
+    phase = 1.0 - current/rampup_length
+    return float(np.exp(-5.0 * phase * phase))
+
+
+def linear_rampup(current, rampup_length):
+    """Linear rampup.
+
+    Args:
+        current (int): current step.
+        rampup_length (int): maximum step.
+    """
+    assert rampup_length > 0
+    current = np.clip(current, 0.0, rampup_length)
+    return float(current / rampup_length)

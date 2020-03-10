@@ -3,7 +3,9 @@ from torch.nn import functional as F
 
 from dassl.engine import TRAINER_REGISTRY, TrainerXU
 from dassl.modeling.ops import mixup
-from dassl.modeling.ops.utils import sharpen_prob, create_onehot, shuffle_index
+from dassl.modeling.ops.utils import (
+    sharpen_prob, create_onehot, linear_rampup, shuffle_index
+)
 
 
 @TRAINER_REGISTRY.register()
@@ -18,11 +20,13 @@ class MixMatch(TrainerXU):
         self.weight_u = cfg.TRAINER.MIXMATCH.WEIGHT_U
         self.temp = cfg.TRAINER.MIXMATCH.TEMP
         self.beta = cfg.TRAINER.MIXMATCH.MIXUP_BETA
+        self.ramup = cfg.TRAINER.MIXMATCH.RAMPUP
 
     def check_cfg(self, cfg):
         assert cfg.DATALOADER.K_TRANSFORMS > 1
 
     def forward_backward(self, batch_x, batch_u):
+        global_step = self.batch_idx + self.epoch * self.num_batches
         input_x, label_x, input_u = self.parse_batch_train(batch_x, batch_u)
         num_x = input_x.shape[0]
 
@@ -65,12 +69,16 @@ class MixMatch(TrainerXU):
         output_u = F.softmax(self.model(input_u), 1)
         loss_u = ((label_u - output_u)**2).sum(1).mean()
 
-        loss = loss_x + loss_u * self.weight_u
+        weight_u = self.weight_u * linear_rampup(
+            global_step, self.rampup_length
+        )
+        loss = loss_x + loss_u*weight_u
         self.model_backward_and_update(loss)
 
         output_dict = {
             'loss_x': loss_x.item(),
             'loss_u': loss_u.item(),
+            'weight_u': weight_u,
             'lr': self.optim.param_groups[0]['lr']
         }
 

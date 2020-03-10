@@ -132,6 +132,7 @@ _C.TRAINER.MIXMATCH = CN()
 _C.TRAINER.MIXMATCH.WEIGHT_U = 100.
 _C.TRAINER.MIXMATCH.TEMP = 2.
 _C.TRAINER.MIXMATCH.MIXUP_BETA = 0.75
+_C.TRAINER.MIXMATCH.RAMPUP = 1000
 
 # -------------------------------------------------- #
 # Model
