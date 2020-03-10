@@ -1,0 +1,11 @@
+DATALOADER:
+  TRAIN_X:
+    BATCH_SIZE: 32
+  TEST:
+    BATCH_SIZE: 32
+
+OPTIM:
+  NAME: 'sgd'
+  LR: 0.002
+  STEPSIZE: [20]
+  MAX_EPOCH: 20

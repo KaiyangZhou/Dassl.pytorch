@@ -1,0 +1,9 @@
+flake8
+yapf
+isort
+yacs
+gdown
+tb-nightly
+future
+scipy
+scikit-learn

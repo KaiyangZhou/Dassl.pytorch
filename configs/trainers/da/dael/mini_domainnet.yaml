@@ -1,0 +1,20 @@
+DATALOADER:
+  NUM_WORKERS: 8
+  TRAIN_X:
+    SAMPLER: 'RandomDomainSampler'
+    BATCH_SIZE: 192
+  TRAIN_U:
+    SAME_AS_X: False
+    BATCH_SIZE: 64
+  TEST:
+    BATCH_SIZE: 200
+
+OPTIM:
+  NAME: 'sgd'
+  LR: 0.005
+  MAX_EPOCH: 60
+  LR_SCHEDULER: 'cosine'
+
+TRAINER:
+  DAEL:
+    STRONG_TRANSFORMS: ['random_flip', 'cutout', 'randaugment2', 'normalize']

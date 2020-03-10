@@ -1,0 +1,7 @@
+INPUT:
+  SIZE: (32, 32)
+  PIXEL_MEAN: [0.5, 0.5, 0.5]
+  PIXEL_STD: [0.5, 0.5, 0.5]
+
+DATASET:
+  NAME: 'CIFARSTL'

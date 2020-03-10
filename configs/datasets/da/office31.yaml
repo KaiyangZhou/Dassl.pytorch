@@ -1,0 +1,14 @@
+INPUT:
+  SIZE: (224, 224)
+  TRANSFORMS: ['random_flip', 'random_translation', 'normalize']
+
+DATASET:
+  NAME: 'Office31'
+
+MODEL:
+  BACKBONE:
+    NAME: 'resnet50'
+  HEAD:
+    NAME: 'mlp'
+    HIDDEN_LAYERS: [256]
+    DROPOUT: 0.

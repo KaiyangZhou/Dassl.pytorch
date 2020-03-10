@@ -1,0 +1,16 @@
+DATALOADER:
+  TRAIN_X:
+    SAMPLER: 'RandomDomainSampler'
+    BATCH_SIZE: 120
+  TEST:
+    BATCH_SIZE: 100
+
+OPTIM:
+  NAME: 'sgd'
+  LR: 0.05
+  STEPSIZE: [20]
+  MAX_EPOCH: 50
+
+TRAINER:
+  DAEL:
+    STRONG_TRANSFORMS: ['randaugment2', 'normalize']

@@ -1,0 +1,10 @@
+INPUT:
+  SIZE: (224, 224)
+  TRANSFORMS: ['random_flip', 'random_translation', 'normalize']
+
+DATASET:
+  NAME: 'DomainNet'
+
+MODEL:
+  BACKBONE:
+    NAME: 'resnet101'

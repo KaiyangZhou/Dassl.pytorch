@@ -1,0 +1,5 @@
+INPUT:
+  SIZE: (224, 224)
+
+DATASET:
+  NAME: 'OfficeHome'

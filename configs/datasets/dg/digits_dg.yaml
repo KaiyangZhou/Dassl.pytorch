@@ -1,0 +1,10 @@
+INPUT:
+  SIZE: (32, 32)
+  TRANSFORMS: ['normalize']
+
+DATASET:
+  NAME: 'DigitsDG'
+
+MODEL:
+  BACKBONE:
+    NAME: 'cnn_digitsdg'
