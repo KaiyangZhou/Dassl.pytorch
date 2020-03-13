@@ -5,12 +5,12 @@ def mixup(x1, x2, y1, y2, beta, preserve_order=False):
     """Mixup.
 
     Args:
-        x1 (torch.Tensor): data with shape of (batch_size, n_channels, height, width).
-        x2 (torch.Tensor): data with shape of (batch_size, n_channels, height, width).
-        y1 (torch.Tensor): label with shape of (batch_size, n_classes).
-        y2 (torch.Tensor): label with shape of (batch_size, n_classes).
+        x1 (torch.Tensor): data with shape of (b, c, h, w).
+        x2 (torch.Tensor): data with shape of (b, c, h, w).
+        y1 (torch.Tensor): label with shape of (b, n).
+        y2 (torch.Tensor): label with shape of (b, n).
         beta (float): hyper-parameter for Beta sampling.
-        preserve_order (bool): whether to apply lmda = max(lmda, 1-lmda).
+        preserve_order (bool): apply lmda=max(lmda, 1-lmda).
             Default is False.
     """
     lmda = torch.distributions.Beta(beta, beta).sample([x1.shape[0], 1, 1, 1])

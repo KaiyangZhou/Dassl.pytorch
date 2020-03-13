@@ -26,9 +26,11 @@ class MixMatch(TrainerXU):
         assert cfg.DATALOADER.K_TRANSFORMS > 1
 
     def forward_backward(self, batch_x, batch_u):
-        global_step = self.batch_idx + self.epoch * self.num_batches
         input_x, label_x, input_u = self.parse_batch_train(batch_x, batch_u)
         num_x = input_x.shape[0]
+
+        global_step = self.batch_idx + self.epoch * self.num_batches
+        weight_u = self.weight_u * linear_rampup(global_step, self.rampup)
 
         # Generate pseudo-label for unlabeled data
         with torch.no_grad():
@@ -38,7 +40,9 @@ class MixMatch(TrainerXU):
                 output_u += output_ui
             output_u /= len(input_u)
             label_u = sharpen_prob(output_u, self.temp)
-            input_u = input_u[0]
+            label_u = [label_u] * len(input_u)
+            label_u = torch.cat(label_u, 0)
+            input_u = torch.cat(input_u, 0)
 
         # Combine and shuffle labeled and unlabeled data
         input_xu = torch.cat([input_x, input_u], 0)
@@ -54,6 +58,7 @@ class MixMatch(TrainerXU):
             self.beta,
             preserve_order=True
         )
+
         input_u, label_u = mixup(
             input_u,
             input_xu[num_x:],
@@ -66,17 +71,16 @@ class MixMatch(TrainerXU):
         # Compute losses
         output_x = F.softmax(self.model(input_x), 1)
         loss_x = (-label_x * torch.log(output_x + 1e-5)).sum(1).mean()
-        output_u = F.softmax(self.model(input_u), 1)
-        loss_u = ((label_u - output_u)**2).sum(1).mean()
 
-        weight_u = self.weight_u * linear_rampup(global_step, self.rampup)
+        output_u = F.softmax(self.model(input_u), 1)
+        loss_u = ((label_u - output_u)**2).mean()
+
         loss = loss_x + loss_u*weight_u
         self.model_backward_and_update(loss)
 
         output_dict = {
             'loss_x': loss_x.item(),
             'loss_u': loss_u.item(),
-            'weight_u': weight_u,
             'lr': self.optim.param_groups[0]['lr']
         }
 

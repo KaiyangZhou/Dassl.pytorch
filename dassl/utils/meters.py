@@ -38,7 +38,7 @@ class MetricMeter:
     Examples::
         >>> # 1. Create an instance of MetricMeter
         >>> metric = MetricMeter()
-        >>> # 2. Update using a dictionary
+        >>> # 2. Update using a dictionary as input
         >>> input_dict = {'loss_1': value_1, 'loss_2': value_2}
         >>> metric.update(input_dict)
         >>> # 3. Convert to string and print
@@ -50,6 +50,9 @@ class MetricMeter:
         self.delimiter = delimiter
 
     def update(self, input_dict):
+        if input_dict is None:
+            return
+
         if not isinstance(input_dict, dict):
             raise TypeError(
                 'Input to MetricMeter.update() must be a dictionary'

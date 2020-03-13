@@ -14,7 +14,7 @@ AVAI_CHOICES = [
     'random_flip', 'random_resized_crop', 'normalize', 'instance_norm',
     'random_crop', 'random_translation', 'center_crop', 'cutout',
     'imagenet_policy', 'cifar10_policy', 'svhn_policy', 'randaugment',
-    'randaugment_fixmatch', 'randaugment2'
+    'randaugment_fixmatch', 'randaugment2', 'gaussian_noise'
 ]
 
 
@@ -126,6 +126,18 @@ class Cutout:
         return img * mask
 
 
+class GaussianNoise:
+    """Add gaussian noise."""
+
+    def __init__(self, mean=0, std=0.15):
+        self.mean = mean
+        self.std = std
+
+    def __call__(self, img):
+        noise = torch.randn(img.size()) * self.std + self.mean
+        return img + noise
+
+
 def build_transform(cfg, is_train=True, choices=None):
     if cfg.INPUT.NO_TRANSFORM:
         print('Note: no transform is applied!')
@@ -224,6 +236,14 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
             'std={})'.format(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD)
         )
         tfm_train += [normalize]
+
+    if 'gaussian_noise' in choices:
+        print(
+            '+ gaussian noise (mean={}, std={})'.format(
+                cfg.INPUT.GN_MEAN, cfg.INPUT.GN_STD
+            )
+        )
+        tfm_train += [GaussianNoise(cfg.INPUT.GN_MEAN, cfg.INPUT.GN_STD)]
 
     if 'instance_norm' in choices:
         print('+ instance normalization')

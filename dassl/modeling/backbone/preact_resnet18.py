@@ -9,7 +9,7 @@ class PreActBlock(nn.Module):
     expansion = 1
 
     def __init__(self, in_planes, planes, stride=1):
-        super(PreActBlock, self).__init__()
+        super().__init__()
         self.bn1 = nn.BatchNorm2d(in_planes)
         self.conv1 = nn.Conv2d(
             in_planes,
@@ -48,7 +48,7 @@ class PreActBottleneck(nn.Module):
     expansion = 4
 
     def __init__(self, in_planes, planes, stride=1):
-        super(PreActBottleneck, self).__init__()
+        super().__init__()
         self.bn1 = nn.BatchNorm2d(in_planes)
         self.conv1 = nn.Conv2d(in_planes, planes, kernel_size=1, bias=False)
         self.bn2 = nn.BatchNorm2d(planes)
@@ -89,7 +89,7 @@ class PreActBottleneck(nn.Module):
 class PreActResNet(Backbone):
 
     def __init__(self, block, num_blocks):
-        super(PreActResNet, self).__init__()
+        super().__init__()
         self.in_planes = 64
 
         self.conv1 = nn.Conv2d(

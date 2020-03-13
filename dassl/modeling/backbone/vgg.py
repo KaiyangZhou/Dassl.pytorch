@@ -24,7 +24,7 @@ model_urls = {
 class VGG(Backbone):
 
     def __init__(self, features, init_weights=True):
-        super(VGG, self).__init__()
+        super().__init__()
         self.features = features
         self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
         # Note that self.classifier outputs features rather than logits

@@ -3,7 +3,7 @@ from torch.nn import functional as F
 
 from dassl.engine import TRAINER_REGISTRY, TrainerXU
 from dassl.metrics import compute_accuracy
-from dassl.modeling.ops.utils import sigmoid_rampup
+from dassl.modeling.ops.utils import sigmoid_rampup, ema_model_update
 
 
 @TRAINER_REGISTRY.register()
@@ -15,14 +15,14 @@ class SelfEnsembling(TrainerXU):
 
     def __init__(self, cfg):
         super().__init__(cfg)
+        self.ema_alpha = cfg.TRAINER.SE.EMA_ALPHA
+        self.conf_thre = cfg.TRAINER.SE.CONF_THRE
+        self.rampup = cfg.TRAINER.SE.RAMPUP
+
         self.teacher = copy.deepcopy(self.model)
         self.teacher.train()
         for param in self.teacher.parameters():
             param.requires_grad_(False)
-
-        self.ema_alpha = cfg.TRAINER.SE.EMA_ALPHA
-        self.conf_thre = cfg.TRAINER.SE.CONF_THRE
-        self.rampup_length = cfg.TRAINER.SE.RAMPUP_LENGTH
 
     def check_cfg(self, cfg):
         assert cfg.DATALOADER.K_TRANSFORMS == 2
@@ -44,7 +44,7 @@ class SelfEnsembling(TrainerXU):
             mask = (max_prob > self.conf_thre).float()
             loss_u = (loss_u * mask).mean()
         else:
-            weight_u = sigmoid_rampup(global_step, self.rampup_length)
+            weight_u = sigmoid_rampup(global_step, self.rampup)
             loss_u = loss_u.mean() * weight_u
 
         loss = loss_x + loss_u
@@ -52,8 +52,7 @@ class SelfEnsembling(TrainerXU):
 
         # Update teacher
         alpha = min(1 - 1 / (global_step+1), self.ema_alpha)
-        for tp, p in zip(self.teacher.parameters(), self.model.parameters()):
-            tp.data.mul_(alpha).add_(1 - alpha, p.data)
+        ema_model_update(self.model, self.teacher, alpha)
 
         output_dict = {
             'loss_x': loss_x.item(),

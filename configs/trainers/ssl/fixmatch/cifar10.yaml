@@ -1,0 +1,23 @@
+DATALOADER:
+  TRAIN_X:
+    BATCH_SIZE: 64
+  TRAIN_U:
+    SAME_AS_X: False
+    BATCH_SIZE: 448
+  TEST:
+    BATCH_SIZE: 500
+
+OPTIM:
+  NAME: 'sgd'
+  LR: 0.05
+  STEPSIZE: [2500]
+  MAX_EPOCH: 2500
+  LR_SCHEDULER: 'cosine'
+
+TRAIN:
+  COUNT_ITER: 'train_u'
+  PRINT_FREQ: 10
+
+TRAINER:
+  FIXMATCH:
+    STRONG_TRANSFORMS: ['random_flip', 'randaugment_fixmatch', 'normalize', 'cutout']

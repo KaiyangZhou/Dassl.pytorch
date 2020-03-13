@@ -488,16 +488,16 @@ class TrainerXU(SimpleTrainer):
                     'epoch [{0}/{1}][{2}/{3}]\t'
                     'time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                     'data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                    '{losses}\t'
-                    'eta {eta}'.format(
+                    'eta {eta}\t'
+                    '{losses}'.format(
                         self.epoch + 1,
                         self.max_epoch,
                         self.batch_idx + 1,
                         self.num_batches,
                         batch_time=batch_time,
                         data_time=data_time,
-                        losses=losses,
-                        eta=eta
+                        eta=eta,
+                        losses=losses
                     )
                 )
 
@@ -547,16 +547,16 @@ class TrainerX(SimpleTrainer):
                     'epoch [{0}/{1}][{2}/{3}]\t'
                     'time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                     'data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                    '{losses}\t'
-                    'eta {eta}'.format(
+                    'eta {eta}\t'
+                    '{losses}'.format(
                         self.epoch + 1,
                         self.max_epoch,
                         self.batch_idx + 1,
                         self.num_batches,
                         batch_time=batch_time,
                         data_time=data_time,
-                        losses=losses,
-                        eta=eta
+                        eta=eta,
+                        losses=losses
                     )
                 )
 

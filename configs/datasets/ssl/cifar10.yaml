@@ -3,12 +3,11 @@ INPUT:
   TRANSFORMS: ['random_flip', 'random_crop', 'normalize']
   PIXEL_MEAN: [0.5, 0.5, 0.5]
   PIXEL_STD: [0.5, 0.5, 0.5]
-  CROP_PADDING: 4
 
 DATASET:
   NAME: 'CIFAR10'
   NUM_LABELED: 4000
-  VAL_PERCENT: 0.
+  VAL_PERCENT: 0.1
 
 MODEL:
   BACKBONE:

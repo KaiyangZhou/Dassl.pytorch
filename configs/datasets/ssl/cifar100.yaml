@@ -9,3 +9,7 @@ DATASET:
   NAME: 'CIFAR100'
   NUM_LABELED: 10000
   VAL_PERCENT: 0.
+
+MODEL:
+  BACKBONE:
+    NAME: 'wide_resnet_28_2'
