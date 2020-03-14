@@ -8,7 +8,7 @@ from dassl.utils import check_isfile
 
 
 class Datum:
-    """Define the basic attributes of a data instance.
+    """Data instance which defines the basic attributes.
 
     Args:
         impath (str): image path.
@@ -47,17 +47,17 @@ class Datum:
 
 
 class DatasetBase:
-    """A unified base dataset class for
+    """A unified dataset class for
     1) domain adaptation
     2) domain generalization
     3) semi-supervised learning
     """
-    dataset_dir = '' # directory path to the dataset
+    dataset_dir = '' # directory which contains the dataset
     domains = [] # string names of all domains
 
     def __init__(self, train_x=None, train_u=None, val=None, test=None):
         self._train_x = train_x # labeled training data
-        self._train_u = train_u # unlabeled training data
+        self._train_u = train_u # unlabeled training data (optional)
         self._val = val # validation data (optional)
         self._test = test # test data
 
