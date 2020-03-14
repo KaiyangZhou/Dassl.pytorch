@@ -50,9 +50,8 @@ class SelfEnsembling(TrainerXU):
         loss = loss_x + loss_u
         self.model_backward_and_update(loss)
 
-        # Update teacher
-        alpha = min(1 - 1 / (global_step+1), self.ema_alpha)
-        ema_model_update(self.model, self.teacher, alpha)
+        ema_alpha = min(1 - 1 / (global_step+1), self.ema_alpha)
+        ema_model_update(self.model, self.teacher, ema_alpha)
 
         output_dict = {
             'loss_x': loss_x.item(),

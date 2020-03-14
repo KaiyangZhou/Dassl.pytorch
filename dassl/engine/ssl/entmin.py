@@ -19,11 +19,11 @@ class EntMin(TrainerXU):
     def forward_backward(self, batch_x, batch_u):
         input_x, label_x, input_u = self.parse_batch_train(batch_x, batch_u)
 
-        logit_x = self.model(input_x)
-        loss_x = F.cross_entropy(logit_x, label_x)
+        output_x = self.model(input_x)
+        loss_x = F.cross_entropy(output_x, label_x)
 
-        prob_u = F.softmax(self.model(input_u), 1)
-        loss_u = (-prob_u * torch.log(prob_u + 1e-5)).sum(1).mean()
+        output_u = F.softmax(self.model(input_u), 1)
+        loss_u = (-output_u * torch.log(output_u + 1e-5)).sum(1).mean()
 
         loss = loss_x + loss_u * self.lmda
 
@@ -31,7 +31,7 @@ class EntMin(TrainerXU):
 
         output_dict = {
             'loss_x': loss_x.item(),
-            'acc_x': compute_accuracy(logit_x.detach(), label_x)[0].item(),
+            'acc_x': compute_accuracy(output_x.detach(), label_x)[0].item(),
             'loss_u': loss_u.item(),
             'lr': self.optim.param_groups[0]['lr']
         }

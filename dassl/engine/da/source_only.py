@@ -18,7 +18,7 @@ class SourceOnly(TrainerXU):
 
         output_dict = {
             'loss': loss.item(),
-            'acc': compute_accuracy(output, label)[0].item(),
+            'acc': compute_accuracy(output.detach(), label)[0].item(),
             'lr': self.optim.param_groups[0]['lr']
         }
 
