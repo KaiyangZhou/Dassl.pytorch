@@ -9,3 +9,7 @@ DATASET:
   NAME: 'SVHN'
   NUM_LABELED: 1000
   VAL_PERCENT: 0.
+
+MODEL:
+  BACKBONE:
+    NAME: 'wide_resnet_28_2'

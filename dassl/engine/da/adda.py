@@ -31,7 +31,9 @@ class ADDA(TrainerXU):
         self.bce = nn.BCEWithLogitsLoss()
 
     def check_cfg(self, cfg):
-        assert check_isfile(cfg.MODEL.INIT_WEIGHTS)
+        assert check_isfile(
+            cfg.MODEL.INIT_WEIGHTS
+        ), 'The weights of source model must be provided'
 
     def build_critic(self):
         cfg = self.cfg
@@ -64,8 +66,8 @@ class ADDA(TrainerXU):
         logit_xd = self.critic(feat_x)
         logit_ud = self.critic(feat_u.detach())
 
-        loss_critic = self.bce(logit_xd,
-                               domain_x) + self.bce(logit_ud, domain_u)
+        loss_critic = self.bce(logit_xd, domain_x)
+        loss_critic += self.bce(logit_ud, domain_u)
         self.model_backward_and_update(loss_critic, 'critic')
 
         logit_ud = self.critic(feat_u)

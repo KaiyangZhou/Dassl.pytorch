@@ -117,3 +117,5 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 ```
 
 After the training finishes, the model weights will be saved under the specified output directory, along with a log file and a tensorboard file for visualization.
+
+The guidance on how to prepare the datasets can be found [here](./DATASETS.md). More detailed tutorials are available [here](./TUTORIALS.md).

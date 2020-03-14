@@ -207,7 +207,9 @@ Run the following command in your terminal under `Dassl.pytorch/datasets/ssl`,
 python stl10.py $DATA/stl10
 ```
 
-This will create a folder named `stl10` under `$DATA`. The file structure will look like
+This will create a folder named `stl10` under `$DATA` and extract the data into three folders, i.e. `train`, `test` and `unlabeled`. Then, download from http://ai.stanford.edu/~acoates/stl10/ the "Binary files" and extract it under `stl10`.
+
+The file structure will look like
 
 ```
 stl10/

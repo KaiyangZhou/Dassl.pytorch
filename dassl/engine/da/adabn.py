@@ -1,5 +1,6 @@
 import torch
 
+from dassl.utils import check_isfile
 from dassl.engine import TRAINER_REGISTRY, TrainerXU
 
 
@@ -15,7 +16,9 @@ class AdaBN(TrainerXU):
         self.done_reset_bn_stats = False
 
     def check_cfg(self, cfg):
-        assert cfg.MODEL.INIT_WEIGHTS
+        assert check_isfile(
+            cfg.MODEL.INIT_WEIGHTS
+        ), 'The weights of source model must be provided'
 
     def before_epoch(self):
         if not self.done_reset_bn_stats:

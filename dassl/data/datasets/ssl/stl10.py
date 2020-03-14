@@ -34,6 +34,9 @@ class STL10(DatasetBase):
             self.dataset_dir, 'stl10_binary', 'fold_indices.txt'
         )
 
+        # Only use the first five splits
+        assert 0 <= cfg.DATASET.STL10_FOLD <= 4
+
         train_x = self._read_data_train(
             train_dir, cfg.DATASET.STL10_FOLD, fold_file
         )

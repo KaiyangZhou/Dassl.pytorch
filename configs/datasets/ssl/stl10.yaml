@@ -8,3 +8,7 @@ INPUT:
 DATASET:
   NAME: 'STL10'
   STL10_FOLD: 0
+
+MODEL:
+  BACKBONE:
+    NAME: 'wide_resnet_28_2'
