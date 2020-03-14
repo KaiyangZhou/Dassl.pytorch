@@ -20,6 +20,9 @@ class FixMatch(TrainerXU):
         self.weight_u = cfg.TRAINER.FIXMATCH.WEIGHT_U
         self.conf_thre = cfg.TRAINER.FIXMATCH.CONF_THRE
 
+    def check_cfg(self, cfg):
+        assert len(cfg.TRAINER.FIXMATCH.STRONG_TRANSFORMS) > 0
+
     def build_data_loader(self):
         cfg = self.cfg
         tfm_train = build_transform(cfg, is_train=True)

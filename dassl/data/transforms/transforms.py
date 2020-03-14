@@ -139,6 +139,15 @@ class GaussianNoise:
 
 
 def build_transform(cfg, is_train=True, choices=None):
+    """Build transformation function.
+
+    Args:
+        cfg (CfgNode): config.
+        is_train (bool, optional): for training (True) or test (False).
+            Default is True.
+        choices (list, optional): list of strings which will overwrite
+            cfg.INPUT.TRANSFORMS if given. Default is None.
+    """
     if cfg.INPUT.NO_TRANSFORM:
         print('Note: no transform is applied!')
         return None

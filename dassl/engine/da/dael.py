@@ -46,6 +46,7 @@ class DAEL(TrainerXU):
     def check_cfg(self, cfg):
         assert cfg.DATALOADER.TRAIN_X.SAMPLER == 'RandomDomainSampler'
         assert not cfg.DATALOADER.TRAIN_U.SAME_AS_X
+        assert len(cfg.TRAINER.DAEL.STRONG_TRANSFORMS) > 0
 
     def build_data_loader(self):
         cfg = self.cfg
