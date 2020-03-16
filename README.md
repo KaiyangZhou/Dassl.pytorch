@@ -42,14 +42,14 @@ Dassl supports the following datasets.
     - [Office-Home](http://hemanthdv.org/OfficeHome-Dataset/)
     - [VisDA17](http://ai.bu.edu/visda-2017/)
     - [CIFAR10](https://www.cs.toronto.edu/~kriz/cifar.html)-[STL10](https://cs.stanford.edu/~acoates/stl10/)
-    - Digit-5
+    - [Digit-5](https://github.com/VisionLearningGroup/VisionLearningGroup.github.io/tree/master/M3SDA/code_MSDA_digit#digit-five-download)
     - [DomainNet](http://ai.bu.edu/M3SDA/)
     - miniDomainNet
 
 - Domain generalization
     - [PACS](https://arxiv.org/abs/1710.03077)
     - [Office-Home](http://hemanthdv.org/OfficeHome-Dataset/)
-    - Digits-DG
+    - [Digits-DG](https://arxiv.org/abs/2003.06054)
 
 - Semi-supervised learning
     - [CIFAR10/100](https://www.cs.toronto.edu/~kriz/cifar.html.)
