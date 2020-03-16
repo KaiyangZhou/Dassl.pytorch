@@ -1,8 +1,8 @@
 # Dassl
 
-Dassl is a research library for domain adaptation and semi-supervised learning, written in [PyTorch](https://pytorch.org).
+Dassl is a toolbox for research in domain adaptation and semi-supervised learning, written in [PyTorch](https://pytorch.org).
 
-It is developed for the following tasks:
+You can use Dassl for the following tasks:
 
 - Single-source domain adaptation
 - Multi-source domain adaptation
@@ -81,15 +81,17 @@ conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
 python setup.py develop
 ```
 
-## Quick Start
+Follow the instructions in [DATASETS.md](./DATASETS.md) to prepare the datasets.
+
+## Quick start
 
 The main interface is implemented in `tools/train.py`, which basically does three things:
 
-1. Initialize config with `cfg = setup_cfg(args)` where `args` contains command-line input.
-2. Instantiate a `trainer` with `build_trainer(cfg)`.
-3. Call `trainer.train()` for training and evaluating a model.
+1. Initialize config with `cfg = setup_cfg(args)` where `args` contains the command-line input.
+2. Instantiate a `trainer` with `build_trainer(cfg)` which loads the dataset and builds a deep neural network model.
+3. Call `trainer.train()` for training and evaluating the model.
 
-Below we provide an example for training a source-only baseline on a domain adaptation dataset,
+Below we provide an example for training a source-only baseline on the popular domain adaptation dataset -- Office-31,
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python tools/train.py \
@@ -119,4 +121,6 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 
 After the training finishes, the model weights will be saved under the specified output directory, along with a log file and a tensorboard file for visualization.
 
-The guidance on how to prepare the datasets can be found [here](./DATASETS.md). More detailed tutorials are available [here](./TUTORIALS.md).
+## Write a new trainer
+
+A good practice is to go through `dassl/engine/trainer.py` to get familar with the base trainer classes, which provide generic functions and training loops. To write a trainer class for domain adaptation or semi-supervised learning, the new class can subclass `TrainerXU`. For domain generalization, the new class can subclass `TrainerX`. In particular, `TrainerXU` and `TrainerX` mainly differ in whether using a data loader for unlabeled data. With the base classes, a new trainer may only need to implement the `forward_backward()` method, which performs loss computation and model update. See `dassl/enigne/da/source_only.py` for example.
