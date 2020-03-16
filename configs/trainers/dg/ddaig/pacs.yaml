@@ -1,0 +1,15 @@
+DATALOADER:
+  TRAIN_X:
+    BATCH_SIZE: 16
+  TEST:
+    BATCH_SIZE: 16
+
+OPTIM:
+  NAME: 'sgd'
+  LR: 0.0005
+  STEPSIZE: [20]
+  MAX_EPOCH: 25
+
+TRAINER:
+  DDAIG:
+    G_ARCH: 'fcn_3x64_gctx'

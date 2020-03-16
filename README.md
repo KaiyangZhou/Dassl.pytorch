@@ -26,6 +26,7 @@ Dassl has implemented the following papers:
     - [Moment Matching for Multi-Source Domain Adaptation (ICCV'19)](https://arxiv.org/abs/1812.01754)
 
 - Domain generalization
+    - [Deep Domain-Adversarial Image Generation for Domain Generalisation](https://arxiv.org/abs/2003.06054)
     - [Generalizing Across Domains via Cross-Gradient Training (ICLR'18)](https://arxiv.org/abs/1804.10745)
 
 - Semi-supervised learning
