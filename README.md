@@ -1,8 +1,8 @@
 # Dassl
 
-Dassl is a toolbox for research in domain adaptation and semi-supervised learning, written in [PyTorch](https://pytorch.org).
+Dassl is a research toolbox for domain adaptation and semi-supervised learning, written in [PyTorch](https://pytorch.org).
 
-You can use Dassl for the following tasks:
+It is designed for the following tasks:
 
 - Single-source domain adaptation
 - Multi-source domain adaptation
@@ -22,7 +22,7 @@ Dassl has implemented the following papers:
     - [Domain-Adversarial Training of Neural Networks (JMLR'16) ](https://arxiv.org/abs/1505.07818)
 
 - Multi-source domain adaptation
-    - [Domain Aadaptive Ensemble Learning]()
+    - [Domain Aadaptive Ensemble Learning](https://arxiv.org/abs/2003.07325)
     - [Moment Matching for Multi-Source Domain Adaptation (ICCV'19)](https://arxiv.org/abs/1812.01754)
 
 - Domain generalization
@@ -44,7 +44,7 @@ Dassl supports the following datasets.
     - [CIFAR10](https://www.cs.toronto.edu/~kriz/cifar.html)-[STL10](https://cs.stanford.edu/~acoates/stl10/)
     - [Digit-5](https://github.com/VisionLearningGroup/VisionLearningGroup.github.io/tree/master/M3SDA/code_MSDA_digit#digit-five-download)
     - [DomainNet](http://ai.bu.edu/M3SDA/)
-    - miniDomainNet
+    - [miniDomainNet](https://arxiv.org/abs/2003.07325)
 
 - Domain generalization
     - [PACS](https://arxiv.org/abs/1710.03077)
@@ -56,7 +56,9 @@ Dassl supports the following datasets.
     - [SVHN](http://ufldl.stanford.edu/housenumbers/)
     - [STL10](https://cs.stanford.edu/~acoates/stl10/)
 
-## Installation
+## Get started
+
+### Installation
 
 Make sure [conda](https://www.anaconda.com/distribution/) is installed properly.
 
@@ -83,11 +85,11 @@ python setup.py develop
 
 Follow the instructions in [DATASETS.md](./DATASETS.md) to prepare the datasets.
 
-## Quick start
+### Training
 
 The main interface is implemented in `tools/train.py`, which basically does three things:
 
-1. Initialize config with `cfg = setup_cfg(args)` where `args` contains the command-line input.
+1. Initialize the config with `cfg = setup_cfg(args)` where `args` contains the command-line input (see `tools/train.py` for the list of input arguments).
 2. Instantiate a `trainer` with `build_trainer(cfg)` which loads the dataset and builds a deep neural network model.
 3. Call `trainer.train()` for training and evaluating the model.
 
@@ -104,7 +106,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 --output-dir output/source_only_office31
 ```
 
-`$DATA` denotes the path to the dataset folder.
+`$DATA` denotes the path to the dataset folder. `--dataset-config-file` loads the common setting for the dataset such as image size and model architecture. `--config-file` loads the algorithm-specific setting such as hyper-parameters and optimization parameters.
 
 To use multiple sources, namely the multi-source domain adaptation task, one just needs to add more sources to `--source-domains`. For instance, to train a source-only baseline on miniDomainNet, one can do
 
@@ -121,6 +123,18 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 
 After the training finishes, the model weights will be saved under the specified output directory, along with a log file and a tensorboard file for visualization.
 
-## Write a new trainer
+### Write a new trainer
 
 A good practice is to go through `dassl/engine/trainer.py` to get familar with the base trainer classes, which provide generic functions and training loops. To write a trainer class for domain adaptation or semi-supervised learning, the new class can subclass `TrainerXU`. For domain generalization, the new class can subclass `TrainerX`. In particular, `TrainerXU` and `TrainerX` mainly differ in whether using a data loader for unlabeled data. With the base classes, a new trainer may only need to implement the `forward_backward()` method, which performs loss computation and model update. See `dassl/enigne/da/source_only.py` for example.
+
+## Citation
+Please cite the following paper if you find Dassl useful to your research.
+
+```
+@article{zhou2020domain,
+  title={Domain Adaptive Ensemble Learning},
+  author={Zhou, Kaiyang and Yang, Yongxin and Qiao, Yu and Xiang, Tao},
+  journal={arXiv preprint arXiv:2003.07325},
+  year={2020}
+}
+```
