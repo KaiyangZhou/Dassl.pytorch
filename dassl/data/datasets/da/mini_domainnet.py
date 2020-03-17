@@ -11,6 +11,7 @@ class miniDomainNet(DatasetBase):
     Reference:
         - Peng et al. Moment Matching for Multi-Source Domain
         Adaptation. ICCV 2019.
+        - Zhou et al. Domain Adaptive Ensemble Learning.
     """
     dataset_dir = 'domainnet'
     domains = ['clipart', 'painting', 'real', 'sketch']

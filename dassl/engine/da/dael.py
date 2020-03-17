@@ -29,6 +29,8 @@ class Experts(nn.Module):
 @TRAINER_REGISTRY.register()
 class DAEL(TrainerXU):
     """Domain Adaptive Ensemble Learning.
+
+    https://arxiv.org/abs/2003.07325.
     """
 
     def __init__(self, cfg):
