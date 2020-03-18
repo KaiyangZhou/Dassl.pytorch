@@ -38,7 +38,7 @@ setup(
     author='Kaiyang Zhou',
     license='MIT',
     long_description=readme(),
-    url='NA',
+    url='https://github.com/KaiyangZhou/Dassl.pytorch',
     packages=find_packages(),
     install_requires=get_requirements(),
     keywords=[

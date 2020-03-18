@@ -1,6 +1,6 @@
 # How to Prepare Datasets
 
-We suggest you put datasets under the same directory `$DATA`, which looks like
+We suggest you put datasets (of the same task) under the same directory `$DATA`, which looks like
 
 ```
 $DATA/
@@ -11,6 +11,24 @@ $DATA/
 ```
 
 Please follow the download links and file structures to organize the datasets.
+
+[Domain Adaptation](#domain-adaptation)
+- [Office-31](#office-31)
+- [Office-Home](#office-home)
+- [VisDA17](#visda17)
+- [CIFAR10-STL10](#cifar10-stl10)
+- [Digit-5](#digit-5)
+- [DomainNet](#domainnet)
+- [miniDomainNet](#miniDomainNet)
+
+[Domain Generalization](#domain-generalization)
+- [PACS](#pacs)
+- [Office-Home-DG](#office-home-dg)
+- [Digits-DG](#digits-dg)
+
+[Semi-Supervised Learning](#semi-supervised-learning)
+- [CIFAR10/100 and SVHN](#cifar10100-and-svhn)
+- [STL10](#stl10)
 
 ## Domain Adaptation
 
@@ -147,7 +165,7 @@ pacs/
 
 It is ok to not manually download this dataset because once you run ``tools/train.py``, the code will detect if the dataset exists or not and automatically download the dataset to ``$DATA`` if missing. This applies to PACS, Office-Home and Digits-DG.
 
-### Office-Home
+### Office-Home-DG
 
 Download link: [google drive](https://drive.google.com/open?id=1gkbf_KaxoBws-GWT3XIPZ7BnkqbAxIFa).
 
