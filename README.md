@@ -1,11 +1,10 @@
 # Dassl
 
-Dassl is a research toolbox for domain adaptation and semi-supervised learning, written in [PyTorch](https://pytorch.org).
+Dassl is a [PyTorch](https://pytorch.org) toolbox for domain adaptation and semi-supervised learning. It has a modular design and unified interfaces, allowing fast prototyping and experimentation. With Dassl, a new method can be implemented with only a few lines of code.
 
-It is designed for the following tasks:
+You can use Dassl as a library for researching the following problems:
 
-- Single-source domain adaptation
-- Multi-source domain adaptation
+- Domain adaptation
 - Domain generalization
 - Semi-supervised learning
 
