@@ -44,16 +44,19 @@ class DigitsDG(DatasetBase):
         )
 
         train = self.read_data(
-            self.dataset_dir, cfg.DATASET.SOURCE_DOMAINS, is_train=True
+            self.dataset_dir, cfg.DATASET.SOURCE_DOMAINS, 'train'
+        )
+        val = self.read_data(
+            self.dataset_dir, cfg.DATASET.SOURCE_DOMAINS, 'val'
         )
         test = self.read_data(
-            self.dataset_dir, cfg.DATASET.TARGET_DOMAINS, is_train=False
+            self.dataset_dir, cfg.DATASET.TARGET_DOMAINS, 'all'
         )
 
-        super().__init__(train_x=train, test=test)
+        super().__init__(train_x=train, val=val, test=test)
 
     @staticmethod
-    def read_data(dataset_dir, input_domains, is_train=True):
+    def read_data(dataset_dir, input_domains, split):
 
         def _load_data_from_directory(directory):
             folders = listdir_nohidden(directory)
@@ -71,13 +74,14 @@ class DigitsDG(DatasetBase):
         items = []
 
         for domain, dname in enumerate(input_domains):
-            train_dir = osp.join(dataset_dir, dname, 'train')
-            impath_label_list = _load_data_from_directory(train_dir)
-
-            if not is_train:
+            if split == 'all':
+                train_dir = osp.join(dataset_dir, dname, 'train')
+                impath_label_list = _load_data_from_directory(train_dir)
                 val_dir = osp.join(dataset_dir, dname, 'val')
-                # Combining all data in the target domain for evaluation
                 impath_label_list += _load_data_from_directory(val_dir)
+            else:
+                split_dir = osp.join(dataset_dir, dname, split)
+                impath_label_list = _load_data_from_directory(split_dir)
 
             for impath, label in impath_label_list:
                 item = Datum(impath=impath, label=label, domain=domain)

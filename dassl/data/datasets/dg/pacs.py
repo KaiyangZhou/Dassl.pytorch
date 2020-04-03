@@ -38,26 +38,30 @@ class PACS(DatasetBase):
             cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS
         )
 
-        train = self._read_data(cfg.DATASET.SOURCE_DOMAINS, is_train=True)
-        test = self._read_data(cfg.DATASET.TARGET_DOMAINS, is_train=False)
+        train = self._read_data(cfg.DATASET.SOURCE_DOMAINS, 'train')
+        val = self._read_data(cfg.DATASET.SOURCE_DOMAINS, 'crossval')
+        test = self._read_data(cfg.DATASET.TARGET_DOMAINS, 'all')
 
-        super().__init__(train_x=train, test=test)
+        super().__init__(train_x=train, val=val, test=test)
 
-    def _read_data(self, input_domains, is_train=True):
+    def _read_data(self, input_domains, split):
         items = []
 
         for domain, dname in enumerate(input_domains):
-            split_file_train = osp.join(
-                self.split_dir, dname + '_train_kfold.txt'
-            )
-            impath_label_list = self._read_split_pacs(split_file_train)
-
-            if not is_train:
-                split_file_val = osp.join(
+            if split == 'all':
+                file_train = osp.join(
+                    self.split_dir, dname + '_train_kfold.txt'
+                )
+                impath_label_list = self._read_split_pacs(file_train)
+                file_val = osp.join(
                     self.split_dir, dname + '_crossval_kfold.txt'
                 )
-                # Combining all data in the target domain for evaluation
-                impath_label_list += self._read_split_pacs(split_file_val)
+                impath_label_list += self._read_split_pacs(file_val)
+            else:
+                file = osp.join(
+                    self.split_dir, dname + '_' + split + '_kfold.txt'
+                )
+                impath_label_list = self._read_split_pacs(file)
 
             for impath, label in impath_label_list:
                 item = Datum(impath=impath, label=label, domain=domain)

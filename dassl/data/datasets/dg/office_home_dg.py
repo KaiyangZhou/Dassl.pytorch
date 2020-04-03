@@ -36,10 +36,13 @@ class OfficeHomeDG(DatasetBase):
         )
 
         train = DigitsDG.read_data(
-            self.dataset_dir, cfg.DATASET.SOURCE_DOMAINS, is_train=True
+            self.dataset_dir, cfg.DATASET.SOURCE_DOMAINS, 'train'
+        )
+        val = DigitsDG.read_data(
+            self.dataset_dir, cfg.DATASET.SOURCE_DOMAINS, 'val'
         )
         test = DigitsDG.read_data(
-            self.dataset_dir, cfg.DATASET.TARGET_DOMAINS, is_train=False
+            self.dataset_dir, cfg.DATASET.TARGET_DOMAINS, 'all'
         )
 
-        super().__init__(train_x=train, test=test)
+        super().__init__(train_x=train, val=val, test=test)
