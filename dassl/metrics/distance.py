@@ -8,8 +8,7 @@ from torch.nn import functional as F
 def compute_distance_matrix(input1, input2, metric='euclidean'):
     """A wrapper function for computing distance matrix.
 
-    Given input1 of (n x m) and input2 of (m x p),
-    the output is of (n x p).
+    Each input matrix has the shape (n_data, feature_dim).
 
     Args:
         input1 (torch.Tensor): 2-D feature matrix.
