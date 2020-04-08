@@ -122,6 +122,25 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 
 After the training finishes, the model weights will be saved under the specified output directory, along with a log file and a tensorboard file for visualization.
 
+### Test
+Testing can be achieved by using `--eval-only`, which tells the script to run `trainer.test()`. You also need to provide the trained model and specify which model file (i.e. saved at which epoch) to use. For example, to use `model.pth.tar-20` saved at `output/source_only_office31/model`, you can do
+
+```bash
+CUDA_VISIBLE_DEVICES=0 python tools/train.py \
+--root $DATA \
+--trainer SourceOnly \
+--source-domains amazon \
+--target-domains webcam \
+--dataset-config-file configs/datasets/da/office31.yaml \
+--config-file configs/trainers/da/source_only/office31.yaml \
+--output-dir output/source_only_office31_test \
+--eval-only \
+--model-dir output/source_only_office31 \
+--load-epoch 20
+```
+
+Note that `--model-dir` takes as input the directory path which was specified in `--output-dir` in the training stage.
+
 ### Write a new trainer
 
 A good practice is to go through `dassl/engine/trainer.py` to get familar with the base trainer classes, which provide generic functions and training loops. To write a trainer class for domain adaptation or semi-supervised learning, the new class can subclass `TrainerXU`. For domain generalization, the new class can subclass `TrainerX`. In particular, `TrainerXU` and `TrainerX` mainly differ in whether using a data loader for unlabeled data. With the base classes, a new trainer may only need to implement the `forward_backward()` method, which performs loss computation and model update. See `dassl/enigne/da/source_only.py` for example.
