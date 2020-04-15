@@ -72,16 +72,15 @@ class CrossGrad(TrainerX):
         loss_d = (1 - self.alpha_d) * loss_d1 + self.alpha_d * loss_d2
         self.model_backward_and_update(loss_d, 'D')
 
-        output_dict = {
-            'loss_f': loss_f.item(),
-            'loss_d': loss_d.item(),
-            'lr': self.optim_F.param_groups[0]['lr']
-        }
+        output_dict = {'loss_f': loss_f.item(), 'loss_d': loss_d.item()}
 
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
         return output_dict
+
+    def get_current_lr(self):
+        return self.optim_F.param_groups[0]['lr']
 
     def model_inference(self, input):
         return self.F(input)

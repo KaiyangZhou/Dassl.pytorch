@@ -16,8 +16,7 @@ class Vanilla(TrainerX):
 
         output_dict = {
             'loss': loss.item(),
-            'acc': compute_accuracy(output.detach(), label)[0].item(),
-            'lr': self.optim.param_groups[0]['lr']
+            'acc': compute_accuracy(output.detach(), label)[0].item()
         }
 
         if (self.batch_idx + 1) == self.num_batches:

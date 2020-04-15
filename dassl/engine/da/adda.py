@@ -76,8 +76,7 @@ class ADDA(TrainerXU):
 
         output_dict = {
             'loss_critic': loss_critic.item(),
-            'loss_model': loss_model.item(),
-            'lr': self.optim.param_groups[0]['lr']
+            'loss_model': loss_model.item()
         }
 
         if (self.batch_idx + 1) == self.num_batches:

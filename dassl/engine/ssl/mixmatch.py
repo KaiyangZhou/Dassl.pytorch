@@ -78,11 +78,7 @@ class MixMatch(TrainerXU):
         loss = loss_x + loss_u*weight_u
         self.model_backward_and_update(loss)
 
-        output_dict = {
-            'loss_x': loss_x.item(),
-            'loss_u': loss_u.item(),
-            'lr': self.optim.param_groups[0]['lr']
-        }
+        output_dict = {'loss_x': loss_x.item(), 'loss_u': loss_u.item()}
 
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()

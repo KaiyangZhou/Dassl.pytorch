@@ -95,14 +95,16 @@ class DDAIG(TrainerX):
         output_dict = {
             'loss_g': loss_g.item(),
             'loss_f': loss_f.item(),
-            'loss_d': loss_d.item(),
-            'lr': self.optim_F.param_groups[0]['lr']
+            'loss_d': loss_d.item()
         }
 
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
         return output_dict
+
+    def get_current_lr(self):
+        return self.optim_F.param_groups[0]['lr']
 
     def model_inference(self, input):
         return self.F(input)

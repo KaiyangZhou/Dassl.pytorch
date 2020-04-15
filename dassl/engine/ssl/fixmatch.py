@@ -65,8 +65,7 @@ class FixMatch(TrainerXU):
             'loss_x': loss_x.item(),
             'acc_x': compute_accuracy(output_x.detach(), label_x)[0].item(),
             'loss_u': loss_u.item(),
-            'acc_u': compute_accuracy(output_u.detach(), label_u)[0].item(),
-            'lr': self.optim.param_groups[0]['lr']
+            'acc_u': compute_accuracy(output_u.detach(), label_u)[0].item()
         }
 
         if (self.batch_idx + 1) == self.num_batches:

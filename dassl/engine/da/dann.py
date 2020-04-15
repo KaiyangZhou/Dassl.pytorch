@@ -69,8 +69,7 @@ class DANN(TrainerXU):
         output_dict = {
             'loss_x': loss_x.item(),
             'acc_x': compute_accuracy(logit_x.detach(), label_x)[0].item(),
-            'loss_d': loss_d.item(),
-            'lr': self.optim.param_groups[0]['lr']
+            'loss_d': loss_d.item()
         }
 
         if (self.batch_idx + 1) == self.num_batches:

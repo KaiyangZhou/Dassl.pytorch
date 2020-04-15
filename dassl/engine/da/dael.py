@@ -170,14 +170,16 @@ class DAEL(TrainerXU):
             'loss_x': loss_x.item(),
             'acc_x': acc_x,
             'loss_cr': loss_cr.item(),
-            'loss_u': loss_u.item(),
-            'lr': self.optim_F.param_groups[0]['lr']
+            'loss_u': loss_u.item()
         }
 
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
         return output_dict
+
+    def get_current_lr(self):
+        return self.optim_F.param_groups[0]['lr']
 
     def parse_batch_train(self, batch_x, batch_u):
         input_x = batch_x['img']

@@ -43,8 +43,7 @@ class MeanTeacher(TrainerXU):
         output_dict = {
             'loss_x': loss_x.item(),
             'acc_x': compute_accuracy(logit_x.detach(), label_x)[0].item(),
-            'loss_u': loss_u.item(),
-            'lr': self.optim.param_groups[0]['lr']
+            'loss_u': loss_u.item()
         }
 
         if (self.batch_idx + 1) == self.num_batches:

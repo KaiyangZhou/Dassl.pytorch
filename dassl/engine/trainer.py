@@ -426,6 +426,9 @@ class SimpleTrainer(TrainerBase):
 
         return input, label
 
+    def get_current_lr(self):
+        return self.optim.param_groups[0]['lr']
+
 
 class TrainerXU(SimpleTrainer):
     """A base trainer using both labeled and unlabeled data.
@@ -489,7 +492,8 @@ class TrainerXU(SimpleTrainer):
                     'time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                     'data {data_time.val:.3f} ({data_time.avg:.3f})\t'
                     'eta {eta}\t'
-                    '{losses}'.format(
+                    '{losses}\t'
+                    'lr {lr}'.format(
                         self.epoch + 1,
                         self.max_epoch,
                         self.batch_idx + 1,
@@ -497,7 +501,8 @@ class TrainerXU(SimpleTrainer):
                         batch_time=batch_time,
                         data_time=data_time,
                         eta=eta,
-                        losses=losses
+                        losses=losses,
+                        lr=self.get_current_lr()
                     )
                 )
 
@@ -548,7 +553,8 @@ class TrainerX(SimpleTrainer):
                     'time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                     'data {data_time.val:.3f} ({data_time.avg:.3f})\t'
                     'eta {eta}\t'
-                    '{losses}'.format(
+                    '{losses}\t'
+                    'lr {lr}'.format(
                         self.epoch + 1,
                         self.max_epoch,
                         self.batch_idx + 1,
@@ -556,7 +562,8 @@ class TrainerX(SimpleTrainer):
                         batch_time=batch_time,
                         data_time=data_time,
                         eta=eta,
-                        losses=losses
+                        losses=losses,
+                        lr=self.get_current_lr()
                     )
                 )
 

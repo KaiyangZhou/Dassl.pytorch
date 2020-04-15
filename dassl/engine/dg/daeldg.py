@@ -133,14 +133,16 @@ class DAELDG(TrainerX):
         output_dict = {
             'loss': loss.item(),
             'acc': acc,
-            'loss_cr': loss_cr.item(),
-            'lr': self.optim_F.param_groups[0]['lr']
+            'loss_cr': loss_cr.item()
         }
 
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
         return output_dict
+
+    def get_current_lr(self):
+        return self.optim_F.param_groups[0]['lr']
 
     def parse_batch_train(self, batch):
         input = batch['img']

@@ -89,14 +89,16 @@ class MCD(TrainerXU):
         output_dict = {
             'loss_step_A': loss_step_A.item(),
             'loss_step_B': loss_step_B.item(),
-            'loss_step_C': loss_step_C.item(),
-            'lr': self.optim_F.param_groups[0]['lr']
+            'loss_step_C': loss_step_C.item()
         }
 
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
         return output_dict
+
+    def get_current_lr(self):
+        return self.optim_F.param_groups[0]['lr']
 
     def discrepancy(self, y1, y2):
         return (y1 - y2).abs().mean()
