@@ -101,7 +101,7 @@ class TrainerBase:
         self._optims[name] = optim
         self._scheds[name] = sched
 
-    def get_names_if_none(self, names=None):
+    def get_model_names(self, names=None):
         names_real = list(self._models.keys())
         if names is not None:
             names = tolist_if_not(names)
@@ -112,7 +112,7 @@ class TrainerBase:
             return names_real
 
     def save_model(self, epoch, directory, is_best=False):
-        names = self.get_names_if_none()
+        names = self.get_model_names()
 
         for name in names:
             save_checkpoint(
@@ -127,7 +127,7 @@ class TrainerBase:
             )
 
     def resume_model_if_exist(self, directory):
-        names = self.get_names_if_none()
+        names = self.get_model_names()
         file_missing = False
 
         for name in names:
@@ -150,7 +150,7 @@ class TrainerBase:
         return start_epoch
 
     def load_model(self, directory, epoch=None):
-        names = self.get_names_if_none()
+        names = self.get_model_names()
         model_file = 'model.pth.tar-' + str(
             epoch
         ) if epoch else 'model-best.pth.tar'
@@ -174,7 +174,7 @@ class TrainerBase:
             self._models[name].load_state_dict(state_dict)
 
     def set_model_mode(self, mode='train', names=None):
-        names = self.get_names_if_none(names)
+        names = self.get_model_names(names)
 
         for name in names:
             if mode == 'train':
@@ -183,7 +183,7 @@ class TrainerBase:
                 self._models[name].eval()
 
     def update_lr(self, names=None):
-        names = self.get_names_if_none(names)
+        names = self.get_model_names(names)
 
         for name in names:
             if self._scheds[name] is not None:
@@ -256,7 +256,7 @@ class TrainerBase:
         raise NotImplementedError
 
     def model_zero_grad(self, names=None):
-        names = self.get_names_if_none(names)
+        names = self.get_model_names(names)
         for name in names:
             self._optims[name].zero_grad()
 
@@ -265,7 +265,7 @@ class TrainerBase:
         loss.backward()
 
     def model_update(self, names=None):
-        names = self.get_names_if_none(names)
+        names = self.get_model_names(names)
         for name in names:
             self._optims[name].step()
 
