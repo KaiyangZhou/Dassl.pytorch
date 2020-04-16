@@ -82,8 +82,5 @@ class MME(TrainerXU):
 
         return output_dict
 
-    def get_current_lr(self):
-        return self.optim_F.param_groups[0]['lr']
-
     def model_inference(self, input):
         return self.C(self.F(input))

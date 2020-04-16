@@ -178,9 +178,6 @@ class DAEL(TrainerXU):
 
         return output_dict
 
-    def get_current_lr(self):
-        return self.optim_F.param_groups[0]['lr']
-
     def parse_batch_train(self, batch_x, batch_u):
         input_x = batch_x['img']
         input_x2 = batch_x['img2']

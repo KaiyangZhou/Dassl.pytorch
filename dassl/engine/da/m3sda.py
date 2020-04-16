@@ -150,9 +150,6 @@ class M3SDA(TrainerXU):
 
         return output_dict
 
-    def get_current_lr(self):
-        return self.optim_F.param_groups[0]['lr']
-
     def moment_distance(self, x, u):
         # x (list): a list of feature matrix.
         # u (torch.Tensor): feature matrix.

@@ -426,8 +426,10 @@ class SimpleTrainer(TrainerBase):
 
         return input, label
 
-    def get_current_lr(self):
-        return self.optim.param_groups[0]['lr']
+    def get_current_lr(self, names=None):
+        names = self.get_model_names(names)
+        name = names[0]
+        return self._optims[name].param_groups[0]['lr']
 
 
 class TrainerXU(SimpleTrainer):
