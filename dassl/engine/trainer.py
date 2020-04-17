@@ -207,9 +207,9 @@ class TrainerBase:
 
     def write_scalar(self, tag, scalar_value, global_step=None):
         if self._writer is None:
-            raise AttributeError(
-                'There is not writer. Please call init_writer() to create the writer.'
-            )
+            # Do nothing if writer is not initialized
+            # Note that writer is only used when training is needed
+            pass
         else:
             self._writer.add_scalar(tag, scalar_value, global_step)
 
@@ -296,7 +296,6 @@ class SimpleTrainer(TrainerBase):
         self.build_data_loader()
         self.build_model()
         self.evaluator = build_evaluator(cfg, lab2cname=self.dm.lab2cname)
-        self.init_writer(self.output_dir)
 
     def check_cfg(self, cfg):
         """Check whether some variables are set correctly for
@@ -354,6 +353,9 @@ class SimpleTrainer(TrainerBase):
         if self.cfg.RESUME:
             directory = self.cfg.RESUME
         self.start_epoch = self.resume_model_if_exist(directory)
+
+        # Initialize summary writer
+        self.init_writer(self.output_dir)
 
         # Remember the starting time (for computing the elapsed time)
         self.time_start = time.time()
