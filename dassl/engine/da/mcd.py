@@ -86,7 +86,7 @@ class MCD(TrainerXU):
             loss_step_C = self.discrepancy(pred_u1, pred_u2)
             self.model_backward_and_update(loss_step_C, 'F')
 
-        output_dict = {
+        loss_summary = {
             'loss_step_A': loss_step_A.item(),
             'loss_step_B': loss_step_B.item(),
             'loss_step_C': loss_step_C.item()
@@ -95,7 +95,7 @@ class MCD(TrainerXU):
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
-        return output_dict
+        return loss_summary
 
     def discrepancy(self, y1, y2):
         return (y1 - y2).abs().mean()

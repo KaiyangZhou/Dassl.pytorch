@@ -74,7 +74,7 @@ class ADDA(TrainerXU):
         loss_model = self.bce(logit_ud, 1 - domain_u)
         self.model_backward_and_update(loss_model, 'model')
 
-        output_dict = {
+        loss_summary = {
             'loss_critic': loss_critic.item(),
             'loss_model': loss_model.item()
         }
@@ -82,4 +82,4 @@ class ADDA(TrainerXU):
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
-        return output_dict
+        return loss_summary

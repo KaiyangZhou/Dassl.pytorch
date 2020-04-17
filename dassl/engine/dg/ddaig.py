@@ -92,7 +92,7 @@ class DDAIG(TrainerX):
         loss_d = F.cross_entropy(self.D(input), domain)
         self.model_backward_and_update(loss_d, 'D')
 
-        output_dict = {
+        loss_summary = {
             'loss_g': loss_g.item(),
             'loss_f': loss_f.item(),
             'loss_d': loss_d.item()
@@ -101,7 +101,7 @@ class DDAIG(TrainerX):
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
-        return output_dict
+        return loss_summary
 
     def model_inference(self, input):
         return self.F(input)

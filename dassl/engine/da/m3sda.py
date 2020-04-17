@@ -139,7 +139,7 @@ class M3SDA(TrainerXU):
 
             self.model_backward_and_update(loss_step_C, 'F')
 
-        output_dict = {
+        loss_summary = {
             'loss_step_A': loss_step_A.item(),
             'loss_step_B': loss_step_B.item(),
             'loss_step_C': loss_step_C.item()
@@ -148,7 +148,7 @@ class M3SDA(TrainerXU):
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
-        return output_dict
+        return loss_summary
 
     def moment_distance(self, x, u):
         # x (list): a list of feature matrix.

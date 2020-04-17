@@ -78,12 +78,12 @@ class MixMatch(TrainerXU):
         loss = loss_x + loss_u*weight_u
         self.model_backward_and_update(loss)
 
-        output_dict = {'loss_x': loss_x.item(), 'loss_u': loss_u.item()}
+        loss_summary = {'loss_x': loss_x.item(), 'loss_u': loss_u.item()}
 
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
-        return output_dict
+        return loss_summary
 
     def parse_batch_train(self, batch_x, batch_u):
         input_x = batch_x['img'][0]

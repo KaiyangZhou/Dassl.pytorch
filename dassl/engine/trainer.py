@@ -478,9 +478,9 @@ class TrainerXU(SimpleTrainer):
                 batch_u = next(train_loader_u_iter)
 
             data_time.update(time.time() - end)
-            loss_dict = self.forward_backward(batch_x, batch_u)
+            loss_summary = self.forward_backward(batch_x, batch_u)
             batch_time.update(time.time() - end)
-            losses.update(loss_dict)
+            losses.update(loss_summary)
 
             if (self.batch_idx + 1) % self.cfg.TRAIN.PRINT_FREQ == 0:
                 nb_this_epoch = self.num_batches - (self.batch_idx + 1)
@@ -539,9 +539,9 @@ class TrainerX(SimpleTrainer):
         end = time.time()
         for self.batch_idx, batch in enumerate(self.train_loader_x):
             data_time.update(time.time() - end)
-            loss_dict = self.forward_backward(batch)
+            loss_summary = self.forward_backward(batch)
             batch_time.update(time.time() - end)
-            losses.update(loss_dict)
+            losses.update(loss_summary)
 
             if (self.batch_idx + 1) % self.cfg.TRAIN.PRINT_FREQ == 0:
                 nb_this_epoch = self.num_batches - (self.batch_idx + 1)

@@ -166,7 +166,7 @@ class DAEL(TrainerXU):
         loss += loss_u * self.weight_u
         self.model_backward_and_update(loss)
 
-        output_dict = {
+        loss_summary = {
             'loss_x': loss_x.item(),
             'acc_x': acc_x,
             'loss_cr': loss_cr.item(),
@@ -176,7 +176,7 @@ class DAEL(TrainerXU):
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
-        return output_dict
+        return loss_summary
 
     def parse_batch_train(self, batch_x, batch_u):
         input_x = batch_x['img']

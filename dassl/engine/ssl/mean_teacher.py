@@ -40,7 +40,7 @@ class MeanTeacher(TrainerXU):
         ema_alpha = min(1 - 1 / (global_step+1), self.ema_alpha)
         ema_model_update(self.model, self.teacher, ema_alpha)
 
-        output_dict = {
+        loss_summary = {
             'loss_x': loss_x.item(),
             'acc_x': compute_accuracy(logit_x.detach(), label_x)[0].item(),
             'loss_u': loss_u.item()
@@ -49,4 +49,4 @@ class MeanTeacher(TrainerXU):
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
-        return output_dict
+        return loss_summary

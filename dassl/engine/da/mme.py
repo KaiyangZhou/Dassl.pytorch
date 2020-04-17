@@ -71,7 +71,7 @@ class MME(TrainerXU):
         loss_u = -(-prob_u * torch.log(prob_u + 1e-5)).sum(1).mean()
         self.model_backward_and_update(loss_u * self.lmda)
 
-        output_dict = {
+        loss_summary = {
             'loss_x': loss_x.item(),
             'acc_x': compute_accuracy(logit_x.detach(), label_x)[0].item(),
             'loss_u': loss_u.item()
@@ -80,7 +80,7 @@ class MME(TrainerXU):
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
-        return output_dict
+        return loss_summary
 
     def model_inference(self, input):
         return self.C(self.F(input))

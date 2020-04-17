@@ -130,7 +130,7 @@ class DAELDG(TrainerX):
         loss += loss_cr
         self.model_backward_and_update(loss)
 
-        output_dict = {
+        loss_summary = {
             'loss': loss.item(),
             'acc': acc,
             'loss_cr': loss_cr.item()
@@ -139,7 +139,7 @@ class DAELDG(TrainerX):
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
 
-        return output_dict
+        return loss_summary
 
     def parse_batch_train(self, batch):
         input = batch['img']
