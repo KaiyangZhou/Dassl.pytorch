@@ -63,9 +63,9 @@ class FixMatch(TrainerXU):
 
         loss_summary = {
             'loss_x': loss_x.item(),
-            'acc_x': compute_accuracy(output_x.detach(), label_x)[0].item(),
+            'acc_x': compute_accuracy(output_x, label_x)[0].item(),
             'loss_u': loss_u.item(),
-            'acc_u': compute_accuracy(output_u.detach(), label_u)[0].item()
+            'acc_u': compute_accuracy(output_u, label_u)[0].item()
         }
 
         if (self.batch_idx + 1) == self.num_batches:

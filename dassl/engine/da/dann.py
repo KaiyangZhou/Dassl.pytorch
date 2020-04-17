@@ -68,7 +68,7 @@ class DANN(TrainerXU):
 
         loss_summary = {
             'loss_x': loss_x.item(),
-            'acc_x': compute_accuracy(logit_x.detach(), label_x)[0].item(),
+            'acc_x': compute_accuracy(logit_x, label_x)[0].item(),
             'loss_d': loss_d.item()
         }
 

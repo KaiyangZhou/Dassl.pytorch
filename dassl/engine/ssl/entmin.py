@@ -31,7 +31,7 @@ class EntMin(TrainerXU):
 
         loss_summary = {
             'loss_x': loss_x.item(),
-            'acc_x': compute_accuracy(output_x.detach(), label_x)[0].item(),
+            'acc_x': compute_accuracy(output_x, label_x)[0].item(),
             'loss_u': loss_u.item()
         }
 
