@@ -5,7 +5,9 @@ from torch.utils.data.sampler import Sampler, RandomSampler, SequentialSampler
 
 
 class RandomDomainSampler(Sampler):
-    """Randomly sample N domains each with K
+    """Random domain sampler.
+
+    This sampler randomly samples N domains each with K
     images to form a minibatch.
     """
 
@@ -25,15 +27,15 @@ class RandomDomainSampler(Sampler):
         self.n_img_per_domain = batch_size // n_domain
 
         self.batch_size = batch_size
+        # n_domain denotes number of domains sampled in a minibatch
         self.n_domain = n_domain
 
-        # Estimate number of images that will be used
-        # within each epoch
-        tmp = []
+        # Estimate the number of images that will be used in each epoch
+        self.length = 0
         for _, idxs in self.domain_dict.items():
-            tmp_nb = len(idxs) // self.n_img_per_domain
-            tmp.append(tmp_nb)
-        self.length = min(tmp) * batch_size
+            n_img = len(idxs)
+            n_img -= n_img % self.n_img_per_domain
+            self.length += n_img
 
     def __iter__(self):
         domain_dict = copy.deepcopy(self.domain_dict)
