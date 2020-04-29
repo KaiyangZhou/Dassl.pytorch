@@ -129,11 +129,14 @@ class Cutout:
 class GaussianNoise:
     """Add gaussian noise."""
 
-    def __init__(self, mean=0, std=0.15):
+    def __init__(self, mean=0, std=0.15, p=0.5):
         self.mean = mean
         self.std = std
+        self.p = p
 
     def __call__(self, img):
+        if random.uniform(0, 1) > self.p:
+            return img
         noise = torch.randn(img.size()) * self.std + self.mean
         return img + noise
 
