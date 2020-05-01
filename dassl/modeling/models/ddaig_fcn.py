@@ -179,14 +179,24 @@ class FCN(nn.Module):
         super().__init__()
 
         backbone = []
-        backbone += [nn.ReflectionPad2d(1)]
+
+        p = 0
+        if padding_type == 'reflect':
+            backbone += [nn.ReflectionPad2d(1)]
+        elif padding_type == 'replicate':
+            backbone += [nn.ReplicationPad2d(1)]
+        elif padding_type == 'zero':
+            p = 1
+        else:
+            raise NotImplementedError
         backbone += [
             nn.Conv2d(
-                input_nc, nc, kernel_size=3, stride=1, padding=0, bias=False
+                input_nc, nc, kernel_size=3, stride=1, padding=p, bias=False
             )
         ]
         backbone += [norm_layer(nc)]
         backbone += [nn.ReLU(True)]
+
         for _ in range(n_blocks):
             backbone += [
                 ResnetBlock(

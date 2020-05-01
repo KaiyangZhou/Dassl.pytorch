@@ -1,8 +1,8 @@
 from yacs.config import CfgNode as CN
 
-# -------------------------------------------------- #
+###########################
 # Config definition
-# -------------------------------------------------- #
+###########################
 
 _C = CN()
 
@@ -18,9 +18,9 @@ _C.USE_CUDA = True
 # dataset, backbone, etc.)
 _C.VERBOSE = True
 
-# -------------------------------------------------- #
+###########################
 # Input
-# -------------------------------------------------- #
+###########################
 _C.INPUT = CN()
 _C.INPUT.SIZE = (224, 224)
 # For available choices please refer to transforms.py
@@ -42,9 +42,9 @@ _C.INPUT.GN_STD = 0.15
 _C.INPUT.RANDAUGMENT_N = 2
 _C.INPUT.RANDAUGMENT_M = 10
 
-# -------------------------------------------------- #
+###########################
 # Dataset
-# -------------------------------------------------- #
+###########################
 _C.DATASET = CN()
 # Directory where datasets are stored
 _C.DATASET.ROOT = ''
@@ -63,9 +63,9 @@ _C.DATASET.VAL_PERCENT = 0.1
 # Negative number means None
 _C.DATASET.STL10_FOLD = -1
 
-# -------------------------------------------------- #
+###########################
 # Dataloader
-# -------------------------------------------------- #
+###########################
 _C.DATALOADER = CN()
 _C.DATALOADER.NUM_WORKERS = 4
 # Apply transformations to an image K times (during training)
@@ -92,9 +92,85 @@ _C.DATALOADER.TEST = CN()
 _C.DATALOADER.TEST.SAMPLER = 'SequentialSampler'
 _C.DATALOADER.TEST.BATCH_SIZE = 32
 
-# -------------------------------------------------- #
-# Trainer
-# -------------------------------------------------- #
+###########################
+# Model
+###########################
+_C.MODEL = CN()
+# Path to model weights for initialization
+_C.MODEL.INIT_WEIGHTS = ''
+_C.MODEL.BACKBONE = CN()
+_C.MODEL.BACKBONE.NAME = ''
+_C.MODEL.BACKBONE.PRETRAINED = True
+# Definition of embedding layer
+_C.MODEL.HEAD = CN()
+# If none, no embedding layer will be constructed
+_C.MODEL.HEAD.NAME = ''
+# Structure of hidden layers which is a list, e.g. [512, 512]
+# If not defined, no embedding layer will be constructed
+_C.MODEL.HEAD.HIDDEN_LAYERS = ()
+_C.MODEL.HEAD.ACTIVATION = 'relu'
+_C.MODEL.HEAD.BN = True
+_C.MODEL.HEAD.DROPOUT = 0.
+
+###########################
+# Optimization
+###########################
+_C.OPTIM = CN()
+_C.OPTIM.NAME = 'adam'
+_C.OPTIM.LR = 0.0003
+_C.OPTIM.WEIGHT_DECAY = 5e-4
+_C.OPTIM.MOMENTUM = 0.9
+_C.OPTIM.SGD_DAMPNING = 0
+_C.OPTIM.SGD_NESTEROV = False
+_C.OPTIM.RMSPROP_ALPHA = 0.99
+_C.OPTIM.ADAM_BETA1 = 0.9
+_C.OPTIM.ADAM_BETA2 = 0.99
+# STAGED_LR allows different layers to have
+# different lr, e.g. pre-trained base layers
+# can be assigned a smaller lr than the new
+# classification layer
+_C.OPTIM.STAGED_LR = False
+_C.OPTIM.NEW_LAYERS = ()
+_C.OPTIM.BASE_LR_MULT = 0.1
+# Learning rate scheduler
+_C.OPTIM.LR_SCHEDULER = 'single_step'
+_C.OPTIM.STEPSIZE = (10, )
+_C.OPTIM.GAMMA = 0.1
+_C.OPTIM.MAX_EPOCH = 10
+
+###########################
+# Train
+###########################
+_C.TRAIN = CN()
+# How often (epoch) to save model during training
+# Set to 0 or negative value to disable
+_C.TRAIN.CHECKPOINT_FREQ = 0
+# How often (batch) to print training information
+_C.TRAIN.PRINT_FREQ = 10
+# Use 'train_x', 'train_u' or 'smaller_one' to count
+# the number of iterations in an epoch (for DA and SSL)
+_C.TRAIN.COUNT_ITER = 'train_x'
+
+###########################
+# Test
+###########################
+_C.TEST = CN()
+_C.TEST.EVALUATOR = 'Classification'
+_C.TEST.PER_CLASS_RESULT = False
+# Compute confusion matrix, which will be saved
+# to $OUTPUT_DIR/cmat.pt
+_C.TEST.COMPUTE_CMAT = False
+# If NO_TEST=True, no testing will be conducted
+_C.TEST.NO_TEST = False
+# How often (epoch) to do testing during training
+# Set to 0 or negative value to disable
+_C.TEST.EVAL_FREQ = 1
+# Use 'test' set or 'val' set for evaluation
+_C.TEST.SPLIT = 'test'
+
+###########################
+# Trainer specifics
+###########################
 _C.TRAINER = CN()
 _C.TRAINER.NAME = ''
 
@@ -131,7 +207,7 @@ _C.TRAINER.DDAIG = CN()
 _C.TRAINER.DDAIG.G_ARCH = ''
 _C.TRAINER.DDAIG.LMDA = 0.3
 _C.TRAINER.DDAIG.CLAMP = False
-_C.TRAINER.DDAIG.CLAMP_MIN = 0.
+_C.TRAINER.DDAIG.CLAMP_MIN = -1.
 _C.TRAINER.DDAIG.CLAMP_MAX = 1.
 _C.TRAINER.DDAIG.WARMUP = 0
 _C.TRAINER.DDAIG.ALPHA = 0.5
@@ -154,79 +230,3 @@ _C.TRAINER.FIXMATCH = CN()
 _C.TRAINER.FIXMATCH.WEIGHT_U = 1.
 _C.TRAINER.FIXMATCH.CONF_THRE = 0.95
 _C.TRAINER.FIXMATCH.STRONG_TRANSFORMS = ()
-
-# -------------------------------------------------- #
-# Model
-# -------------------------------------------------- #
-_C.MODEL = CN()
-# Path to model weights for initialization
-_C.MODEL.INIT_WEIGHTS = ''
-_C.MODEL.BACKBONE = CN()
-_C.MODEL.BACKBONE.NAME = ''
-_C.MODEL.BACKBONE.PRETRAINED = True
-# Definition of embedding layer
-_C.MODEL.HEAD = CN()
-# If none, no embedding layer will be constructed
-_C.MODEL.HEAD.NAME = ''
-# Structure of hidden layers which is a list, e.g. [512, 512]
-# If not defined, no embedding layer will be constructed
-_C.MODEL.HEAD.HIDDEN_LAYERS = ()
-_C.MODEL.HEAD.ACTIVATION = 'relu'
-_C.MODEL.HEAD.BN = True
-_C.MODEL.HEAD.DROPOUT = 0.
-
-# -------------------------------------------------- #
-# Optimization
-# -------------------------------------------------- #
-_C.OPTIM = CN()
-_C.OPTIM.NAME = 'adam'
-_C.OPTIM.LR = 0.0003
-_C.OPTIM.WEIGHT_DECAY = 5e-4
-_C.OPTIM.MOMENTUM = 0.9
-_C.OPTIM.SGD_DAMPNING = 0
-_C.OPTIM.SGD_NESTEROV = False
-_C.OPTIM.RMSPROP_ALPHA = 0.99
-_C.OPTIM.ADAM_BETA1 = 0.9
-_C.OPTIM.ADAM_BETA2 = 0.99
-# STAGED_LR allows different layers to have
-# different lr, e.g. pre-trained base layers
-# can be assigned a smaller lr than the new
-# classification layer
-_C.OPTIM.STAGED_LR = False
-_C.OPTIM.NEW_LAYERS = ()
-_C.OPTIM.BASE_LR_MULT = 0.1
-# Learning rate scheduler
-_C.OPTIM.LR_SCHEDULER = 'single_step'
-_C.OPTIM.STEPSIZE = (10, )
-_C.OPTIM.GAMMA = 0.1
-_C.OPTIM.MAX_EPOCH = 10
-
-# -------------------------------------------------- #
-# Train
-# -------------------------------------------------- #
-_C.TRAIN = CN()
-# How often (epoch) to save model during training
-# Set to 0 or negative value to disable
-_C.TRAIN.CHECKPOINT_FREQ = 0
-# How often (batch) to print training information
-_C.TRAIN.PRINT_FREQ = 10
-# Use 'train_x', 'train_u' or 'smaller_one' to count
-# the number of iterations in an epoch (for DA and SSL)
-_C.TRAIN.COUNT_ITER = 'train_x'
-
-# -------------------------------------------------- #
-# Test
-# -------------------------------------------------- #
-_C.TEST = CN()
-_C.TEST.EVALUATOR = 'Classification'
-_C.TEST.PER_CLASS_RESULT = False
-# Compute confusion matrix, which will be saved
-# to $OUTPUT_DIR/cmat.pt
-_C.TEST.COMPUTE_CMAT = False
-# If NO_TEST=True, no testing will be conducted
-_C.TEST.NO_TEST = False
-# How often (epoch) to do testing during training
-# Set to 0 or negative value to disable
-_C.TEST.EVAL_FREQ = 1
-# Use 'test' set or 'val' set for evaluation
-_C.TEST.SPLIT = 'test'
