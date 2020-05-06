@@ -13,4 +13,4 @@ OPTIM:
 
 TRAINER:
   DAEL:
-    STRONG_TRANSFORMS: ['random_flip', 'cutout', 'randaugment2']
+    STRONG_TRANSFORMS: ['random_flip', 'cutout', 'randaugment2', 'normalize']
