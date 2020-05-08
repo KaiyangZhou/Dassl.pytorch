@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
-from .build import MODEL_REGISTRY
+from .build import NETWORK_REGISTRY
 
 
 def init_network_weights(model, init_type='normal', gain=0.02):
@@ -277,7 +277,7 @@ class FCN(nn.Module):
         return x_p
 
 
-@MODEL_REGISTRY.register()
+@NETWORK_REGISTRY.register()
 def fcn_3x32_gctx(**kwargs):
     norm_layer = get_norm_layer(norm_type='instance')
     net = FCN(3, 3, nc=32, n_blocks=3, norm_layer=norm_layer)
@@ -285,7 +285,7 @@ def fcn_3x32_gctx(**kwargs):
     return net
 
 
-@MODEL_REGISTRY.register()
+@NETWORK_REGISTRY.register()
 def fcn_3x64_gctx(**kwargs):
     norm_layer = get_norm_layer(norm_type='instance')
     net = FCN(3, 3, nc=64, n_blocks=3, norm_layer=norm_layer)
@@ -293,7 +293,7 @@ def fcn_3x64_gctx(**kwargs):
     return net
 
 
-@MODEL_REGISTRY.register()
+@NETWORK_REGISTRY.register()
 def fcn_3x32_gctx_stn(image_size=32, **kwargs):
     norm_layer = get_norm_layer(norm_type='instance')
     net = FCN(
@@ -310,7 +310,7 @@ def fcn_3x32_gctx_stn(image_size=32, **kwargs):
     return net
 
 
-@MODEL_REGISTRY.register()
+@NETWORK_REGISTRY.register()
 def fcn_3x64_gctx_stn(image_size=224, **kwargs):
     norm_layer = get_norm_layer(norm_type='instance')
     net = FCN(

@@ -6,8 +6,8 @@ from dassl.optim import build_optimizer, build_lr_scheduler
 from dassl.utils import count_num_param
 from dassl.engine import TRAINER_REGISTRY, TrainerXU
 from dassl.metrics import compute_accuracy
+from dassl.modeling import build_head
 from dassl.modeling.ops import ReverseGrad
-from dassl.modeling.head import build_head
 
 
 @TRAINER_REGISTRY.register()

@@ -12,9 +12,8 @@ from dassl.utils import (
     MetricMeter, AverageMeter, tolist_if_not, count_num_param, load_checkpoint,
     save_checkpoint, resume_from_checkpoint, load_pretrained_weights
 )
+from dassl.modeling import build_head, build_backbone
 from dassl.evaluation import build_evaluator
-from dassl.modeling.head import build_head
-from dassl.modeling.backbone import build_backbone
 
 
 class SimpleNet(nn.Module):

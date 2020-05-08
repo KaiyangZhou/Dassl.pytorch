@@ -11,6 +11,8 @@ ignore =
     # Do not use bare 'except'
     E722,
     # Line break after binary operator
-    W504
+    W504,
+    # Too many leading '#' for block comment
+    E266
 max-line-length = 79
 exclude = __init__.py, build

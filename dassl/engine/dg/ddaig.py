@@ -4,8 +4,8 @@ from torch.nn import functional as F
 from dassl.optim import build_optimizer, build_lr_scheduler
 from dassl.utils import count_num_param
 from dassl.engine import TRAINER_REGISTRY, TrainerX
+from dassl.modeling import build_network
 from dassl.engine.trainer import SimpleNet
-from dassl.modeling.models import build_model
 
 
 @TRAINER_REGISTRY.register()
@@ -44,7 +44,7 @@ class DDAIG(TrainerX):
         self.register_model('D', self.D, self.optim_D, self.sched_D)
 
         print('Building G')
-        self.G = build_model(cfg.TRAINER.DDAIG.G_ARCH, verbose=cfg.VERBOSE)
+        self.G = build_network(cfg.TRAINER.DDAIG.G_ARCH, verbose=cfg.VERBOSE)
         self.G.to(self.device)
         print('# params: {:,}'.format(count_num_param(self.G)))
         self.optim_G = build_optimizer(self.G, cfg.OPTIM)

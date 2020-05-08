@@ -5,7 +5,7 @@ import torch.nn as nn
 from dassl.optim import build_optimizer, build_lr_scheduler
 from dassl.utils import check_isfile, count_num_param, open_specified_layers
 from dassl.engine import TRAINER_REGISTRY, TrainerXU
-from dassl.modeling.head import build_head
+from dassl.modeling import build_head
 
 
 @TRAINER_REGISTRY.register()
