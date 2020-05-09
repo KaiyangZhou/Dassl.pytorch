@@ -1,4 +1,3 @@
-import random
 import argparse
 import torch
 
@@ -34,9 +33,6 @@ def reset_cfg(cfg, args):
     if args.seed:
         cfg.SEED = args.seed
 
-    if args.random_seed:
-        cfg.SEED = random.randint(0, 1e+6)
-
     if args.source_domains:
         cfg.DATASET.SOURCE_DOMAINS = args.source_domains
 
@@ -70,7 +66,9 @@ def setup_cfg(args):
 
 def main(args):
     cfg = setup_cfg(args)
-    set_random_seed(cfg.SEED)
+    if cfg.SEED >= 0:
+        print('Setting fixed seed: {}'.format(cfg.SEED))
+        set_random_seed(cfg.SEED)
     setup_logger(cfg.OUTPUT_DIR)
 
     if torch.cuda.is_available() and cfg.USE_CUDA:
@@ -103,11 +101,11 @@ if __name__ == '__main__':
         default='',
         help='checkpoint directory (from which the training resumes)'
     )
-    parser.add_argument('--seed', type=int, default=1, help='manual seed')
     parser.add_argument(
-        '--random-seed',
-        action='store_true',
-        help='use random seed (this will overwrite the manual seed)'
+        '--seed',
+        type=int,
+        default=-1,
+        help='only positive value enables a fixed seed'
     )
     parser.add_argument(
         '--source-domains',
