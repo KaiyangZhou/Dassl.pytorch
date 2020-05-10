@@ -25,6 +25,7 @@ Please follow the download links and file structures to organize the datasets.
 - [PACS](#pacs)
 - [Office-Home-DG](#office-home-dg)
 - [Digits-DG](#digits-dg)
+- [Digit-Single](#digit-single)
 
 [Semi-Supervised Learning](#semi-supervised-learning)
 - [CIFAR10/100 and SVHN](#cifar10100-and-svhn)
@@ -192,6 +193,9 @@ digits_dg/
     svhn/
     syn/
 ```
+
+### Digit-Single
+Follow the steps for [Digit-5](#digit-5) to organize the dataset.
 
 ## Semi-Supervised Learning
 

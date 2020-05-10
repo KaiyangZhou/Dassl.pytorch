@@ -9,6 +9,7 @@ You can use Dassl as a library for researching the following problems:
 - Semi-supervised learning
 
 ## What's new
+- [May 2020] `v0.1.3`: Added the `Digit-Single` dataset for benchmarking single-source DG methods. The corresponding CNN model is [dassl/modeling/backbone/cnn_digitsingle.py](dassl/modeling/backbone/cnn_digitsingle.py) and the dataset config file is [configs/datasets/dg/digit_single.yaml](configs/datasets/dg/digit_single.yaml). See [Volpi et al. NIPS'18](https://arxiv.org/abs/1805.12018) for how to evaluate your method.
 - [May 2020] `v0.1.2`: 1) Added [EfficientNet](https://arxiv.org/abs/1905.11946) models (B0-B7) (credit to https://github.com/lukemelas/EfficientNet-PyTorch). To use EfficientNet, set `MODEL.BACKBONE.NAME` to `efficientnet_b{N}` where `N={0, ..., 7}`. 2) `dassl/modeling/models` has been renamed to `dassl/modeling/network`, including the `build_model()` method changed to `build_network()` and the `MODEL_REGISTRY` to `NETWORK_RESIGTRY`.
 
 ## Overview
@@ -52,6 +53,7 @@ Dassl supports the following datasets.
     - [PACS](https://arxiv.org/abs/1710.03077)
     - [Office-Home](http://hemanthdv.org/OfficeHome-Dataset/)
     - [Digits-DG](https://arxiv.org/abs/2003.06054)
+    - [Digit-Single](https://arxiv.org/abs/1805.12018)
 
 - Semi-supervised learning
     - [CIFAR10/100](https://www.cs.toronto.edu/~kriz/cifar.html.)
