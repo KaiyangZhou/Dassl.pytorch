@@ -1,5 +1,7 @@
 import torch.nn as nn
 
+from dassl.utils import init_network_weights
+
 from .build import BACKBONE_REGISTRY
 from .backbone import Backbone
 
@@ -49,4 +51,6 @@ def cnn_digitsdg(**kwargs):
         - Zhou et al. Deep Domain-Adversarial Image Generation
         for Domain Generalisation. AAAI 2020.
     """
-    return ConvNet(c_hidden=64, nb=4)
+    model = ConvNet(c_hidden=64, nb=4)
+    init_network_weights(model, init_type='kaiming')
+    return model
