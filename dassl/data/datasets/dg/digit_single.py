@@ -1,4 +1,3 @@
-import random
 import os.path as osp
 
 from dassl.utils import listdir_nohidden
@@ -24,7 +23,9 @@ def read_image_list(im_dir, n_max=None, n_repeat=None):
         items.append((impath, label))
 
     if n_max is not None:
-        items = random.sample(items, n_max)
+        # Note that the sampling process is NOT random,
+        # which follows that in Volpi et al. NIPS'18.
+        items = items[:n_max]
 
     if n_repeat is not None:
         items *= n_repeat
@@ -74,12 +75,10 @@ class DigitSingle(DatasetBase):
 
     Protocol:
         Volpi et al. train a model using 10,000 images from MNIST and
-        evaluate the model on the test split of the other
-        four datasets. However, the code does not restrict you to only
-        use MNIST as the source dataset. Instead, you can use any dataset
-        as the source. But note that only 10,000 images will be randomly
-        sampled from the source dataset for training. This excludes USPS,
-        which only have 7,438 training images so all of them will be used.
+        evaluate the model on the test split of the other four datasets. However,
+        the code does not restrict you to only use MNIST as the source dataset.
+        Instead, you can use any dataset as the source. But note that only 10,000
+        images will be sampled from the source dataset for training.
     
     Reference:
         - Lecun et al. Gradient-based learning applied to document
