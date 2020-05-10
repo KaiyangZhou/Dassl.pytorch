@@ -1,0 +1,12 @@
+INPUT:
+  SIZE: (32, 32)
+  TRANSFORMS: ['normalize']
+  PIXEL_MEAN: [0.5, 0.5, 0.5]
+  PIXEL_STD: [0.5, 0.5, 0.5]
+
+DATASET:
+  NAME: 'DigitSingle'
+
+MODEL:
+  BACKBONE:
+    NAME: 'cnn_digitsingle'
