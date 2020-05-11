@@ -1,4 +1,5 @@
 import torch.nn as nn
+from torch.nn import functional as F
 
 from dassl.utils import init_network_weights
 
@@ -19,15 +20,12 @@ class Convolution(nn.Module):
 
 class ConvNet(Backbone):
 
-    def __init__(self, c_in=3, c_hidden=64, nb=4):
+    def __init__(self, c_hidden=64):
         super().__init__()
-        backbone = []
-        backbone += [Convolution(c_in, c_hidden)]
-        backbone += [nn.MaxPool2d(2)]
-        for i in range(nb - 1):
-            backbone += [Convolution(c_hidden, c_hidden)]
-            backbone += [nn.MaxPool2d(2)]
-        self.backbone = nn.Sequential(*backbone)
+        self.conv1 = Convolution(3, c_hidden)
+        self.conv2 = Convolution(c_hidden, c_hidden)
+        self.conv3 = Convolution(c_hidden, c_hidden)
+        self.conv4 = Convolution(c_hidden, c_hidden)
 
         self._out_features = 2**2 * c_hidden
 
@@ -39,8 +37,15 @@ class ConvNet(Backbone):
 
     def forward(self, x):
         self._check_input(x)
-        f = self.backbone(x)
-        return f.view(f.size(0), -1)
+        x = self.conv1(x)
+        x = F.max_pool2d(x, 2)
+        x = self.conv2(x)
+        x = F.max_pool2d(x, 2)
+        x = self.conv3(x)
+        x = F.max_pool2d(x, 2)
+        x = self.conv4(x)
+        x = F.max_pool2d(x, 2)
+        return x.view(x.size(0), -1)
 
 
 @BACKBONE_REGISTRY.register()
@@ -51,6 +56,6 @@ def cnn_digitsdg(**kwargs):
         - Zhou et al. Deep Domain-Adversarial Image Generation
         for Domain Generalisation. AAAI 2020.
     """
-    model = ConvNet(c_hidden=64, nb=4)
+    model = ConvNet(c_hidden=64)
     init_network_weights(model, init_type='kaiming')
     return model
