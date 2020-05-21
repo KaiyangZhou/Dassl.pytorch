@@ -8,7 +8,7 @@ from .tools import mkdir_if_missing
 __all__ = ['Logger', 'setup_logger']
 
 
-class Logger(object):
+class Logger:
     """Write console output to external text file.
     
     Imported from `<https://github.com/Cysu/open-reid/blob/master/reid/utils/logging.py>`_
