@@ -131,7 +131,7 @@ class DAELDG(TrainerX):
         self.model_backward_and_update(loss)
 
         loss_summary = {
-            'loss': loss.item(),
+            'loss_x': loss_x.item(),
             'acc': acc,
             'loss_cr': loss_cr.item()
         }
