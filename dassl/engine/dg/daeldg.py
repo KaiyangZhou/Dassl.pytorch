@@ -94,7 +94,7 @@ class DAELDG(TrainerX):
         domain = torch.split(domain, self.split_batch, 0)
         domain = [d[0].item() for d in domain]
 
-        loss = 0
+        loss_x = 0
         loss_cr = 0
         acc = 0
 
@@ -106,7 +106,7 @@ class DAELDG(TrainerX):
 
             # Learning expert
             pred_i = self.E(i, feat_i)
-            loss += (-label_i * torch.log(pred_i + 1e-5)).sum(1).mean()
+            loss_x += (-label_i * torch.log(pred_i + 1e-5)).sum(1).mean()
             expert_label_i = pred_i.detach()
             acc += compute_accuracy(pred_i.detach(),
                                     label_i.max(1)[1])[0].item()
@@ -121,12 +121,12 @@ class DAELDG(TrainerX):
             cr_pred = cr_pred.mean(1)
             loss_cr += ((cr_pred - expert_label_i)**2).sum(1).mean()
 
-        loss /= self.n_domain
+        loss_x /= self.n_domain
         loss_cr /= self.n_domain
         acc /= self.n_domain
 
         loss = 0
-        loss += loss
+        loss += loss_x
         loss += loss_cr
         self.model_backward_and_update(loss)
 
