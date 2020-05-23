@@ -111,7 +111,7 @@ digit5/
 Then, run the following command in your terminal under `Dassl.pytorch/datasets/da`,
 
 ```bash 
-python digit5.py $DATA
+python digit5.py $DATA/digit5
 ```
 
 This will extract the data and organize the file structure as
