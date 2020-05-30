@@ -212,7 +212,7 @@ class DatasetWrapper(TorchDataset):
     def __getitem__(self, idx):
         item = self.data_source[idx]
 
-        loss_summary = {
+        output = {
             'label': item.label,
             'domain': item.domain,
             'impath': item.impath
@@ -227,15 +227,15 @@ class DatasetWrapper(TorchDataset):
                     keyname = 'img'
                     if (i + 1) > 1:
                         keyname += str(i + 1)
-                    loss_summary[keyname] = img
+                    output[keyname] = img
             else:
                 img = self._transform_image(self.transform, img0)
-                loss_summary['img'] = img
+                output['img'] = img
 
         img0 = self.to_tensor(img0)
-        loss_summary['img0'] = img0
+        output['img0'] = img0
 
-        return loss_summary
+        return output
 
     def _transform_image(self, tfm, img0):
         img_list = []
