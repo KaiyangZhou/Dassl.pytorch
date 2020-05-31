@@ -4,7 +4,7 @@ Dassl is a [PyTorch](https://pytorch.org) toolbox for domain adaptation and semi
 
 Besides the efforts to facilitate algorithm development and push state of the art, Dassl is also aimed at providing a uniform benchmarking platform, which allows methods to be evaluated on a common ground using the same set of environment and parameters.
 
-You can use Dassl as a library for researching the following problems:
+You can use Dassl as a library for the following research:
 
 - Domain adaptation
 - Domain generalization
@@ -89,7 +89,7 @@ conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
 python setup.py develop
 ```
 
-Follow the instructions in [DATASETS.md](./DATASETS.md) to prepare the datasets.
+Follow the instructions in [DATASETS.md](./DATASETS.md) to install the datasets.
 
 ### Training
 
@@ -112,7 +112,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 --output-dir output/source_only_office31
 ```
 
-`$DATA` denotes the path to the dataset folder. `--dataset-config-file` loads the common setting for the dataset such as image size and model architecture. `--config-file` loads the algorithm-specific setting such as hyper-parameters and optimization parameters.
+`$DATA` denotes the location where datasets are installed. `--dataset-config-file` loads the common setting for the dataset such as image size and model architecture. `--config-file` loads the algorithm-specific setting such as hyper-parameters and optimization parameters.
 
 To use multiple sources, namely the multi-source domain adaptation task, one just needs to add more sources to `--source-domains`. For instance, to train a source-only baseline on miniDomainNet, one can do
 

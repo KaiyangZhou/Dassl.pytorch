@@ -1,16 +1,13 @@
-# How to Prepare Datasets
+# How to Install Datasets
 
-We suggest you put datasets (of the same task) under the same directory `$DATA`, which looks like
-
-```
+`$DATA` denotes the location where datasets are installed, e.g.
+```bash
 $DATA/
     office31/
     office_home/
     visda17/
     ...
 ```
-
-Please follow the download links and file structures to organize the datasets.
 
 [Domain Adaptation](#domain-adaptation)
 - [Office-31](#office-31)
