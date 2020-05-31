@@ -42,8 +42,17 @@ File structure:
 ```
 office31/
     amazon/
+        back_pack/
+        bike/
+        ...
     dslr/
+        back_pack/
+        bike/
+        ...
     webcam/
+        back_pack/
+        bike/
+        ...
 ```
 
 ### Office-Home
