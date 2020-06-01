@@ -6,3 +6,4 @@ from .dann import DANN
 from .adabn import AdaBN
 from .m3sda import M3SDA
 from .source_only import SourceOnly
+from .self_ensembling import SelfEnsembling
