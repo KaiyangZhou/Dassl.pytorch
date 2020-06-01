@@ -99,7 +99,7 @@ The main interface is implemented in `tools/train.py`, which basically does thre
 2. Instantiate a `trainer` with `build_trainer(cfg)` which loads the dataset and builds a deep neural network model.
 3. Call `trainer.train()` for training and evaluating the model.
 
-Below we provide an example for training a source-only baseline on the popular domain adaptation dataset -- Office-31,
+Below we provide an example for training a source-only baseline on the popular domain adaptation dataset, Office-31,
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python tools/train.py \
@@ -112,7 +112,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 --output-dir output/source_only_office31
 ```
 
-`$DATA` denotes the location where datasets are installed. `--dataset-config-file` loads the common setting for the dataset such as image size and model architecture. `--config-file` loads the algorithm-specific setting such as hyper-parameters and optimization parameters.
+`$DATA` denotes the location where datasets are installed. `--dataset-config-file` loads the common setting for the dataset (Office-31 in this case) such as image size and model architecture. `--config-file` loads the algorithm-specific setting such as hyper-parameters and optimization parameters.
 
 To use multiple sources, namely the multi-source domain adaptation task, one just needs to add more sources to `--source-domains`. For instance, to train a source-only baseline on miniDomainNet, one can do
 
@@ -128,6 +128,8 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 ```
 
 After the training finishes, the model weights will be saved under the specified output directory, along with a log file and a tensorboard file for visualization.
+
+For other trainers such as `MCD`, you can set `--trainer MCD` while keeping the config file unchanged, i.e. using the same training parameters as `SourceOnly` (in the simplest case). To modify the algorithm-specific hyper-parameters, in this case `N_STEP_F` (number of steps to update the feature extractor), you can append `TRAINER.MCD.N_STEP_F 4` to the existing input arguments, otherwise the default value will be used. Alternatively, you can create a new `.yaml` config file to store your custom setting. See [here](https://github.com/KaiyangZhou/Dassl.pytorch/blob/master/dassl/config/defaults.py#L176) for a complete list of algorithm-specific hyper-parameters.
 
 ### Test
 Testing can be achieved by using `--eval-only`, which tells the script to run `trainer.test()`. You also need to provide the trained model and specify which model file (i.e. saved at which epoch) to use. For example, to use `model.pth.tar-20` saved at `output/source_only_office31/model`, you can do
