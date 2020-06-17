@@ -29,8 +29,6 @@ class RandomDomainSampler(Sampler):
         self.batch_size = batch_size
         # n_domain denotes number of domains sampled in a minibatch
         self.n_domain = n_domain
-
-        # Estimate the number of images that will be used in each epoch
         self.length = len(list(self.__iter__()))
 
     def __iter__(self):
