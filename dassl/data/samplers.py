@@ -31,11 +31,7 @@ class RandomDomainSampler(Sampler):
         self.n_domain = n_domain
 
         # Estimate the number of images that will be used in each epoch
-        self.length = 0
-        for _, idxs in self.domain_dict.items():
-            n_img = len(idxs)
-            n_img -= n_img % self.n_img_per_domain
-            self.length += n_img
+        self.length = len(list(self.__iter__()))
 
     def __iter__(self):
         domain_dict = copy.deepcopy(self.domain_dict)
