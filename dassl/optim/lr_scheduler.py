@@ -40,7 +40,7 @@ def build_lr_scheduler(optimizer, optim_cfg):
         )
 
     elif lr_scheduler == 'multi_step':
-        if not isinstance(stepsize, list):
+        if not isinstance(stepsize, (list, tuple)):
             raise TypeError(
                 'For multi_step lr_scheduler, stepsize must '
                 'be a list, but got {}'.format(type(stepsize))
