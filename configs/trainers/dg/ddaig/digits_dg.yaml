@@ -1,3 +1,7 @@
+INPUT:
+  PIXEL_MEAN: [0., 0., 0.]
+  PIXEL_STD: [1., 1., 1.]
+
 DATALOADER:
   TRAIN_X:
     BATCH_SIZE: 128
@@ -13,3 +17,4 @@ OPTIM:
 TRAINER:
   DDAIG:
     G_ARCH: 'fcn_3x32_gctx'
+    LMDA: 0.3
