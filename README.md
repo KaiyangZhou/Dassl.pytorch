@@ -14,7 +14,7 @@ You can use Dassl as a library for the following research:
 
 ## Overview
 
-Dassl has implemented the following papers:
+Dassl has implemented the following methods:
 
 - Single-source domain adaptation
     - [Semi-supervised Domain Adaptation via Minimax Entropy (ICCV'19)](https://arxiv.org/abs/1904.06487) [[dassl/engine/da/mme.py](dassl/engine/da/mme.py)]
