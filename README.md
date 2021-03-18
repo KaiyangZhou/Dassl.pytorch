@@ -1,6 +1,6 @@
 # Dassl
 
-Dassl is a [PyTorch](https://pytorch.org) toolbox designed for researching Domain Adaptation and Semi-Supervised Learning (and hence the name Dassl). It has a modular design and unified interfaces, allowing fast prototyping and experimentation of new DA/SSL methods. With Dassl, a new method can be implemented with only a few lines of code.
+Dassl is a [PyTorch](https://pytorch.org) toolbox designed for researching Domain Adaptation and Semi-Supervised Learning (and hence the name *Dassl*). It has a modular design and unified interfaces, allowing fast prototyping and experimentation of new DA/SSL methods. With Dassl, a new method can be implemented with only a few lines of code.
 
 You can use Dassl as a library for the following research:
 
@@ -9,7 +9,7 @@ You can use Dassl as a library for the following research:
 - Semi-supervised learning
 
 ## What's new
-- [Mar 2021] Happy to announce that we have just released a survey on domain generalization at https://arxiv.org/abs/2103.02503, which summarizes the ten-year development in this topic with coverage on the history, related problems, datasets, methodologies, potential directions, and so on.
+- [Mar 2021] We have just released a survey on domain generalization at https://arxiv.org/abs/2103.02503, which summarizes the ten-year development in this topic with coverage on the history, related problems, datasets, methodologies, potential directions, and so on.
 - [Jan 2021] Our recent work, [MixStyle](https://openreview.net/forum?id=6xHJ37MVxxp) (mixing instance-level feature statistics of samples of different domains for improving domain generalization), has been accepted to ICLR'21. The code has been released at https://github.com/KaiyangZhou/mixstyle-release where the cross-domain image classification part is based on Dassl.pytorch.
 - [May 2020] `v0.1.3`: Added the `Digit-Single` dataset for benchmarking single-source DG methods. The corresponding CNN model is [dassl/modeling/backbone/cnn_digitsingle.py](dassl/modeling/backbone/cnn_digitsingle.py) and the dataset config file is [configs/datasets/dg/digit_single.yaml](configs/datasets/dg/digit_single.yaml). See [Volpi et al. NIPS'18](https://arxiv.org/abs/1805.12018) for how to evaluate your method.
 - [May 2020] `v0.1.2`: 1) Added [EfficientNet](https://arxiv.org/abs/1905.11946) models (B0-B7) (credit to https://github.com/lukemelas/EfficientNet-PyTorch). To use EfficientNet, set `MODEL.BACKBONE.NAME` to `efficientnet_b{N}` where `N={0, ..., 7}`. 2) `dassl/modeling/models` has been renamed to `dassl/modeling/network`, including the `build_model()` method changed to `build_network()` and the `MODEL_REGISTRY` to `NETWORK_RESIGTRY`.
@@ -40,7 +40,7 @@ Dassl has implemented the following methods:
     - [Mean teachers are better role models: Weight-averaged consistency targets improve semi-supervised deep learning results (NeurIPS'17)](https://arxiv.org/abs/1703.01780) [[dassl/engine/ssl/mean_teacher.py](dassl/engine/ssl/mean_teacher.py)]
     - [Semi-supervised Learning by Entropy Minimization (NeurIPS'04)](http://papers.nips.cc/paper/2740-semi-supervised-learning-by-entropy-minimization.pdf) [[dassl/engine/ssl/entmin.py](dassl/engine/ssl/entmin.py)]
 
-Dassl supports the following datasets.
+Dassl supports the following datasets:
 
 - Domain adaptation
     - [Office-31](https://scalable.mpi-inf.mpg.de/files/2013/04/saenko_eccv_2010.pdf)
@@ -89,15 +89,15 @@ conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
 python setup.py develop
 ```
 
-Follow the instructions in [DATASETS.md](./DATASETS.md) to install the datasets.
+Follow the instructions in [DATASETS.md](./DATASETS.md) to preprocess the datasets.
 
 ### Training
 
-The main interface is implemented in `tools/train.py`, which basically does three things:
+The main interface is implemented in `tools/train.py`, which basically does
 
-1. Initialize the config with `cfg = setup_cfg(args)` where `args` contains the command-line input (see `tools/train.py` for the list of input arguments).
-2. Instantiate a `trainer` with `build_trainer(cfg)` which loads the dataset and builds a deep neural network model.
-3. Call `trainer.train()` for training and evaluating the model.
+1. initialize the config with `cfg = setup_cfg(args)` where `args` contains the command-line input (see `tools/train.py` for the list of input arguments);
+2. instantiate a `trainer` with `build_trainer(cfg)` which loads the dataset and builds a deep neural network model;
+3. call `trainer.train()` for training and evaluating the model.
 
 Below we provide an example for training a source-only baseline on the popular domain adaptation dataset, Office-31,
 
@@ -129,10 +129,12 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 
 After the training finishes, the model weights will be saved under the specified output directory, along with a log file and a tensorboard file for visualization.
 
-For other trainers such as `MCD`, you can set `--trainer MCD` while keeping the config file unchanged, i.e. using the same training parameters as `SourceOnly` (in the simplest case). To modify the algorithm-specific hyper-parameters, in this case `N_STEP_F` (number of steps to update the feature extractor), you can append `TRAINER.MCD.N_STEP_F 4` to the existing input arguments, otherwise the default value will be used. Alternatively, you can create a new `.yaml` config file to store your custom setting. See [here](https://github.com/KaiyangZhou/Dassl.pytorch/blob/master/dassl/config/defaults.py#L176) for a complete list of algorithm-specific hyper-parameters.
+To print out the results saved in the log file (so you do not need to exhaustively go through all log files and calculate the mean/std by yourself), you can use `tools/parse_test_res.py`. The instruction can be found in the code.
+
+For other trainers such as `MCD`, you can set `--trainer MCD` while keeping the config file unchanged, i.e. using the same training parameters as `SourceOnly` (in the simplest case). To modify the hyper-parameters in MCD, like `N_STEP_F` (number of steps to update the feature extractor), you can append `TRAINER.MCD.N_STEP_F 4` to the existing input arguments (otherwise the default value will be used). Alternatively, you can create a new `.yaml` config file to store your custom setting. See [here](https://github.com/KaiyangZhou/Dassl.pytorch/blob/master/dassl/config/defaults.py#L176) for a complete list of algorithm-specific hyper-parameters.
 
 ### Test
-Testing can be achieved by using `--eval-only`, which tells the script to run `trainer.test()`. You also need to provide the trained model and specify which model file (i.e. saved at which epoch) to use. For example, to use `model.pth.tar-20` saved at `output/source_only_office31/model`, you can do
+Model testing can be done by using `--eval-only`, which asks the code to run `trainer.test()`. You also need to provide the trained model and specify which model file (i.e. saved at which epoch) to use. For example, to use `model.pth.tar-20` saved at `output/source_only_office31/model`, you can do
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python tools/train.py \
