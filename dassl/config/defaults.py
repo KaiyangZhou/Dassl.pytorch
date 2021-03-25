@@ -64,6 +64,9 @@ _C.DATASET.VAL_PERCENT = 0.1
 # Fold index for STL-10 dataset (normal range is 0 - 9)
 # Negative number means None
 _C.DATASET.STL10_FOLD = -1
+# CIFAR-10/100-C's corruption type and intensity level
+_C.DATASET.CIFAR_C_TYPE = ''
+_C.DATASET.CIFAR_C_LEVEL = 1
 
 ###########################
 # Dataloader

@@ -5,7 +5,7 @@ from .vgg import vgg16
 from .resnet import resnet18, resnet34, resnet50, resnet101, resnet152
 from .alexnet import alexnet
 from .mobilenetv2 import mobilenetv2
-from .wide_resnet import wide_resnet_28_2
+from .wide_resnet import wide_resnet_16_4, wide_resnet_28_2
 from .cnn_digitsdg import cnn_digitsdg
 from .efficientnet import (
     efficientnet_b0, efficientnet_b1, efficientnet_b2, efficientnet_b3,

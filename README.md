@@ -9,6 +9,7 @@ You can use Dassl as a library for the following research:
 - Semi-supervised learning
 
 ## What's new
+- [Mar 2021] `v0.1.6`: Added [CIFAR-10/100-C](https://arxiv.org/abs/1807.01697) to the benchmark datasets for evaluating a model's robustness to image corruptions.
 - [Mar 2021] We have just released a survey on domain generalization at https://arxiv.org/abs/2103.02503, which summarizes the ten-year development in this topic with coverage on the history, related problems, datasets, methodologies, potential directions, and so on.
 - [Jan 2021] Our recent work, [MixStyle](https://openreview.net/forum?id=6xHJ37MVxxp) (mixing instance-level feature statistics of samples of different domains for improving domain generalization), has been accepted to ICLR'21. The code has been released at https://github.com/KaiyangZhou/mixstyle-release where the cross-domain image classification part is based on Dassl.pytorch.
 - [May 2020] `v0.1.3`: Added the `Digit-Single` dataset for benchmarking single-source DG methods. The corresponding CNN model is [dassl/modeling/backbone/cnn_digitsingle.py](dassl/modeling/backbone/cnn_digitsingle.py) and the dataset config file is [configs/datasets/dg/digit_single.yaml](configs/datasets/dg/digit_single.yaml). See [Volpi et al. NIPS'18](https://arxiv.org/abs/1805.12018) for how to evaluate your method.
@@ -56,6 +57,8 @@ Dassl supports the following datasets:
     - [Office-Home](http://hemanthdv.org/OfficeHome-Dataset/)
     - [Digits-DG](https://arxiv.org/abs/2003.06054)
     - [Digit-Single](https://arxiv.org/abs/1805.12018)
+    - [CIFAR-10-C](https://arxiv.org/abs/1807.01697)
+    - [CIFAR-100-C](https://arxiv.org/abs/1807.01697)
 
 - Semi-supervised learning
     - [CIFAR10/100](https://www.cs.toronto.edu/~kriz/cifar.html.)

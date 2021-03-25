@@ -10,7 +10,7 @@ class SVHN(CIFAR10):
         - Netzer et al. Reading Digits in Natural Images with
         Unsupervised Feature Learning. NIPS-W 2011.
     """
-    dataset_dir = 'ssl_svhn'
+    dataset_dir = 'svhn'
 
     def __init__(self, cfg):
         super().__init__(cfg)

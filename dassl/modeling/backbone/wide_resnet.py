@@ -139,3 +139,8 @@ class WideResNet(Backbone):
 @BACKBONE_REGISTRY.register()
 def wide_resnet_28_2(**kwargs):
     return WideResNet(28, 2)
+
+
+@BACKBONE_REGISTRY.register()
+def wide_resnet_16_4(**kwargs):
+    return WideResNet(16, 4)

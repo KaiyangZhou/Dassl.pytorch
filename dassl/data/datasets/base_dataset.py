@@ -52,7 +52,7 @@ class DatasetBase:
     2) domain generalization
     3) semi-supervised learning
     """
-    dataset_dir = '' # directory which contains the dataset
+    dataset_dir = '' # the directory where the dataset is stored
     domains = [] # string names of all domains
 
     def __init__(self, train_x=None, train_u=None, val=None, test=None):

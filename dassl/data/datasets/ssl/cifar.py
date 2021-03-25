@@ -16,7 +16,7 @@ class CIFAR10(DatasetBase):
         - Krizhevsky. Learning Multiple Layers of Features
         from Tiny Images. Tech report.
     """
-    dataset_dir = 'ssl_cifar10'
+    dataset_dir = 'cifar10'
 
     def __init__(self, cfg):
         root = osp.abspath(osp.expanduser(cfg.DATASET.ROOT))
@@ -93,7 +93,7 @@ class CIFAR100(CIFAR10):
         - Krizhevsky. Learning Multiple Layers of Features
         from Tiny Images. Tech report.
     """
-    dataset_dir = 'ssl_cifar100'
+    dataset_dir = 'cifar100'
 
     def __init__(self, cfg):
         super().__init__(cfg)

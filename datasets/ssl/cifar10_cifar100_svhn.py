@@ -37,8 +37,8 @@ def download_and_prepare(name, root):
     else:
         raise ValueError
 
-    train_dir = osp.join(root, 'ssl_' + name, 'train')
-    test_dir = osp.join(root, 'ssl_' + name, 'test')
+    train_dir = osp.join(root, name, 'train')
+    test_dir = osp.join(root, name, 'test')
 
     extract_and_save_image(train, train_dir)
     extract_and_save_image(test, test_dir)
