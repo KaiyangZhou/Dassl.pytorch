@@ -6,8 +6,8 @@ INPUT:
 
 DATASET:
   NAME: 'CIFAR100C'
-  CIFAR_C_TYPE: 'brightness'
-  CIFAR_C_LEVEL: 1
+  CIFAR_C_TYPE: 'fog'
+  CIFAR_C_LEVEL: 5
 
 MODEL:
   BACKBONE:
