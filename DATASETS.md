@@ -227,7 +227,7 @@ cifar10_c/
     ... # 19 corruption types in total
 ```
 
-Note that `cifar10_c/` only contains the test images. The training images are the normal CIFAR-10 images. See #cifar10100-and-svhn for how to prepare the CIFAR-10 dataset.
+Note that `cifar10_c/` only contains the test images. The training images are the normal CIFAR-10 images. See [CIFAR10/100 and SVHN](#cifar10100-and-svhn) for how to prepare the CIFAR-10 dataset.
 
 ### CIFAR-100-C
 
@@ -249,7 +249,7 @@ cifar100_c/
     ... # 19 corruption types in total
 ```
 
-Note that `cifar100_c/` only contains the test images. The training images are the normal CIFAR-100 images. See #cifar10100-and-svhn for how to prepare the CIFAR-100 dataset.
+Note that `cifar100_c/` only contains the test images. The training images are the normal CIFAR-100 images. See [CIFAR10/100 and SVHN](#cifar10100-and-svhn) for how to prepare the CIFAR-100 dataset.
 
 ## Semi-Supervised Learning
 
