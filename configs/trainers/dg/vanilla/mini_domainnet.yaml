@@ -1,0 +1,12 @@
+DATALOADER:
+  NUM_WORKERS: 8
+  TRAIN_X:
+    BATCH_SIZE: 128
+  TEST:
+    BATCH_SIZE: 128
+
+OPTIM:
+  NAME: 'sgd'
+  LR: 0.005
+  MAX_EPOCH: 60
+  LR_SCHEDULER: 'cosine'
