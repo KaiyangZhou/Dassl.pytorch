@@ -2,7 +2,10 @@ from .build import build_backbone, BACKBONE_REGISTRY # isort:skip
 from .backbone import Backbone # isort:skip
 
 from .vgg import vgg16
-from .resnet import resnet18, resnet34, resnet50, resnet101, resnet152
+from .resnet import (
+    resnet18, resnet34, resnet50, resnet101, resnet152, resnet18_ms123,
+    resnet50_ms123
+)
 from .alexnet import alexnet
 from .mobilenetv2 import mobilenetv2
 from .wide_resnet import wide_resnet_16_4, wide_resnet_28_2
