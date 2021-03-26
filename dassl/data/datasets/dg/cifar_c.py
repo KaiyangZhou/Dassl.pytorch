@@ -50,7 +50,8 @@ class CIFAR10C(DatasetBase):
                 'Please specify DATASET.CIFAR_C_TYPE in the config file'
             )
 
-        assert c_type in AVAI_C_TYPES
+        assert c_type in AVAI_C_TYPES, \
+            f'C_TYPE is expected to belong to {AVAI_C_TYPES}, but got "{c_type}"'
         assert 1 <= c_level <= 5
 
         train_dir = osp.join(self.dataset_dir, source_domain, 'train')
