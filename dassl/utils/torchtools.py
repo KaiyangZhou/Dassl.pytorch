@@ -83,20 +83,26 @@ def load_checkpoint(fpath):
     """
     if fpath is None:
         raise ValueError('File path is None')
+
     if not osp.exists(fpath):
         raise FileNotFoundError('File is not found at "{}"'.format(fpath))
+
     map_location = None if torch.cuda.is_available() else 'cpu'
+
     try:
         checkpoint = torch.load(fpath, map_location=map_location)
+
     except UnicodeDecodeError:
         pickle.load = partial(pickle.load, encoding="latin1")
         pickle.Unpickler = partial(pickle.Unpickler, encoding="latin1")
         checkpoint = torch.load(
             fpath, pickle_module=pickle, map_location=map_location
         )
+
     except Exception:
         print('Unable to load checkpoint from "{}"'.format(fpath))
         raise
+
     return checkpoint
 
 
@@ -122,18 +128,23 @@ def resume_from_checkpoint(fdir, model, optimizer=None, scheduler=None):
     with open(osp.join(fdir, 'checkpoint'), 'r') as checkpoint:
         model_name = checkpoint.readlines()[0].strip('\n')
         fpath = osp.join(fdir, model_name)
+
     print('Loading checkpoint from "{}"'.format(fpath))
     checkpoint = load_checkpoint(fpath)
     model.load_state_dict(checkpoint['state_dict'])
     print('Loaded model weights')
+
     if optimizer is not None and 'optimizer' in checkpoint.keys():
         optimizer.load_state_dict(checkpoint['optimizer'])
         print('Loaded optimizer')
+
     if scheduler is not None and 'scheduler' in checkpoint.keys():
         scheduler.load_state_dict(checkpoint['scheduler'])
         print('Loaded scheduler')
+
     start_epoch = checkpoint['epoch']
     print('Previous epoch: {}'.format(start_epoch))
+
     return start_epoch
 
 

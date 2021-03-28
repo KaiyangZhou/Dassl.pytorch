@@ -116,12 +116,22 @@ class TrainerBase:
         names = self.get_model_names()
 
         for name in names:
+            model_dict = self._models[name].state_dict()
+
+            optim_dict = None
+            if self._optims[name] is not None:
+                optim_dict = self._optims[name].state_dict()
+
+            sched_dict = None
+            if self._scheds[name] is not None:
+                sched_dict = self._scheds[name].state_dict()
+
             save_checkpoint(
                 {
-                    'state_dict': self._models[name].state_dict(),
+                    'state_dict': model_dict,
                     'epoch': epoch + 1,
-                    'optimizer': self._optims[name].state_dict(),
-                    'scheduler': self._scheds[name].state_dict()
+                    'optimizer': optim_dict,
+                    'scheduler': sched_dict
                 },
                 osp.join(directory, name),
                 is_best=is_best
@@ -140,6 +150,10 @@ class TrainerBase:
         if file_missing:
             print('No checkpoint found, train from scratch')
             return 0
+
+        print(
+            'Found checkpoint in "{}". Will resume training'.format(directory)
+        )
 
         for name in names:
             path = osp.join(directory, name)
@@ -259,7 +273,8 @@ class TrainerBase:
     def model_zero_grad(self, names=None):
         names = self.get_model_names(names)
         for name in names:
-            self._optims[name].zero_grad()
+            if self._optims[name] is not None:
+                self._optims[name].zero_grad()
 
     def model_backward(self, loss):
         self.detect_anomaly(loss)
@@ -268,7 +283,8 @@ class TrainerBase:
     def model_update(self, names=None):
         names = self.get_model_names(names)
         for name in names:
-            self._optims[name].step()
+            if self._optims[name] is not None:
+                self._optims[name].step()
 
     def model_backward_and_update(self, loss, names=None):
         self.model_zero_grad(names)
