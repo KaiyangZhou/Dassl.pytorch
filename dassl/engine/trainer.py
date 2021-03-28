@@ -96,6 +96,8 @@ class TrainerBase:
                 'Cannot assign sched before super().__init__() call'
             )
 
+        assert name not in self._models, 'Found duplicate model names'
+
         self._models[name] = model
         self._optims[name] = optim
         self._scheds[name] = sched
