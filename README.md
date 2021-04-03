@@ -188,7 +188,7 @@ def my_backbone(**kwargs):
 Then, you can set `MODEL.BACKBONE.NAME` to `my_backbone` to use your own architecture. For more details, please refer to the source code in `dassl/modeling`.
 
 ## Citation
-Please cite the following paper if you find Dassl useful to your research.
+If you find this code useful to your research, please consider giving credit to the following paper
 
 ```
 @article{zhou2020domain,
