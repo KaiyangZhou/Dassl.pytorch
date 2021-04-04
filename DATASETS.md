@@ -54,6 +54,8 @@ office31/
         ...
 ```
 
+Note that within each domain folder you need to move all class folders out of the `images/` folder and then delete the `images/` folder.
+
 ### Office-Home
 
 Download link: http://hemanthdv.org/OfficeHome-Dataset/.
