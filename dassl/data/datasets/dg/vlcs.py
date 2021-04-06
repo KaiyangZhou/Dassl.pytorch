@@ -1,5 +1,5 @@
-import os.path as osp
 import glob
+import os.path as osp
 
 from dassl.utils import listdir_nohidden
 
