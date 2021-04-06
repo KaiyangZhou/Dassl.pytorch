@@ -29,6 +29,9 @@ class CIFAR10(DatasetBase):
         )
         test = self._read_data_test(test_dir)
 
+        if cfg.DATASET.ALL_AS_UNLABELED:
+            train_u = train_u + train_x
+
         if len(val) == 0:
             val = None
 
@@ -56,8 +59,10 @@ class CIFAR10(DatasetBase):
             for i, imname in enumerate(imnames_train):
                 impath = osp.join(class_dir, imname)
                 item = Datum(impath=impath, label=label)
+
                 if (i + 1) <= num_labeled_per_class:
                     items_x.append(item)
+
                 else:
                     items_u.append(item)
 

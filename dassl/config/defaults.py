@@ -67,6 +67,8 @@ _C.DATASET.STL10_FOLD = -1
 # CIFAR-10/100-C's corruption type and intensity level
 _C.DATASET.CIFAR_C_TYPE = ''
 _C.DATASET.CIFAR_C_LEVEL = 1
+# Use all data in the unlabeled data set (e.g. FixMatch)
+_C.DATASET.ALL_AS_UNLABELED = False
 
 ###########################
 # Dataloader

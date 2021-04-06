@@ -43,6 +43,9 @@ class STL10(DatasetBase):
         train_u = self._read_data_all(unlabeled_dir)
         test = self._read_data_all(test_dir)
 
+        if cfg.DATASET.ALL_AS_UNLABELED:
+            train_u = train_u + train_x
+
         super().__init__(train_x=train_x, train_u=train_u, test=test)
 
     def _read_data_train(self, data_dir, fold, fold_file):

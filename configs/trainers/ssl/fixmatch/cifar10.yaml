@@ -7,6 +7,9 @@ DATALOADER:
   TEST:
     BATCH_SIZE: 500
 
+DATASET:
+  ALL_AS_UNLABELED: True
+
 OPTIM:
   NAME: 'sgd'
   LR: 0.05
