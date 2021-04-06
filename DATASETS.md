@@ -176,7 +176,7 @@ pacs/
     splits/
 ```
 
-It is ok to not manually download this dataset because once you run ``tools/train.py``, the code will detect if the dataset exists or not and automatically download the dataset to ``$DATA`` if missing. This applies to PACS, Office-Home and Digits-DG.
+You do not necessarily have to manually download this dataset. Once you run ``tools/train.py``, the code will detect if the dataset exists or not and automatically download the dataset to ``$DATA`` if missing. This also applies to Office-Home-DG and Digits-DG.
 
 ### Office-Home-DG
 
