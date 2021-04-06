@@ -9,6 +9,7 @@ You can use Dassl as a library for the following research:
 - Semi-supervised learning
 
 ## What's new
+- [Apr 2021] `v0.1.9`: Adds [VLCS](https://people.csail.mit.edu/torralba/publications/datasets_cvpr11.pdf) to the benchmark datasets (see `dassl/data/datasets/dg/vlcs.py`).
 - [Mar 2021] `v0.1.8`: Allows `optim` and `sched` to be `None` in `register_model()`.
 - [Mar 2021] `v0.1.7`: Adds [MixStyle](https://openreview.net/forum?id=6xHJ37MVxxp) models to [dassl/modeling/backbone/resnet.py](dassl/modeling/backbone/resnet.py). The training configs in `configs/trainers/dg/vanilla` can be used to train MixStyle models.
 - [Mar 2021] `v0.1.6`: Adds [CIFAR-10/100-C](https://arxiv.org/abs/1807.01697) to the benchmark datasets for evaluating a model's robustness to image corruptions.
@@ -57,6 +58,7 @@ Dassl supports the following datasets:
 
 - Domain generalization
     - [PACS](https://arxiv.org/abs/1710.03077)
+    - [VLCS](https://people.csail.mit.edu/torralba/publications/datasets_cvpr11.pdf)
     - [Office-Home](http://hemanthdv.org/OfficeHome-Dataset/)
     - [Digits-DG](https://arxiv.org/abs/2003.06054)
     - [Digit-Single](https://arxiv.org/abs/1805.12018)

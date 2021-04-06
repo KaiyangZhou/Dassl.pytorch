@@ -20,6 +20,7 @@ $DATA/
 
 [Domain Generalization](#domain-generalization)
 - [PACS](#pacs)
+- [VLCS](#vlcs)
 - [Office-Home-DG](#office-home-dg)
 - [Digits-DG](#digits-dg)
 - [Digit-Single](#digit-single)
@@ -176,7 +177,21 @@ pacs/
     splits/
 ```
 
-You do not necessarily have to manually download this dataset. Once you run ``tools/train.py``, the code will detect if the dataset exists or not and automatically download the dataset to ``$DATA`` if missing. This also applies to Office-Home-DG and Digits-DG.
+You do not necessarily have to manually download this dataset. Once you run ``tools/train.py``, the code will detect if the dataset exists or not and automatically download the dataset to ``$DATA`` if missing. This also applies to VLCS, Office-Home-DG, and Digits-DG.
+
+### VLCS
+
+Download link: [google drive](https://drive.google.com/file/d/1r0WL5DDqKfSPp9E3tRENwHaXNs1olLZd/view?usp=sharing) (credit to https://github.com/fmcarlucci/JigenDG#vlcs)
+
+File structure:
+
+```
+VLCS/
+    CALTECH/
+    LABELME/
+    PASCAL/
+    SUN/
+```
 
 ### Office-Home-DG
 
