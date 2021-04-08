@@ -62,7 +62,7 @@ def compute_ci95(res):
 
 def parse_dir(directory, end_signal, regex_acc, regex_err, args):
     print('Parsing {}'.format(directory))
-    subdirs = listdir_nohidden(directory)
+    subdirs = listdir_nohidden(directory, sort=True)
 
     valid_fpaths = []
     valid_accs = []
@@ -117,7 +117,7 @@ def main(args, end_signal):
 
     if args.multi_exp:
         accs, errs = [], []
-        for directory in listdir_nohidden(args.directory):
+        for directory in listdir_nohidden(args.directory, sort=True):
             directory = osp.join(args.directory, directory)
             acc, err = parse_dir(
                 directory, end_signal, regex_acc, regex_err, args
