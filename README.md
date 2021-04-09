@@ -9,7 +9,7 @@ You can use Dassl as a library for the following research:
 - Semi-supervised learning
 
 ## What's new
-- [Apr 2021] `v0.2.0`: Adds `_C.DATASET.ALL_AS_UNLABELED` (for the SSL setting) to the config variable list. When this variable is set to `True`, all labeled data will be included in the unlabeled data set (as adopted in [FixMatch](https://arxiv.org/abs/2001.07685)).
+- [Apr 2021] `v0.2.0`: Adds `_C.DATASET.ALL_AS_UNLABELED` (for the SSL setting) to the config variable list. When this variable is set to `True`, all labeled data will be included in the unlabeled data set.
 - [Apr 2021] `v0.1.9`: Adds [VLCS](https://people.csail.mit.edu/torralba/publications/datasets_cvpr11.pdf) to the benchmark datasets (see `dassl/data/datasets/dg/vlcs.py`).
 - [Mar 2021] `v0.1.8`: Allows `optim` and `sched` to be `None` in `register_model()`.
 - [Mar 2021] `v0.1.7`: Adds [MixStyle](https://openreview.net/forum?id=6xHJ37MVxxp) models to [dassl/modeling/backbone/resnet.py](dassl/modeling/backbone/resnet.py). The training configs in `configs/trainers/dg/vanilla` can be used to train MixStyle models.
