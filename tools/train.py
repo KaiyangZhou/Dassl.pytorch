@@ -54,13 +54,23 @@ def reset_cfg(cfg, args):
 
 def setup_cfg(args):
     cfg = get_cfg_default()
-    reset_cfg(cfg, args)
+
+    # 1. From the dataset config file
     if args.dataset_config_file:
         cfg.merge_from_file(args.dataset_config_file)
+
+    # 2. From the method config file
     if args.config_file:
         cfg.merge_from_file(args.config_file)
+
+    # 3. From input arguments
+    reset_cfg(cfg, args)
+
+    # 4. From optional input arguments
     cfg.merge_from_list(args.opts)
+
     cfg.freeze()
+
     return cfg
 
 
