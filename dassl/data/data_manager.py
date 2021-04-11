@@ -15,6 +15,7 @@ def build_data_loader(
     data_source=None,
     batch_size=64,
     n_domain=0,
+    n_ins=2,
     tfm=None,
     is_train=True,
     dataset_wrapper=None
@@ -25,7 +26,8 @@ def build_data_loader(
         cfg=cfg,
         data_source=data_source,
         batch_size=batch_size,
-        n_domain=n_domain
+        n_domain=n_domain,
+        n_ins=n_ins
     )
 
     if dataset_wrapper is None:
@@ -76,6 +78,7 @@ class DataManager:
             data_source=dataset.train_x,
             batch_size=cfg.DATALOADER.TRAIN_X.BATCH_SIZE,
             n_domain=cfg.DATALOADER.TRAIN_X.N_DOMAIN,
+            n_ins=cfg.DATALOADER.TRAIN_X.N_INS,
             tfm=tfm_train,
             is_train=True,
             dataset_wrapper=dataset_wrapper
@@ -87,11 +90,13 @@ class DataManager:
             sampler_type_ = cfg.DATALOADER.TRAIN_U.SAMPLER
             batch_size_ = cfg.DATALOADER.TRAIN_U.BATCH_SIZE
             n_domain_ = cfg.DATALOADER.TRAIN_U.N_DOMAIN
+            n_ins_ = cfg.DATALOADER.TRAIN_U.N_INS
 
             if cfg.DATALOADER.TRAIN_U.SAME_AS_X:
                 sampler_type_ = cfg.DATALOADER.TRAIN_X.SAMPLER
                 batch_size_ = cfg.DATALOADER.TRAIN_X.BATCH_SIZE
                 n_domain_ = cfg.DATALOADER.TRAIN_X.N_DOMAIN
+                n_ins_ = cfg.DATALOADER.TRAIN_X.N_INS
 
             train_loader_u = build_data_loader(
                 cfg,
@@ -99,6 +104,7 @@ class DataManager:
                 data_source=dataset.train_u,
                 batch_size=batch_size_,
                 n_domain=n_domain_,
+                n_ins=n_ins_,
                 tfm=tfm_train,
                 is_train=True,
                 dataset_wrapper=dataset_wrapper

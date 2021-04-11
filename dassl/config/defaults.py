@@ -84,6 +84,9 @@ _C.DATALOADER.TRAIN_X.BATCH_SIZE = 32
 # Parameter for RandomDomainSampler
 # 0 or -1 means sampling from all domains
 _C.DATALOADER.TRAIN_X.N_DOMAIN = 0
+# Parameter of RandomClassSampler
+# Number of instances per class
+_C.DATALOADER.TRAIN_X.N_INS = 16
 
 # Setting for train_u data-loader
 _C.DATALOADER.TRAIN_U = CN()
@@ -93,6 +96,7 @@ _C.DATALOADER.TRAIN_U.SAME_AS_X = True
 _C.DATALOADER.TRAIN_U.SAMPLER = 'RandomSampler'
 _C.DATALOADER.TRAIN_U.BATCH_SIZE = 32
 _C.DATALOADER.TRAIN_U.N_DOMAIN = 0
+_C.DATALOADER.TRAIN_U.N_INS = 16
 
 # Setting for test data-loader
 _C.DATALOADER.TEST = CN()
