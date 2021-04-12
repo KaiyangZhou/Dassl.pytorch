@@ -23,11 +23,16 @@ class MixStyle(nn.Module):
         self.eps = eps
         self.alpha = alpha
 
+        self._activated = True
+
     def __repr__(self):
         return f'MixStyle(p={self.p}, alpha={self.alpha}, eps={self.eps})'
 
+    def set_activation_status(self, status=True):
+        self._activated = status
+
     def forward(self, x):
-        if not self.training:
+        if not self.training or not self._activated:
             return x
 
         if random.random() > self.p:
@@ -74,15 +79,20 @@ class MixStyle2(nn.Module):
         self.eps = eps
         self.alpha = alpha
 
+        self._activated = True
+
     def __repr__(self):
         return f'MixStyle(p={self.p}, alpha={self.alpha}, eps={self.eps})'
+
+    def set_activation_status(self, status=True):
+        self._activated = status
 
     def forward(self, x):
         """
         For the input x, the first half comes from one domain,
         while the second half comes from the other domain.
         """
-        if not self.training:
+        if not self.training or not self._activated:
             return x
 
         if random.random() > self.p:
