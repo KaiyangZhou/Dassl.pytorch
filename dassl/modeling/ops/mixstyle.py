@@ -3,6 +3,16 @@ import torch
 import torch.nn as nn
 
 
+def deactivate_mixstyle(m):
+    if type(m) == MixStyle:
+        m.set_activation_status(False)
+
+
+def activate_mixstyle(m):
+    if type(m) == MixStyle:
+        m.set_activation_status(True)
+
+
 class MixStyle(nn.Module):
     """MixStyle.
 
