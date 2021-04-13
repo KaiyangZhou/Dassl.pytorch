@@ -68,7 +68,7 @@ class MixStyle(nn.Module):
 
 
 class MixStyle2(nn.Module):
-    """MixStyle (w/ domain prior).
+    """MixStyle (cross-domain style-mixing).
 
     The input should contain two equal-sized mini-batches from two distinct domains.
 

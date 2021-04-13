@@ -1,8 +1,6 @@
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 
-from dassl.modeling.ops import MixStyle
-
 from .build import BACKBONE_REGISTRY
 from .backbone import Backbone
 
@@ -109,7 +107,14 @@ class Bottleneck(nn.Module):
 class ResNet(Backbone):
 
     def __init__(
-        self, block, layers, ms_layers=[], ms_p=0.5, ms_a=0.1, **kwargs
+        self,
+        block,
+        layers,
+        ms_class=None,
+        ms_layers=[],
+        ms_p=0.5,
+        ms_a=0.1,
+        **kwargs
     ):
         self.inplanes = 64
         super().__init__()
@@ -131,7 +136,7 @@ class ResNet(Backbone):
 
         self.mixstyle = None
         if ms_layers:
-            self.mixstyle = MixStyle(p=ms_p, alpha=ms_a)
+            self.mixstyle = ms_class(p=ms_p, alpha=ms_a)
             for layer_name in ms_layers:
                 assert layer_name in ['layer1', 'layer2', 'layer3']
             print(f'Insert MixStyle after {ms_layers}')
@@ -216,9 +221,6 @@ resnet50: block=Bottleneck, layers=[3, 4, 6, 3]
 resnet101: block=Bottleneck, layers=[3, 4, 23, 3]
 resnet152: block=Bottleneck, layers=[3, 8, 36, 3]
 """
-"""
-Standard residual networks
-"""
 
 
 @BACKBONE_REGISTRY.register()
@@ -277,10 +279,13 @@ Residual networks with mixstyle
 
 
 @BACKBONE_REGISTRY.register()
-def resnet18_ms123(pretrained=True, **kwargs):
+def resnet18_ms_l123(pretrained=True, **kwargs):
+    from dassl.modeling.ops import MixStyle
+
     model = ResNet(
         block=BasicBlock,
         layers=[2, 2, 2, 2],
+        ms_class=MixStyle,
         ms_layers=['layer1', 'layer2', 'layer3']
     )
 
@@ -291,10 +296,47 @@ def resnet18_ms123(pretrained=True, **kwargs):
 
 
 @BACKBONE_REGISTRY.register()
-def resnet50_ms123(pretrained=True, **kwargs):
+def resnet50_ms_l123(pretrained=True, **kwargs):
+    from dassl.modeling.ops import MixStyle
+
     model = ResNet(
         block=Bottleneck,
         layers=[3, 4, 6, 3],
+        ms_class=MixStyle,
+        ms_layers=['layer1', 'layer2', 'layer3']
+    )
+
+    if pretrained:
+        init_pretrained_weights(model, model_urls['resnet50'])
+
+    return model
+
+
+@BACKBONE_REGISTRY.register()
+def resnet18_ms2_l123(pretrained=True, **kwargs):
+    from dassl.modeling.ops import MixStyle2
+
+    model = ResNet(
+        block=BasicBlock,
+        layers=[2, 2, 2, 2],
+        ms_class=MixStyle2,
+        ms_layers=['layer1', 'layer2', 'layer3']
+    )
+
+    if pretrained:
+        init_pretrained_weights(model, model_urls['resnet18'])
+
+    return model
+
+
+@BACKBONE_REGISTRY.register()
+def resnet50_ms2_l123(pretrained=True, **kwargs):
+    from dassl.modeling.ops import MixStyle2
+
+    model = ResNet(
+        block=Bottleneck,
+        layers=[3, 4, 6, 3],
+        ms_class=MixStyle2,
         ms_layers=['layer1', 'layer2', 'layer3']
     )
 
