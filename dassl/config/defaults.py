@@ -230,12 +230,13 @@ _C.TRAINER.ENTMIN.LMDA = 1e-3 # weight on the entropy loss
 _C.TRAINER.MEANTEA = CN()
 _C.TRAINER.MEANTEA.WEIGHT_U = 1. # weight on the unlabeled loss
 _C.TRAINER.MEANTEA.EMA_ALPHA = 0.999
+_C.TRAINER.MEANTEA.RAMPUP = 5 # epochs used to ramp up the loss_u weight
 # MixMatch
 _C.TRAINER.MIXMATCH = CN()
 _C.TRAINER.MIXMATCH.WEIGHT_U = 100. # weight on the unlabeled loss
 _C.TRAINER.MIXMATCH.TEMP = 2. # temperature for sharpening the probability
 _C.TRAINER.MIXMATCH.MIXUP_BETA = 0.75
-_C.TRAINER.MIXMATCH.RAMPUP = 20000
+_C.TRAINER.MIXMATCH.RAMPUP = 20000 # steps used to ramp up the loss_u weight
 # FixMatch
 _C.TRAINER.FIXMATCH = CN()
 _C.TRAINER.FIXMATCH.WEIGHT_U = 1. # weight on the unlabeled loss
