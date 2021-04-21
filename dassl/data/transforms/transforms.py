@@ -252,7 +252,7 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
 
     if 'gaussian_blur' in choices:
         print(f'+ gaussian blur (kernel={cfg.INPUT.GB_K})')
-        tfm_train += [RandomApply([GaussianBlur(cfg.INPUT.GB_K)], p=0.5)]
+        tfm_train += [RandomApply([GaussianBlur(cfg.INPUT.GB_K)], p=cfg.INPUT.GB_P)]
 
     print('+ to torch tensor of range [0, 1]')
     tfm_train += [ToTensor()]
