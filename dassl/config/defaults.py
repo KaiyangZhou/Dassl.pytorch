@@ -43,6 +43,13 @@ _C.INPUT.GN_STD = 0.15
 # RandomAugment
 _C.INPUT.RANDAUGMENT_N = 2
 _C.INPUT.RANDAUGMENT_M = 10
+# ColorJitter (brightness, contrast, saturation, hue)
+_C.INPUT.COLORJITTER_B = 0.4
+_C.INPUT.COLORJITTER_C = 0.4
+_C.INPUT.COLORJITTER_S = 0.4
+_C.INPUT.COLORJITTER_H = 0.1
+# Random gray scale's probability
+_C.INPUT.INPUT.RGS_P = 0.2
 
 ###########################
 # Dataset

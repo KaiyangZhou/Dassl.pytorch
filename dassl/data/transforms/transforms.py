@@ -3,8 +3,8 @@ import random
 import torch
 from PIL import Image
 from torchvision.transforms import (
-    Resize, Compose, ToTensor, Normalize, CenterCrop, RandomCrop,
-    RandomResizedCrop, RandomHorizontalFlip
+    Resize, Compose, ToTensor, Normalize, CenterCrop, RandomCrop, ColorJitter,
+    RandomGrayscale, RandomResizedCrop, RandomHorizontalFlip
 )
 
 from .autoaugment import SVHNPolicy, CIFAR10Policy, ImageNetPolicy
@@ -14,7 +14,8 @@ AVAI_CHOICES = [
     'random_flip', 'random_resized_crop', 'normalize', 'instance_norm',
     'random_crop', 'random_translation', 'center_crop', 'cutout',
     'imagenet_policy', 'cifar10_policy', 'svhn_policy', 'randaugment',
-    'randaugment_fixmatch', 'randaugment2', 'gaussian_noise'
+    'randaugment_fixmatch', 'randaugment2', 'gaussian_noise', 'colorjitter',
+    'randomgrayscale'
 ]
 
 
@@ -232,6 +233,21 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
         n_ = cfg.INPUT.RANDAUGMENT_N
         print('+ randaugment2 (n={})'.format(n_))
         tfm_train += [RandAugment2(n_)]
+
+    if 'colorjitter' in choices:
+        print('+ color jitter')
+        tfm_train += [
+            ColorJitter(
+                brightness=cfg.INPUT.COLORJITTER_B,
+                contrast=cfg.INPUT.COLORJITTER_C,
+                saturation=cfg.INPUT.COLORJITTER_S,
+                hue=cfg.INPUT.COLORJITTER_H
+            )
+        ]
+
+    if 'randomgrayscale' in choices:
+        print('+ random gray scale')
+        tfm_train += [RandomGrayscale(p=cfg.INPUT.RGS_P)]
 
     print('+ to torch tensor of range [0, 1]')
     tfm_train += [ToTensor()]
