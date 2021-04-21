@@ -49,7 +49,7 @@ _C.INPUT.COLORJITTER_C = 0.4
 _C.INPUT.COLORJITTER_S = 0.4
 _C.INPUT.COLORJITTER_H = 0.1
 # Random gray scale's probability
-_C.INPUT.INPUT.RGS_P = 0.2
+_C.INPUT.RGS_P = 0.2
 
 ###########################
 # Dataset
