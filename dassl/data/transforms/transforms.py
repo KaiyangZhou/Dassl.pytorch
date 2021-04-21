@@ -4,7 +4,8 @@ import torch
 from PIL import Image
 from torchvision.transforms import (
     Resize, Compose, ToTensor, Normalize, CenterCrop, RandomCrop, ColorJitter,
-    GaussianBlur, RandomGrayscale, RandomResizedCrop, RandomHorizontalFlip
+    GaussianBlur, RandomGrayscale, RandomResizedCrop, RandomHorizontalFlip,
+    RandomApply
 )
 
 from .autoaugment import SVHNPolicy, CIFAR10Policy, ImageNetPolicy
@@ -251,7 +252,7 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
 
     if 'gaussian_blur' in choices:
         print(f'+ gaussian blur (kernel={cfg.INPUT.GB_K})')
-        tfm_train += [GaussianBlur(cfg.INPUT.GB_K)]
+        tfm_train += [RandomApply([GaussianBlur(cfg.INPUT.GB_K)], p=0.5)]
 
     print('+ to torch tensor of range [0, 1]')
     tfm_train += [ToTensor()]
