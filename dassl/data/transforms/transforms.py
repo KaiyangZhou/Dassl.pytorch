@@ -4,7 +4,7 @@ import torch
 from PIL import Image
 from torchvision.transforms import (
     Resize, Compose, ToTensor, Normalize, CenterCrop, RandomCrop, ColorJitter,
-    RandomGrayscale, RandomResizedCrop, RandomHorizontalFlip
+    GaussianBlur, RandomGrayscale, RandomResizedCrop, RandomHorizontalFlip
 )
 
 from .autoaugment import SVHNPolicy, CIFAR10Policy, ImageNetPolicy
@@ -15,7 +15,7 @@ AVAI_CHOICES = [
     'random_crop', 'random_translation', 'center_crop', 'cutout',
     'imagenet_policy', 'cifar10_policy', 'svhn_policy', 'randaugment',
     'randaugment_fixmatch', 'randaugment2', 'gaussian_noise', 'colorjitter',
-    'randomgrayscale'
+    'randomgrayscale', 'gaussian_blur'
 ]
 
 
@@ -248,6 +248,10 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
     if 'randomgrayscale' in choices:
         print('+ random gray scale')
         tfm_train += [RandomGrayscale(p=cfg.INPUT.RGS_P)]
+
+    if 'gaussian_blur' in choices:
+        print(f'+ gaussian blur (kernel={cfg.INPUT.GB_K})')
+        tfm_train += [GaussianBlur(cfg.INPUT.GB_K)]
 
     print('+ to torch tensor of range [0, 1]')
     tfm_train += [ToTensor()]
