@@ -51,7 +51,7 @@ _C.INPUT.COLORJITTER_H = 0.1
 # Random gray scale's probability
 _C.INPUT.RGS_P = 0.2
 # Gaussian blur
-_C.INPUT.GB_K = 20
+_C.INPUT.GB_K = 21
 
 ###########################
 # Dataset
