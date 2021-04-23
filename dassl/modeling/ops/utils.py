@@ -28,6 +28,8 @@ def shuffle_index(data, label):
 def create_onehot(label, num_classes):
     """Create one-hot tensor.
 
+    We suggest using nn.functional.one_hot.
+
     Args:
         label (torch.Tensor): 1-D tensor.
         num_classes (int): number of classes.
