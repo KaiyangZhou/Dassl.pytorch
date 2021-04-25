@@ -2,7 +2,7 @@
 Goal
 ---
 1. Read test results from log.txt files
-2. Compute mean and std across different seeds
+2. Compute mean and std across different folders (seeds)
 
 Usage
 ---
@@ -104,8 +104,10 @@ def parse_dir(directory, end_signal, regex_acc, regex_err, args):
 
     print('===')
     print('outcome of directory: {}'.format(directory))
-    print('* acc: {:.2f}% +- {:.2f}%'.format(acc_mean, acc_std))
-    print('* err: {:.2f}% +- {:.2f}%'.format(err_mean, err_std))
+    if args.res_format in ['acc', 'acc_and_err']:
+        print('* acc: {:.2f}% +- {:.2f}%'.format(acc_mean, acc_std))
+    if args.res_format in ['err', 'acc_and_err']:
+        print('* err: {:.2f}% +- {:.2f}%'.format(err_mean, err_std))
     print('===')
 
     return acc_mean, err_mean
@@ -127,8 +129,10 @@ def main(args, end_signal):
         acc_mean = np.mean(accs)
         err_mean = np.mean(errs)
         print('overall average')
-        print('* acc: {:.2f}%'.format(acc_mean))
-        print('* err: {:.2f}%'.format(err_mean))
+        if args.res_format in ['acc', 'acc_and_err']:
+            print('* acc: {:.2f}%'.format(acc_mean))
+        if args.res_format in ['err', 'acc_and_err']:
+            print('* err: {:.2f}%'.format(err_mean))
     else:
         parse_dir(args.directory, end_signal, regex_acc, regex_err, args)
 
@@ -145,7 +149,13 @@ if __name__ == '__main__':
         '--test-log', action='store_true', help='Process test log'
     )
     parser.add_argument(
-        '--multi-exp', action='store_true', help='multiple experiments'
+        '--multi-exp', action='store_true', help='Multiple experiments'
+    )
+    parser.add_argument(
+        '--res-format',
+        type=str,
+        default='acc',
+        choices=['acc', 'err', 'acc_and_err']
     )
     args = parser.parse_args()
     end_signal = 'Finished training'
