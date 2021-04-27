@@ -6,7 +6,7 @@ from torch.nn import functional as F
 class MaximumMeanDiscrepancy(nn.Module):
 
     def __init__(self, kernel_type='rbf', normalize=False):
-        super(MaximumMeanDiscrepancy, self).__init__()
+        super().__init__()
         self.kernel_type = kernel_type
         self.normalize = normalize
 
