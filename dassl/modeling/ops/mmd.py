@@ -77,7 +77,8 @@ class MaximumMeanDiscrepancy(nn.Module):
         m, n = x.size(0), y.size(0)
         distmat = torch.pow(x, 2).sum(dim=1, keepdim=True).expand(m, n) + \
             torch.pow(y, 2).sum(dim=1, keepdim=True).expand(n, m).t()
-        distmat.addmm_(1, -2, x, y.t())
+        # distmat.addmm_(1, -2, x, y.t())
+        distmat.addmm_(x, y.t(), beta=1, alpha=-2)
         return distmat
 
 
