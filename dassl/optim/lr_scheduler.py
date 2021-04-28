@@ -35,6 +35,9 @@ def build_lr_scheduler(optimizer, optim_cfg):
                 'be an integer, but got {}'.format(type(stepsize))
             )
 
+        if stepsize <= 0:
+            stepsize = max_epoch
+
         scheduler = torch.optim.lr_scheduler.StepLR(
             optimizer, step_size=stepsize, gamma=gamma
         )

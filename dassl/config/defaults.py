@@ -155,7 +155,8 @@ _C.OPTIM.NEW_LAYERS = ()
 _C.OPTIM.BASE_LR_MULT = 0.1
 # Learning rate scheduler
 _C.OPTIM.LR_SCHEDULER = 'single_step'
-_C.OPTIM.STEPSIZE = (10, )
+# -1 or 0 means the stepsize is equal to max_epoch
+_C.OPTIM.STEPSIZE = (-1, )
 _C.OPTIM.GAMMA = 0.1
 _C.OPTIM.MAX_EPOCH = 10
 
