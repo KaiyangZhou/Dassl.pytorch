@@ -296,6 +296,40 @@ def resnet18_ms_l123(pretrained=True, **kwargs):
 
 
 @BACKBONE_REGISTRY.register()
+def resnet18_ms_l12(pretrained=True, **kwargs):
+    from dassl.modeling.ops import MixStyle
+
+    model = ResNet(
+        block=BasicBlock,
+        layers=[2, 2, 2, 2],
+        ms_class=MixStyle,
+        ms_layers=['layer1', 'layer2']
+    )
+
+    if pretrained:
+        init_pretrained_weights(model, model_urls['resnet18'])
+
+    return model
+
+
+@BACKBONE_REGISTRY.register()
+def resnet18_ms_l1(pretrained=True, **kwargs):
+    from dassl.modeling.ops import MixStyle
+
+    model = ResNet(
+        block=BasicBlock,
+        layers=[2, 2, 2, 2],
+        ms_class=MixStyle,
+        ms_layers=['layer1']
+    )
+
+    if pretrained:
+        init_pretrained_weights(model, model_urls['resnet18'])
+
+    return model
+
+
+@BACKBONE_REGISTRY.register()
 def resnet50_ms_l123(pretrained=True, **kwargs):
     from dassl.modeling.ops import MixStyle
 

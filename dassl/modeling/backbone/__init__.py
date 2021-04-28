@@ -3,8 +3,9 @@ from .backbone import Backbone # isort:skip
 
 from .vgg import vgg16
 from .resnet import (
-    resnet18, resnet34, resnet50, resnet101, resnet152, resnet18_ms_l123,
-    resnet50_ms_l123, resnet18_ms2_l123, resnet50_ms2_l123
+    resnet18, resnet34, resnet50, resnet101, resnet152, resnet18_ms_l1,
+    resnet18_ms_l12, resnet18_ms_l123, resnet50_ms_l123, resnet18_ms2_l123,
+    resnet50_ms2_l123
 )
 from .alexnet import alexnet
 from .mobilenetv2 import mobilenetv2
