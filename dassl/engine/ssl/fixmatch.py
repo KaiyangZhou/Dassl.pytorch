@@ -39,9 +39,7 @@ class FixMatch(TrainerXU):
 
     def assess_y_pred_quality(self, y_pred, y_true, mask):
         n_masked_correct = (y_pred.eq(y_true).float() * mask).sum()
-        acc_thre = n_masked_correct / (
-            mask.sum() + 1e-5
-        ) # accuracy after threshold
+        acc_thre = n_masked_correct / (mask.sum() + 1e-5)
         acc_raw = y_pred.eq(y_true).sum() / y_pred.numel() # raw accuracy
         keep_rate = mask.sum() / mask.numel()
         output = {
