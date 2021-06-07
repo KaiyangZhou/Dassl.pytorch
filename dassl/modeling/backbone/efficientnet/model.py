@@ -28,8 +28,8 @@ class MBConvBlock(nn.Module):
         self._block_args = block_args
         self._bn_mom = 1 - global_params.batch_norm_momentum
         self._bn_eps = global_params.batch_norm_epsilon
-        self.has_se = (self._block_args.se_ratio
-                       is not None) and (0 < self._block_args.se_ratio <= 1)
+        self.has_se = (self._block_args.se_ratio is
+                       not None) and (0 < self._block_args.se_ratio <= 1)
         self.id_skip = block_args.id_skip # skip connection and drop connect
 
         # Expansion phase
