@@ -58,10 +58,10 @@ def extend_cfg(cfg):
 
     E.g.
         from yacs.config import CfgNode as CN
-        cfg.MY_MODEL = CN()
-        cfg.MY_MODEL.PARAM_A = 1.
-        cfg.MY_MODEL.PARAM_B = 0.5
-        cfg.MY_MODEL.PARAM_C = False
+        cfg.TRAINER.MY_MODEL = CN()
+        cfg.TRAINER.MY_MODEL.PARAM_A = 1.
+        cfg.TRAINER.MY_MODEL.PARAM_B = 0.5
+        cfg.TRAINER.MY_MODEL.PARAM_C = False
     """
     pass
 
