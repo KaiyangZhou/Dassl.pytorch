@@ -8,16 +8,16 @@ _C = CN()
 
 _C.VERSION = 1
 
-# Directory to save the output files
+# Directory to save the output files (like log.txt and model weights)
 _C.OUTPUT_DIR = './output'
-# Path to a directory where the files were saved
+# Path to a directory where the files were saved previously
 _C.RESUME = ''
 # Set seed to negative value to randomize everything
 # Set seed to positive value to use a fixed seed
 _C.SEED = -1
 _C.USE_CUDA = True
-# Print detailed information (e.g. what trainer,
-# dataset, backbone, etc.)
+# Print detailed information
+# E.g. trainer, dataset, and backbone
 _C.VERBOSE = True
 
 ###########################
@@ -65,7 +65,7 @@ _C.DATASET.NAME = ''
 _C.DATASET.SOURCE_DOMAINS = ()
 # List of names of target domains
 _C.DATASET.TARGET_DOMAINS = ()
-# Number of labeled instances for the SSL setting
+# Number of labeled instances (for the SSL setting)
 _C.DATASET.NUM_LABELED = 250
 # Percentage of validation data (only used for SSL datasets)
 # Set to 0 if do not want to use val data
@@ -87,7 +87,7 @@ _C.DATALOADER = CN()
 _C.DATALOADER.NUM_WORKERS = 4
 # Apply transformations to an image K times (during training)
 _C.DATALOADER.K_TRANSFORMS = 1
-# Setting for train_x data-loader
+# Setting for the train_x data-loader
 _C.DATALOADER.TRAIN_X = CN()
 _C.DATALOADER.TRAIN_X.SAMPLER = 'RandomSampler'
 _C.DATALOADER.TRAIN_X.BATCH_SIZE = 32
@@ -98,7 +98,7 @@ _C.DATALOADER.TRAIN_X.N_DOMAIN = 0
 # Number of instances per class
 _C.DATALOADER.TRAIN_X.N_INS = 16
 
-# Setting for train_u data-loader
+# Setting for the train_u data-loader
 _C.DATALOADER.TRAIN_U = CN()
 # Set to false if you want to have unique
 # data loader params for train_u
@@ -108,7 +108,7 @@ _C.DATALOADER.TRAIN_U.BATCH_SIZE = 32
 _C.DATALOADER.TRAIN_U.N_DOMAIN = 0
 _C.DATALOADER.TRAIN_U.N_INS = 16
 
-# Setting for test data-loader
+# Setting for the test data-loader
 _C.DATALOADER.TEST = CN()
 _C.DATALOADER.TEST.SAMPLER = 'SequentialSampler'
 _C.DATALOADER.TEST.BATCH_SIZE = 32
@@ -117,17 +117,18 @@ _C.DATALOADER.TEST.BATCH_SIZE = 32
 # Model
 ###########################
 _C.MODEL = CN()
-# Path to model weights for initialization
+# Path to model weights (for initialization)
 _C.MODEL.INIT_WEIGHTS = ''
 _C.MODEL.BACKBONE = CN()
 _C.MODEL.BACKBONE.NAME = ''
 _C.MODEL.BACKBONE.PRETRAINED = True
-# Definition of embedding layer
+# Definition of embedding layers
 _C.MODEL.HEAD = CN()
-# If none, no embedding layer will be constructed
+# If none, do not construct embedding layers, the
+# backbone's output will be passed to the classifier
 _C.MODEL.HEAD.NAME = ''
-# Structure of hidden layers which is a list, e.g. [512, 512]
-# If not defined, no embedding layer will be constructed
+# Structure of hidden layers (a list), e.g. [512, 512]
+# If undefined, no embedding layer will be constructed
 _C.MODEL.HEAD.HIDDEN_LAYERS = ()
 _C.MODEL.HEAD.ACTIVATION = 'relu'
 _C.MODEL.HEAD.BN = True
