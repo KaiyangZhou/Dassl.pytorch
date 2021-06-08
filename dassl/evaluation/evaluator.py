@@ -42,13 +42,15 @@ class Classification(EvaluatorBase):
     def reset(self):
         self._correct = 0
         self._total = 0
+        if self._per_class_res is not None:
+            self._per_class_res = defaultdict(list)
 
     def process(self, mo, gt):
         # mo (torch.Tensor): model output [batch, num_classes]
         # gt (torch.LongTensor): ground truth [batch]
         pred = mo.max(1)[1]
-        matched = pred.eq(gt).float()
-        self._correct += int(matched.sum().item())
+        matches = pred.eq(gt).float()
+        self._correct += int(matches.sum().item())
         self._total += gt.shape[0]
 
         self._y_true.extend(gt.data.cpu().numpy().tolist())
@@ -57,8 +59,8 @@ class Classification(EvaluatorBase):
         if self._per_class_res is not None:
             for i, label in enumerate(gt):
                 label = label.item()
-                matched_i = int(matched[i].item())
-                self._per_class_res[label].append(matched_i)
+                matches_i = int(matches[i].item())
+                self._per_class_res[label].append(matches_i)
 
     def evaluate(self):
         results = OrderedDict()
