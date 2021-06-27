@@ -16,11 +16,22 @@ def activate_mixstyle(m):
 
 @contextmanager
 def run_without_mixstyle(model):
+    # Assume MixStyle was initially activated
     try:
         model.apply(deactivate_mixstyle)
         yield
     finally:
         model.apply(activate_mixstyle)
+
+
+@contextmanager
+def run_with_mixstyle(model):
+    # Assume MixStyle was initially deactivated
+    try:
+        model.apply(activate_mixstyle)
+        yield
+    finally:
+        model.apply(deactivate_mixstyle)
 
 
 def random_mixstyle(m):
