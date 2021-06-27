@@ -14,6 +14,16 @@ def activate_mixstyle(m):
         m.set_activation_status(True)
 
 
+def random_mixstyle(m):
+    if type(m) == MixStyle:
+        m.update_mix_method('random')
+
+
+def crossdomain_mixstyle(m):
+    if type(m) == MixStyle:
+        m.update_mix_method('crossdomain')
+
+
 @contextmanager
 def run_without_mixstyle(model):
     # Assume MixStyle was initially activated
@@ -25,23 +35,19 @@ def run_without_mixstyle(model):
 
 
 @contextmanager
-def run_with_mixstyle(model):
+def run_with_mixstyle(model, mix=None):
     # Assume MixStyle was initially deactivated
+    if mix == 'random':
+        model.apply(random_mixstyle)
+
+    elif mix == 'crossdomain':
+        model.apply(crossdomain_mixstyle)
+
     try:
         model.apply(activate_mixstyle)
         yield
     finally:
         model.apply(deactivate_mixstyle)
-
-
-def random_mixstyle(m):
-    if type(m) == MixStyle:
-        m.update_mix_method('random')
-
-
-def crossdomain_mixstyle(m):
-    if type(m) == MixStyle:
-        m.update_mix_method('crossdomain')
 
 
 class MixStyle(nn.Module):
