@@ -1,4 +1,5 @@
 import random
+from contextlib import contextmanager
 import torch
 import torch.nn as nn
 
@@ -11,6 +12,15 @@ def deactivate_mixstyle(m):
 def activate_mixstyle(m):
     if type(m) == MixStyle:
         m.set_activation_status(True)
+
+
+@contextmanager
+def run_without_mixstyle(model):
+    try:
+        model.apply(deactivate_mixstyle)
+        yield
+    finally:
+        model.apply(activate_mixstyle)
 
 
 def random_mixstyle(m):
