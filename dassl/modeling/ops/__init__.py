@@ -2,7 +2,8 @@ from .mmd import MaximumMeanDiscrepancy
 from .dsbn import DSBN1d, DSBN2d
 from .mixup import mixup
 from .mixstyle import (
-    MixStyle, MixStyle2, activate_mixstyle, deactivate_mixstyle
+    MixStyle, MixStyle2, random_mixstyle, activate_mixstyle,
+    deactivate_mixstyle, crossdomain_mixstyle
 )
 from .transnorm import TransNorm1d, TransNorm2d
 from .sequential2 import Sequential2

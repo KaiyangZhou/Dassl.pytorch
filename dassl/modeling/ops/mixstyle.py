@@ -13,6 +13,16 @@ def activate_mixstyle(m):
         m.set_activation_status(True)
 
 
+def random_mixstyle(m):
+    if type(m) == MixStyle:
+        m.update_mix_method('random')
+
+
+def crossdomain_mixstyle(m):
+    if type(m) == MixStyle:
+        m.update_mix_method('crossdomain')
+
+
 class MixStyle(nn.Module):
     """MixStyle.
 
@@ -20,26 +30,30 @@ class MixStyle(nn.Module):
       Zhou et al. Domain Generalization with MixStyle. ICLR 2021.
     """
 
-    def __init__(self, p=0.5, alpha=0.1, eps=1e-6):
+    def __init__(self, p=0.5, alpha=0.1, eps=1e-6, mix='random'):
         """
         Args:
           p (float): probability of using MixStyle.
           alpha (float): parameter of the Beta distribution.
           eps (float): scaling parameter to avoid numerical issues.
+          mix (str): how to mix.
         """
         super().__init__()
         self.p = p
         self.beta = torch.distributions.Beta(alpha, alpha)
         self.eps = eps
         self.alpha = alpha
-
+        self.mix = mix
         self._activated = True
 
     def __repr__(self):
-        return f'MixStyle(p={self.p}, alpha={self.alpha}, eps={self.eps})'
+        return f'MixStyle(p={self.p}, alpha={self.alpha}, eps={self.eps}, mix={self.mix})'
 
     def set_activation_status(self, status=True):
         self._activated = status
+
+    def update_mix_method(self, mix='random'):
+        self.mix = mix
 
     def forward(self, x):
         if not self.training or not self._activated:
@@ -59,71 +73,20 @@ class MixStyle(nn.Module):
         lmda = self.beta.sample((B, 1, 1, 1))
         lmda = lmda.to(x.device)
 
-        perm = torch.randperm(B)
-        mu2, sig2 = mu[perm], sig[perm]
-        mu_mix = mu*lmda + mu2 * (1-lmda)
-        sig_mix = sig*lmda + sig2 * (1-lmda)
+        if self.mix == 'random':
+            # random shuffle
+            perm = torch.randperm(B)
 
-        return x_normed*sig_mix + mu_mix
+        elif self.mix == 'crossdomain':
+            # split into two halves and swap the order
+            perm = torch.arange(B - 1, -1, -1) # inverse index
+            perm_b, perm_a = perm.chunk(2)
+            perm_b = perm_b[torch.randperm(B // 2)]
+            perm_a = perm_a[torch.randperm(B // 2)]
+            perm = torch.cat([perm_b, perm_a], 0)
 
-
-class MixStyle2(nn.Module):
-    """MixStyle (cross-domain style-mixing).
-
-    The input should contain two equal-sized mini-batches from two distinct domains.
-
-    Reference:
-      Zhou et al. Domain Generalization with MixStyle. ICLR 2021.
-    """
-
-    def __init__(self, p=0.5, alpha=0.1, eps=1e-6):
-        """
-        Args:
-          p (float): probability of using MixStyle.
-          alpha (float): parameter of the Beta distribution.
-          eps (float): scaling parameter to avoid numerical issues.
-        """
-        super().__init__()
-        self.p = p
-        self.beta = torch.distributions.Beta(alpha, alpha)
-        self.eps = eps
-        self.alpha = alpha
-
-        self._activated = True
-
-    def __repr__(self):
-        return f'MixStyle(p={self.p}, alpha={self.alpha}, eps={self.eps})'
-
-    def set_activation_status(self, status=True):
-        self._activated = status
-
-    def forward(self, x):
-        """
-        For the input x, the first half comes from one domain,
-        while the second half comes from the other domain.
-        """
-        if not self.training or not self._activated:
-            return x
-
-        if random.random() > self.p:
-            return x
-
-        B = x.size(0)
-
-        mu = x.mean(dim=[2, 3], keepdim=True)
-        var = x.var(dim=[2, 3], keepdim=True)
-        sig = (var + self.eps).sqrt()
-        mu, sig = mu.detach(), sig.detach()
-        x_normed = (x-mu) / sig
-
-        lmda = self.beta.sample((B, 1, 1, 1))
-        lmda = lmda.to(x.device)
-
-        perm = torch.arange(B - 1, -1, -1) # inverse index
-        perm_b, perm_a = perm.chunk(2)
-        perm_b = perm_b[torch.randperm(B // 2)]
-        perm_a = perm_a[torch.randperm(B // 2)]
-        perm = torch.cat([perm_b, perm_a], 0)
+        else:
+            raise NotImplementedError
 
         mu2, sig2 = mu[perm], sig[perm]
         mu_mix = mu*lmda + mu2 * (1-lmda)

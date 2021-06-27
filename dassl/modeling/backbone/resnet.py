@@ -347,34 +347,85 @@ def resnet50_ms_l123(pretrained=True, **kwargs):
 
 
 @BACKBONE_REGISTRY.register()
-def resnet18_ms2_l123(pretrained=True, **kwargs):
-    from dassl.modeling.ops import MixStyle2
+def resnet50_ms_l12(pretrained=True, **kwargs):
+    from dassl.modeling.ops import MixStyle
 
     model = ResNet(
-        block=BasicBlock,
-        layers=[2, 2, 2, 2],
-        ms_class=MixStyle2,
-        ms_layers=['layer1', 'layer2', 'layer3']
+        block=Bottleneck,
+        layers=[3, 4, 6, 3],
+        ms_class=MixStyle,
+        ms_layers=['layer1', 'layer2']
     )
 
     if pretrained:
-        init_pretrained_weights(model, model_urls['resnet18'])
+        init_pretrained_weights(model, model_urls['resnet50'])
 
     return model
 
 
 @BACKBONE_REGISTRY.register()
-def resnet50_ms2_l123(pretrained=True, **kwargs):
-    from dassl.modeling.ops import MixStyle2
+def resnet50_ms_l1(pretrained=True, **kwargs):
+    from dassl.modeling.ops import MixStyle
 
     model = ResNet(
         block=Bottleneck,
         layers=[3, 4, 6, 3],
-        ms_class=MixStyle2,
-        ms_layers=['layer1', 'layer2', 'layer3']
+        ms_class=MixStyle,
+        ms_layers=['layer1']
     )
 
     if pretrained:
         init_pretrained_weights(model, model_urls['resnet50'])
+
+    return model
+
+
+@BACKBONE_REGISTRY.register()
+def resnet101_ms_l123(pretrained=True, **kwargs):
+    from dassl.modeling.ops import MixStyle
+
+    model = ResNet(
+        block=Bottleneck,
+        layers=[3, 4, 23, 3],
+        ms_class=MixStyle,
+        ms_layers=['layer1', 'layer2', 'layer3']
+    )
+
+    if pretrained:
+        init_pretrained_weights(model, model_urls['resnet101'])
+
+    return model
+
+
+@BACKBONE_REGISTRY.register()
+def resnet101_ms_l12(pretrained=True, **kwargs):
+    from dassl.modeling.ops import MixStyle
+
+    model = ResNet(
+        block=Bottleneck,
+        layers=[3, 4, 23, 3],
+        ms_class=MixStyle,
+        ms_layers=['layer1', 'layer2']
+    )
+
+    if pretrained:
+        init_pretrained_weights(model, model_urls['resnet101'])
+
+    return model
+
+
+@BACKBONE_REGISTRY.register()
+def resnet101_ms_l1(pretrained=True, **kwargs):
+    from dassl.modeling.ops import MixStyle
+
+    model = ResNet(
+        block=Bottleneck,
+        layers=[3, 4, 23, 3],
+        ms_class=MixStyle,
+        ms_layers=['layer1']
+    )
+
+    if pretrained:
+        init_pretrained_weights(model, model_urls['resnet101'])
 
     return model
