@@ -104,7 +104,9 @@ class DatasetBase:
         for item in data_source:
             tmp.add((item.label, item.classname))
         mapping = {label: classname for label, classname in tmp}
-        classnames = list(mapping.values())
+        labels = list(mapping.keys())
+        labels.sort()
+        classnames = [mapping[label] for label in labels]
         return mapping, classnames
 
     def check_input_domains(self, source_domains, target_domains):
