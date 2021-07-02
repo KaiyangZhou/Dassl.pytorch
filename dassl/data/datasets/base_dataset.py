@@ -100,10 +100,10 @@ class DatasetBase:
 
     def get_lab2cname(self, data_source):
         # return the label-to-classname mapping
-        tmp = set()
+        container = set()
         for item in data_source:
-            tmp.add((item.label, item.classname))
-        mapping = {label: classname for label, classname in tmp}
+            container.add((item.label, item.classname))
+        mapping = {label: classname for label, classname in container}
         labels = list(mapping.keys())
         labels.sort()
         classnames = [mapping[label] for label in labels]
