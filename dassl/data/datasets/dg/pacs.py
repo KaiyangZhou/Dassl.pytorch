@@ -65,7 +65,12 @@ class PACS(DatasetBase):
 
             for impath, label in impath_label_list:
                 classname = impath.split('/')[-2]
-                item = Datum(impath=impath, label=label, domain=domain, classname=classname)
+                item = Datum(
+                    impath=impath,
+                    label=label,
+                    domain=domain,
+                    classname=classname
+                )
                 items.append(item)
 
         return items

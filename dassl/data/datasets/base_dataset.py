@@ -62,9 +62,7 @@ class DatasetBase:
         self._test = test # test data
 
         self._num_classes = self.get_num_classes(train_x)
-        self._lab2cname, self._classnames = self.get_label_classname_mapping(
-            train_x
-        )
+        self._lab2cname, self._classnames = self.get_lab2cname(train_x)
 
     @property
     def train_x(self):
@@ -100,7 +98,8 @@ class DatasetBase:
             label_set.add(item.label)
         return max(label_set) + 1
 
-    def get_label_classname_mapping(self, data_source):
+    def get_lab2cname(self, data_source):
+        # return the label-to-classname mapping
         tmp = set()
         for item in data_source:
             tmp.add((item.label, item.classname))
