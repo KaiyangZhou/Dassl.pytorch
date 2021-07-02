@@ -62,7 +62,9 @@ class DatasetBase:
         self._test = test # test data
 
         self._num_classes = self.get_num_classes(train_x)
-        self._lab2cname = self.get_label_classname_mapping(train_x)
+        self._lab2cname, self._classnames = self.get_label_classname_mapping(
+            train_x
+        )
 
     @property
     def train_x(self):
@@ -85,6 +87,10 @@ class DatasetBase:
         return self._lab2cname
 
     @property
+    def classnames(self):
+        return self._classnames
+
+    @property
     def num_classes(self):
         return self._num_classes
 
@@ -99,7 +105,8 @@ class DatasetBase:
         for item in data_source:
             tmp.add((item.label, item.classname))
         mapping = {label: classname for label, classname in tmp}
-        return mapping
+        classnames = list(mapping.values())
+        return mapping, classnames
 
     def check_input_domains(self, source_domains, target_domains):
         self.is_input_domain_valid(source_domains)
