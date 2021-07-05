@@ -112,7 +112,12 @@ class Digit5(DatasetBase):
             items_d = eval(func)(domain_dir, split=split)
 
             for impath, label in items_d:
-                item = Datum(impath=impath, label=label, domain=domain)
+                item = Datum(
+                    impath=impath,
+                    label=label,
+                    domain=domain,
+                    classname=str(label)
+                )
                 items.append(item)
 
         return items

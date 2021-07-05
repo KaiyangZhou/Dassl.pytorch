@@ -51,7 +51,12 @@ class Office31(DatasetBase):
 
                 for imname in imnames:
                     impath = osp.join(class_path, imname)
-                    item = Datum(impath=impath, label=label, domain=domain)
+                    item = Datum(
+                        impath=impath,
+                        label=label,
+                        domain=domain,
+                        classname=class_name
+                    )
                     items.append(item)
 
         return items
