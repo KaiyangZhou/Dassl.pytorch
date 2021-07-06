@@ -99,7 +99,10 @@ class Classification(EvaluatorBase):
                         label, classname, total, correct, acc
                     )
                 )
-            print('* average: {:.2f}%'.format(np.mean(accs)))
+            mean_acc = np.mean(accs)
+            print('* average: {:.2f}%'.format(mean_acc))
+
+            results['perclass_accuracy'] = mean_acc
 
         if self.cfg.TEST.COMPUTE_CMAT:
             cmat = confusion_matrix(

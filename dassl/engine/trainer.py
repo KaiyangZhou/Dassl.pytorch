@@ -2,6 +2,7 @@ import time
 import os.path as osp
 import datetime
 from collections import OrderedDict
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.tensorboard import SummaryWriter
@@ -112,7 +113,7 @@ class TrainerBase:
         else:
             return names_real
 
-    def save_model(self, epoch, directory, is_best=False):
+    def save_model(self, epoch, directory, is_best=False, model_name=''):
         names = self.get_model_names()
 
         for name in names:
@@ -134,7 +135,8 @@ class TrainerBase:
                     'scheduler': sched_dict
                 },
                 osp.join(directory, name),
-                is_best=is_best
+                is_best=is_best,
+                model_name=model_name
             )
 
     def resume_model_if_exist(self, directory):
@@ -166,9 +168,12 @@ class TrainerBase:
 
     def load_model(self, directory, epoch=None):
         names = self.get_model_names()
-        model_file = 'model.pth.tar-' + str(
-            epoch
-        ) if epoch else 'model-best.pth.tar'
+
+        # By default, the best model is loaded
+        model_file = 'model-best.pth.tar'
+
+        if epoch is not None:
+            model_file = 'model.pth.tar-' + str(epoch)
 
         for name in names:
             model_path = osp.join(directory, name, model_file)
@@ -313,6 +318,7 @@ class SimpleTrainer(TrainerBase):
         self.build_data_loader()
         self.build_model()
         self.evaluator = build_evaluator(cfg, lab2cname=self.dm.lab2cname)
+        self.best_result = -np.inf
 
     def check_cfg(self, cfg):
         """Check whether some variables are set correctly for
@@ -380,12 +386,12 @@ class SimpleTrainer(TrainerBase):
     def after_train(self):
         print('Finished training')
 
-        # Do testing
-        if not self.cfg.TEST.NO_TEST:
+        do_test = not self.cfg.TEST.NO_TEST
+        if do_test:
+            if self.cfg.TEST.FINAL_MODEL == 'best_val':
+                print('Deploy the model with the best val performance')
+                self.load_model(self.output_dir)
             self.test()
-
-        # Save model
-        self.save_model(self.epoch, self.output_dir)
 
         # Show elapsed time
         elapsed = round(time.time() - self.time_start)
@@ -396,31 +402,40 @@ class SimpleTrainer(TrainerBase):
         self.close_writer()
 
     def after_epoch(self):
-        not_last_epoch = (self.epoch + 1) != self.max_epoch
-        do_test = self.cfg.TEST.EVAL_FREQ > 0 and not self.cfg.TEST.NO_TEST
-        meet_test_freq = (
-            self.epoch + 1
-        ) % self.cfg.TEST.EVAL_FREQ == 0 if do_test else False
+        last_epoch = (self.epoch + 1) == self.max_epoch
+        do_test = not self.cfg.TEST.NO_TEST
         meet_checkpoint_freq = (
             self.epoch + 1
         ) % self.cfg.TRAIN.CHECKPOINT_FREQ == 0 if self.cfg.TRAIN.CHECKPOINT_FREQ > 0 else False
 
-        if not_last_epoch and do_test and meet_test_freq:
+        if do_test:
+            if self.cfg.TEST.FINAL_MODEL == 'best_val':
+                curr_result = self.test(split='val')
+                is_best = curr_result > self.best_result
+                if is_best:
+                    self.best_result = curr_result
+                    self.save_model(self.epoch, self.output_dir, model_name='model-best.pth.tar')
+            
             self.test()
-
-        if not_last_epoch and meet_checkpoint_freq:
+        
+        if meet_checkpoint_freq or last_epoch:
             self.save_model(self.epoch, self.output_dir)
 
     @torch.no_grad()
-    def test(self):
+    def test(self, split=None):
         """A generic testing pipeline."""
         self.set_model_mode('eval')
         self.evaluator.reset()
 
-        split = self.cfg.TEST.SPLIT
-        print('Do evaluation on {} set'.format(split))
-        data_loader = self.val_loader if split == 'val' else self.test_loader
-        assert data_loader is not None
+        if split is None:
+            split = self.cfg.TEST.SPLIT
+
+        if split == 'val' and self.val_loader is not None:
+            data_loader = self.val_loader
+            print('Do evaluation on {} set'.format(split))
+        else:
+            data_loader = self.test_loader
+            print('Do evaluation on test set')
 
         for batch_idx, batch in enumerate(data_loader):
             input, label = self.parse_batch_test(batch)
@@ -432,6 +447,8 @@ class SimpleTrainer(TrainerBase):
         for k, v in results.items():
             tag = '{}/{}'.format(split, k)
             self.write_scalar(tag, v, self.epoch)
+        
+        return results['accuracy']
 
     def model_inference(self, input):
         return self.model(input)

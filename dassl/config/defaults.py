@@ -166,7 +166,7 @@ _C.OPTIM.MAX_EPOCH = 10
 ###########################
 _C.TRAIN = CN()
 # How often (epoch) to save model during training
-# Set to 0 or negative value to disable
+# Set to 0 or negative value to only save the last one
 _C.TRAIN.CHECKPOINT_FREQ = 0
 # How often (batch) to print training information
 _C.TRAIN.PRINT_FREQ = 10
@@ -185,11 +185,11 @@ _C.TEST.PER_CLASS_RESULT = False
 _C.TEST.COMPUTE_CMAT = False
 # If NO_TEST=True, no testing will be conducted
 _C.TEST.NO_TEST = False
-# How often (epoch) to do testing during training
-# Set to 0 or negative value to disable
-_C.TEST.EVAL_FREQ = 1
-# Use 'test' set or 'val' set for evaluation
+# Use test or val set for FINAL evaluation
 _C.TEST.SPLIT = 'test'
+# Which model to test after training
+# Either last_step or best_val
+_C.TEST.FINAL_MODEL = 'last_step'
 
 ###########################
 # Trainer specifics
