@@ -20,7 +20,10 @@ __all__ = [
 
 
 def save_checkpoint(
-    state, save_dir, is_best=False, remove_module_from_keys=False,
+    state,
+    save_dir,
+    is_best=False,
+    remove_module_from_keys=False,
     model_name=''
 ):
     r"""Save checkpoint.
@@ -43,7 +46,7 @@ def save_checkpoint(
         >>> save_checkpoint(state, 'log/my_model')
     """
     mkdir_if_missing(save_dir)
-    
+
     if remove_module_from_keys:
         # remove 'module.' in state_dict's keys
         state_dict = state['state_dict']
@@ -53,7 +56,7 @@ def save_checkpoint(
                 k = k[7:]
             new_state_dict[k] = v
         state['state_dict'] = new_state_dict
-    
+
     # save model
     epoch = state['epoch']
     if not model_name:
@@ -61,13 +64,13 @@ def save_checkpoint(
     fpath = osp.join(save_dir, model_name)
     torch.save(state, fpath)
     print('Checkpoint saved to "{}"'.format(fpath))
-    
+
     # save current model name
     checkpoint_file = osp.join(save_dir, 'checkpoint')
     checkpoint = open(checkpoint_file, 'w+')
     checkpoint.write('{}\n'.format(osp.basename(fpath)))
     checkpoint.close()
-    
+
     if is_best:
         best_fpath = osp.join(osp.dirname(fpath), 'model-best.pth.tar')
         shutil.copy(fpath, best_fpath)

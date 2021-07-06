@@ -1,8 +1,8 @@
 import time
+import numpy as np
 import os.path as osp
 import datetime
 from collections import OrderedDict
-import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.tensorboard import SummaryWriter
@@ -414,10 +414,14 @@ class SimpleTrainer(TrainerBase):
                 is_best = curr_result > self.best_result
                 if is_best:
                     self.best_result = curr_result
-                    self.save_model(self.epoch, self.output_dir, model_name='model-best.pth.tar')
-            
+                    self.save_model(
+                        self.epoch,
+                        self.output_dir,
+                        model_name='model-best.pth.tar'
+                    )
+
             self.test()
-        
+
         if meet_checkpoint_freq or last_epoch:
             self.save_model(self.epoch, self.output_dir)
 
@@ -447,7 +451,7 @@ class SimpleTrainer(TrainerBase):
         for k, v in results.items():
             tag = '{}/{}'.format(split, k)
             self.write_scalar(tag, v, self.epoch)
-        
+
         return results['accuracy']
 
     def model_inference(self, input):
