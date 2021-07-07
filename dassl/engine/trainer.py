@@ -170,7 +170,7 @@ class TrainerBase:
         if not directory:
             print('Failed to load model because no directory is given')
             return
-        
+
         names = self.get_model_names()
 
         # By default, the best model is loaded
