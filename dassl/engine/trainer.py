@@ -167,6 +167,10 @@ class TrainerBase:
         return start_epoch
 
     def load_model(self, directory, epoch=None):
+        if not directory:
+            print('Failed to load model because no directory is given')
+            return
+        
         names = self.get_model_names()
 
         # By default, the best model is loaded
