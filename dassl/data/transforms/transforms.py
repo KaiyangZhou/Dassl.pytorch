@@ -207,7 +207,9 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
 
     if 'random_resized_crop' in choices:
         print('+ random resized crop')
-        tfm_train += [RandomResizedCrop(cfg.INPUT.SIZE, interpolation=interp_mode)]
+        tfm_train += [
+            RandomResizedCrop(cfg.INPUT.SIZE, interpolation=interp_mode)
+        ]
 
     if 'center_crop' in choices:
         print('+ center crop (on 1.125x enlarged input)')
