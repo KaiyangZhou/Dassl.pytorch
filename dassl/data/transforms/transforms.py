@@ -19,6 +19,12 @@ AVAI_CHOICES = [
     'randomgrayscale', 'gaussian_blur'
 ]
 
+INTERPOLATION_MODES = {
+    'bilinear': Image.BILINEAR,
+    'bicubic': Image.BICUBIC,
+    'nearest': Image.NEAREST
+}
+
 
 class Random2DTranslation:
     """Randomly translates the input image with a probability.
@@ -179,8 +185,10 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
     print('Building transform_train')
     tfm_train = []
 
+    interp_mode = INTERPOLATION_MODES[cfg.INPUT.INTERPOLATION]
+
     print('+ resize to {}'.format(expected_size))
-    tfm_train += [Resize(cfg.INPUT.SIZE)]
+    tfm_train += [Resize(cfg.INPUT.SIZE, interpolation=interp_mode)]
 
     if 'random_flip' in choices:
         print('+ random flip')
@@ -199,12 +207,12 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
 
     if 'random_resized_crop' in choices:
         print('+ random resized crop')
-        tfm_train += [RandomResizedCrop(cfg.INPUT.SIZE)]
+        tfm_train += [RandomResizedCrop(cfg.INPUT.SIZE, interpolation=interp_mode)]
 
     if 'center_crop' in choices:
         print('+ center crop (on 1.125x enlarged input)')
         enlarged_size = [int(x * 1.125) for x in cfg.INPUT.SIZE]
-        tfm_train += [Resize(enlarged_size)]
+        tfm_train += [Resize(enlarged_size, interpolation=interp_mode)]
         tfm_train += [CenterCrop(cfg.INPUT.SIZE)]
 
     if 'imagenet_policy' in choices:
@@ -293,13 +301,15 @@ def _build_transform_test(cfg, choices, expected_size, normalize):
     print('Building transform_test')
     tfm_test = []
 
+    interp_mode = INTERPOLATION_MODES[cfg.INPUT.INTERPOLATION]
+
     print('+ resize to {}'.format(expected_size))
-    tfm_test += [Resize(cfg.INPUT.SIZE)]
+    tfm_test += [Resize(cfg.INPUT.SIZE, interpolation=interp_mode)]
 
     if 'center_crop' in choices:
         print('+ center crop (on 1.125x enlarged input)')
         enlarged_size = [int(x * 1.125) for x in cfg.INPUT.SIZE]
-        tfm_test += [Resize(enlarged_size)]
+        tfm_test += [Resize(enlarged_size, interpolation=interp_mode)]
         tfm_test += [CenterCrop(cfg.INPUT.SIZE)]
 
     print('+ to torch tensor of range [0, 1]')

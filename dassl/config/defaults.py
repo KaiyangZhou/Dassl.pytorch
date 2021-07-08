@@ -25,6 +25,8 @@ _C.VERBOSE = True
 ###########################
 _C.INPUT = CN()
 _C.INPUT.SIZE = (224, 224)
+# Mode of interpolation in resize functions
+_C.INPUT.INTERPOLATION = 'bilinear'
 # For available choices please refer to transforms.py
 _C.INPUT.TRANSFORMS = ()
 # If True, tfm_train and tfm_test will be None
