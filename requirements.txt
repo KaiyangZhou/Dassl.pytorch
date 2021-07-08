@@ -1,6 +1,6 @@
-flake8
-yapf
-isort
+flake8==3.7.9
+yapf==0.29.0
+isort==4.3.21
 yacs
 gdown
 tb-nightly
