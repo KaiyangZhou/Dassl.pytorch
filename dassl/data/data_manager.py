@@ -1,5 +1,6 @@
 import torch
 import torchvision.transforms as T
+from PIL import Image
 from torch.utils.data import Dataset as TorchDataset
 
 from dassl.utils import read_image
@@ -7,6 +8,12 @@ from dassl.utils import read_image
 from .datasets import build_dataset
 from .samplers import build_sampler
 from .transforms import build_transform
+
+INTERPOLATION_MODES = {
+    'bilinear': Image.BILINEAR,
+    'bicubic': Image.BICUBIC,
+    'nearest': Image.NEAREST
+}
 
 
 def build_data_loader(
@@ -202,8 +209,9 @@ class DatasetWrapper(TorchDataset):
             )
 
         # Build transform without any data augmentation
+        interp_mode = INTERPOLATION_MODES[cfg.INPUT.INTERPOLATION]
         to_tensor = []
-        to_tensor += [T.Resize(cfg.INPUT.SIZE)]
+        to_tensor += [T.Resize(cfg.INPUT.SIZE, interpolation=interp_mode)]
         to_tensor += [T.ToTensor()]
         if 'normalize' in cfg.INPUT.TRANSFORMS:
             normalize = T.Normalize(
