@@ -168,7 +168,9 @@ class TrainerBase:
 
     def load_model(self, directory, epoch=None):
         if not directory:
-            print('Failed to load model because no directory is given')
+            print(
+                'Note that load_model() is skipped as no pretrained model is given'
+            )
             return
 
         names = self.get_model_names()
