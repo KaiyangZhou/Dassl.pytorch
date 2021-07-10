@@ -89,6 +89,9 @@ _C.DATALOADER = CN()
 _C.DATALOADER.NUM_WORKERS = 4
 # Apply transformations to an image K times (during training)
 _C.DATALOADER.K_TRANSFORMS = 1
+# img0 denotes image tensor without augmentation
+# Useful for consistency learning
+_C.DATALOADER.RETURN_IMG0 = False
 # Setting for the train_x data-loader
 _C.DATALOADER.TRAIN_X = CN()
 _C.DATALOADER.TRAIN_X.SAMPLER = 'RandomSampler'

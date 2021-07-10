@@ -14,7 +14,12 @@ class AverageMeter:
         >>> losses.update(loss_value, batch_size)
     """
 
-    def __init__(self):
+    def __init__(self, ema=False):
+        """
+        Args:
+            ema (bool, optional): apply exponential moving average.
+        """
+        self.ema = ema
         self.reset()
 
     def reset(self):
@@ -26,10 +31,15 @@ class AverageMeter:
     def update(self, val, n=1):
         if isinstance(val, torch.Tensor):
             val = val.item()
+
         self.val = val
         self.sum += val * n
         self.count += n
-        self.avg = self.sum / self.count
+
+        if self.ema:
+            self.avg = self.avg * 0.9 + self.val * 0.1
+        else:
+            self.avg = self.sum / self.count
 
 
 class MetricMeter:

@@ -196,11 +196,11 @@ class DatasetWrapper(TorchDataset):
     def __init__(self, cfg, data_source, transform=None, is_train=False):
         self.cfg = cfg
         self.data_source = data_source
-        # transform accepts list (tuple) as input
-        self.transform = transform
+        self.transform = transform # accept list (tuple) as input
         self.is_train = is_train
         # Augmenting an image K>1 times is only allowed during training
         self.k_tfm = cfg.DATALOADER.K_TRANSFORMS if is_train else 1
+        self.return_img0 = cfg.DATALOADER.RETURN_IMG0
 
         if self.k_tfm > 1 and transform is None:
             raise ValueError(
@@ -208,7 +208,7 @@ class DatasetWrapper(TorchDataset):
                 'because transform is None'.format(self.k_tfm)
             )
 
-        # Build transform without any data augmentation
+        # Build transform that doesn't apply any data augmentation
         interp_mode = INTERPOLATION_MODES[cfg.INPUT.INTERPOLATION]
         to_tensor = []
         to_tensor += [T.Resize(cfg.INPUT.SIZE, interpolation=interp_mode)]
@@ -246,8 +246,8 @@ class DatasetWrapper(TorchDataset):
                 img = self._transform_image(self.transform, img0)
                 output['img'] = img
 
-        img0 = self.to_tensor(img0)
-        output['img0'] = img0
+        if self.return_img0:
+            output['img0'] = self.to_tensor(img0)
 
         return output
 
