@@ -138,3 +138,6 @@ dmypy.json
 output/
 debug.sh
 debug.py
+
+# PyCharm
+.idea

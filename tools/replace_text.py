@@ -35,7 +35,7 @@ def recursive_update(directory, text_to_search, replacement_text):
             raise NotImplementedError
 
 
-def main():
+def replace_text():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'file_or_dir', type=str, help='path to file or directory'
@@ -66,4 +66,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    replace_text()
+

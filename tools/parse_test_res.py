@@ -113,7 +113,30 @@ def parse_dir(directory, end_signal, regex_acc, regex_err, args):
     return acc_mean, err_mean
 
 
-def main(args, end_signal):
+def parse_test_res():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('directory', type=str, help='Path to directory')
+    parser.add_argument(
+        '--ci95',
+        action='store_true',
+        help=r'Compute 95\% confidence interval'
+    )
+    parser.add_argument(
+        '--test-log', action='store_true', help='Process test log'
+    )
+    parser.add_argument(
+        '--multi-exp', action='store_true', help='Multiple experiments'
+    )
+    parser.add_argument(
+        '--res-format',
+        type=str,
+        default='acc',
+        choices=['acc', 'err', 'acc_and_err']
+    )
+    args = parser.parse_args()
+    end_signal = 'Finished training'
+    if args.test_log:
+        end_signal = '=> result'
     regex_acc = re.compile(r'\* accuracy: ([\.\deE+-]+)%')
     regex_err = re.compile(r'\* error: ([\.\deE+-]+)%')
 
@@ -138,27 +161,4 @@ def main(args, end_signal):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('directory', type=str, help='Path to directory')
-    parser.add_argument(
-        '--ci95',
-        action='store_true',
-        help=r'Compute 95\% confidence interval'
-    )
-    parser.add_argument(
-        '--test-log', action='store_true', help='Process test log'
-    )
-    parser.add_argument(
-        '--multi-exp', action='store_true', help='Multiple experiments'
-    )
-    parser.add_argument(
-        '--res-format',
-        type=str,
-        default='acc',
-        choices=['acc', 'err', 'acc_and_err']
-    )
-    args = parser.parse_args()
-    end_signal = 'Finished training'
-    if args.test_log:
-        end_signal = '=> result'
-    main(args, end_signal)
+    parse_test_res()
