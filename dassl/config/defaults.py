@@ -67,8 +67,11 @@ _C.DATASET.NAME = ''
 _C.DATASET.SOURCE_DOMAINS = ()
 # List of names of target domains
 _C.DATASET.TARGET_DOMAINS = ()
-# Number of labeled instances (for the SSL setting)
-_C.DATASET.NUM_LABELED = 250
+# Number of labeled instances in total
+# Useful for the semi-supervised learning
+_C.DATASET.NUM_LABELED = -1
+# Number of images per class
+_C.DATASET.NUM_SHOTS = -1
 # Percentage of validation data (only used for SSL datasets)
 # Set to 0 if do not want to use val data
 # Using val data for hyperparameter tuning was done in Oliver et al. 2018

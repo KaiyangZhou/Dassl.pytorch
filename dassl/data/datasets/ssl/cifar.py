@@ -24,6 +24,8 @@ class CIFAR10(DatasetBase):
         train_dir = osp.join(self.dataset_dir, 'train')
         test_dir = osp.join(self.dataset_dir, 'test')
 
+        assert cfg.DATASET.NUM_LABELED > 0
+
         train_x, train_u, val = self._read_data_train(
             train_dir, cfg.DATASET.NUM_LABELED, cfg.DATASET.VAL_PERCENT
         )

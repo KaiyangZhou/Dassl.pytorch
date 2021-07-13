@@ -1,7 +1,9 @@
 import os
+import random
 import os.path as osp
 import tarfile
 import zipfile
+from collections import defaultdict
 import gdown
 
 from dassl.utils import check_isfile
@@ -93,13 +95,22 @@ class DatasetBase:
         return self._num_classes
 
     def get_num_classes(self, data_source):
+        """Count number of classes.
+
+        Args:
+            data_source (list): a list of Datum objects.
+        """
         label_set = set()
         for item in data_source:
             label_set.add(item.label)
         return max(label_set) + 1
 
     def get_lab2cname(self, data_source):
-        # return the label-to-classname mapping
+        """Get a label-to-classname mapping (dict).
+
+        Args:
+            data_source (list): a list of Datum objects.
+        """
         container = set()
         for item in data_source:
             container.add((item.label, item.classname))
@@ -142,3 +153,38 @@ class DatasetBase:
             zip_ref.close()
 
         print('File extracted to {}'.format(osp.dirname(dst)))
+
+    def generate_fewshot_dataset(self, data_source, num_shots):
+        """Generate a few-shot dataset (typically for the training set).
+
+        This function is useful when one wants to evaluate a model
+        in a few-shot learning setting where each class only contains
+        a few number of images.
+
+        Args:
+            data_source (list): a list of Datum objects.
+            num_shots (int): number of instances per class to sample.
+        """
+        if num_shots < 1:
+            return data_source
+
+        num_classes = self.get_num_classes(data_source)
+        tracker = defaultdict(list)
+        for item in data_source:
+            tracker[item.label].append(item)
+
+        print(
+            'CREATE A FEW-SHOT SETTING: '
+            f'sample {num_shots} images from '
+            f'each one of the {num_classes} classes'
+        )
+
+        dataset = []
+        for label, items in tracker.items():
+            assert len(items) >= num_shots, \
+                f'Class {label} only has {len(items)} instances ' \
+                f'(less than NUM_SHOTS={num_shots})'
+            sampled_items = random.sample(items, num_shots)
+            dataset.extend(sampled_items)
+
+        return dataset
