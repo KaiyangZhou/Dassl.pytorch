@@ -495,8 +495,8 @@ class TrainerXU(SimpleTrainer):
     def run_epoch(self):
         self.set_model_mode('train')
         losses = MetricMeter()
-        batch_time = AverageMeter(ema=True)
-        data_time = AverageMeter(ema=True)
+        batch_time = AverageMeter()
+        data_time = AverageMeter()
 
         # Decide to iterate over labeled or unlabeled dataset
         len_train_loader_x = len(self.train_loader_x)
@@ -583,8 +583,8 @@ class TrainerX(SimpleTrainer):
     def run_epoch(self):
         self.set_model_mode('train')
         losses = MetricMeter()
-        batch_time = AverageMeter(ema=True)
-        data_time = AverageMeter(ema=True)
+        batch_time = AverageMeter()
+        data_time = AverageMeter()
         self.num_batches = len(self.train_loader_x)
 
         end = time.time()
