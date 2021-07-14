@@ -426,7 +426,11 @@ class SimpleTrainer(TrainerBase):
                         model_name='model-best.pth.tar'
                     )
 
-            self.test()
+            elif self.cfg.TEST.FINAL_MODEL == 'last_step':
+                self.test()
+
+            else:
+                raise NotImplementedError
 
         if meet_checkpoint_freq or last_epoch:
             self.save_model(self.epoch, self.output_dir)
