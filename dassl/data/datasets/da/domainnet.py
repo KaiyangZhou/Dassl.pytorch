@@ -14,6 +14,8 @@ class DomainNet(DatasetBase):
         - Around 0.6M images.
         - 345 categories.
         - URL: http://ai.bu.edu/M3SDA/.
+    
+    Special note: the t-shirt class (327) is missing in painting_train.txt.
 
     Reference:
         - Peng et al. Moment Matching for Multi-Source Domain
