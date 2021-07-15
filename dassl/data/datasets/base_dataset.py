@@ -181,10 +181,15 @@ class DatasetBase:
 
         dataset = []
         for label, items in tracker.items():
-            assert len(items) >= num_shots, \
-                f'Class {label} only has {len(items)} instances ' \
-                f'(less than NUM_SHOTS={num_shots})'
-            sampled_items = random.sample(items, num_shots)
+            if len(items) >= num_shots:
+                sampled_items = random.sample(items, num_shots)
+            else:
+                print(
+                    f'Repetition applied to class {label} due '
+                    f'to limited size ({len(items)} vs. '
+                    f'{num_shots} required)'
+                )
+                sampled_items = random.choices(items, k=num_shots)
             dataset.extend(sampled_items)
 
         return dataset
