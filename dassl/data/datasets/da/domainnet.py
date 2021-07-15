@@ -37,6 +37,8 @@ class DomainNet(DatasetBase):
         train_u = self._read_data(cfg.DATASET.TARGET_DOMAINS, split='train')
         test = self._read_data(cfg.DATASET.TARGET_DOMAINS, split='test')
 
+        train_x = self.generate_fewshot_dataset(train_x, cfg.DATASET.NUM_SHOTS)
+
         super().__init__(train_x=train_x, train_u=train_u, test=test)
 
     def _read_data(self, input_domains, split='train'):
