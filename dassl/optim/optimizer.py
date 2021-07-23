@@ -14,7 +14,7 @@ def build_optimizer(model, optim_cfg):
     """A function wrapper for building an optimizer.
 
     Args:
-        model (nn.Module): model.
+        model (nn.Module or iterable): model.
         optim_cfg (CfgNode): optimization config.
     """
     optim = optim_cfg.NAME
@@ -37,21 +37,22 @@ def build_optimizer(model, optim_cfg):
             )
         )
 
-    if not isinstance(model, nn.Module):
-        raise TypeError(
-            'model given to build_optimizer must be an instance of nn.Module'
-        )
-
     if staged_lr:
+        if not isinstance(model, nn.Module):
+            raise TypeError(
+                'When staged_lr is True, model given to '
+                'build_optimizer() must be an instance of nn.Module'
+            )
+
+        if isinstance(model, nn.DataParallel):
+            model = model.module
+
         if isinstance(new_layers, str):
             if new_layers is None:
                 warnings.warn(
                     'new_layers is empty, therefore, staged_lr is useless'
                 )
             new_layers = [new_layers]
-
-        if isinstance(model, nn.DataParallel):
-            model = model.module
 
         base_params = []
         base_layers = []
@@ -75,7 +76,10 @@ def build_optimizer(model, optim_cfg):
         ]
 
     else:
-        param_groups = model.parameters()
+        if isinstance(model, nn.Module):
+            param_groups = model.parameters()
+        else:
+            param_groups = model
 
     if optim == 'adam':
         optimizer = torch.optim.Adam(
