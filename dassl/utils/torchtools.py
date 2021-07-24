@@ -23,7 +23,7 @@ def save_checkpoint(
     state,
     save_dir,
     is_best=False,
-    remove_module_from_keys=False,
+    remove_module_from_keys=True,
     model_name=''
 ):
     r"""Save checkpoint.
@@ -34,7 +34,7 @@ def save_checkpoint(
         is_best (bool, optional): if True, this checkpoint will be copied and named
             ``model-best.pth.tar``. Default is False.
         remove_module_from_keys (bool, optional): whether to remove "module."
-            from layer names. Default is False.
+            from layer names. Default is True.
         model_name (str, optional): model name to save.
 
     Examples::
