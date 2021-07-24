@@ -414,23 +414,16 @@ class SimpleTrainer(TrainerBase):
             self.epoch + 1
         ) % self.cfg.TRAIN.CHECKPOINT_FREQ == 0 if self.cfg.TRAIN.CHECKPOINT_FREQ > 0 else False
 
-        if do_test:
-            if self.cfg.TEST.FINAL_MODEL == 'best_val':
-                curr_result = self.test(split='val')
-                is_best = curr_result > self.best_result
-                if is_best:
-                    self.best_result = curr_result
-                    self.save_model(
-                        self.epoch,
-                        self.output_dir,
-                        model_name='model-best.pth.tar'
-                    )
-
-            elif self.cfg.TEST.FINAL_MODEL == 'last_step':
-                self.test()
-
-            else:
-                raise NotImplementedError
+        if do_test and self.cfg.TEST.FINAL_MODEL == 'best_val':
+            curr_result = self.test(split='val')
+            is_best = curr_result > self.best_result
+            if is_best:
+                self.best_result = curr_result
+                self.save_model(
+                    self.epoch,
+                    self.output_dir,
+                    model_name='model-best.pth.tar'
+                )
 
         if meet_checkpoint_freq or last_epoch:
             self.save_model(self.epoch, self.output_dir)
