@@ -455,7 +455,7 @@ class SimpleTrainer(TrainerBase):
             tag = '{}/{}'.format(split, k)
             self.write_scalar(tag, v, self.epoch)
 
-        return results['accuracy']
+        return list(results.values())[0]
 
     def model_inference(self, input):
         return self.model(input)
