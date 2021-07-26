@@ -52,6 +52,7 @@ import re
 import numpy as np
 import os.path as osp
 import argparse
+from collections import OrderedDict, defaultdict
 
 from dassl.utils import check_isfile, listdir_nohidden
 
@@ -60,18 +61,17 @@ def compute_ci95(res):
     return 1.96 * np.std(res) / np.sqrt(len(res))
 
 
-def parse_dir(directory, end_signal, regex_acc, regex_err, args):
-    print('Parsing {}'.format(directory))
+def parse_function(*metrics, directory='', args=None, end_signal=None):
+    print(f'Parsing files in {directory}')
     subdirs = listdir_nohidden(directory, sort=True)
 
-    valid_fpaths = []
-    valid_accs = []
-    valid_errs = []
+    outputs = []
 
     for subdir in subdirs:
         fpath = osp.join(directory, subdir, 'log.txt')
         assert check_isfile(fpath)
         good_to_go = False
+        output = OrderedDict()
 
         with open(fpath, 'r') as f:
             lines = f.readlines()
@@ -82,83 +82,104 @@ def parse_dir(directory, end_signal, regex_acc, regex_err, args):
                 if line == end_signal:
                     good_to_go = True
 
-                match_acc = regex_acc.search(line)
-                if match_acc and good_to_go:
-                    acc = float(match_acc.group(1))
-                    valid_accs.append(acc)
-                    valid_fpaths.append(fpath)
+                for metric in metrics:
+                    match = metric['regex'].search(line)
+                    if match and good_to_go:
+                        if 'file' not in output:
+                            output['file'] = fpath
+                        num = float(match.group(1))
+                        name = metric['name']
+                        output[name] = num
 
-                match_err = regex_err.search(line)
-                if match_err and good_to_go:
-                    err = float(match_err.group(1))
-                    valid_errs.append(err)
+        if output:
+            outputs.append(output)
 
-    for fpath, acc, err in zip(valid_fpaths, valid_accs, valid_errs):
-        print('file: {}. acc: {:.2f}%. err: {:.2f}%'.format(fpath, acc, err))
+    assert len(outputs) > 0, f'Nothing found in {directory}'
 
-    acc_mean = np.mean(valid_accs)
-    acc_std = compute_ci95(valid_accs) if args.ci95 else np.std(valid_accs)
+    metrics_results = defaultdict(list)
 
-    err_mean = np.mean(valid_errs)
-    err_std = compute_ci95(valid_errs) if args.ci95 else np.std(valid_errs)
+    for output in outputs:
+        msg = ''
+        for key, value in output.items():
+            msg += f'{key}: {value}. '
+            if key != 'file':
+                metrics_results[key].append(value)
+        print(msg)
+
+    output_results = OrderedDict()
 
     print('===')
-    print('outcome of directory: {}'.format(directory))
-    if args.res_format in ['acc', 'acc_and_err']:
-        print('* acc: {:.2f}% +- {:.2f}%'.format(acc_mean, acc_std))
-    if args.res_format in ['err', 'acc_and_err']:
-        print('* err: {:.2f}% +- {:.2f}%'.format(err_mean, err_std))
+    print(f'Summary of directory: {directory}')
+    for key, values in metrics_results.items():
+        avg = np.mean(values)
+        std = compute_ci95(values) if args.ci95 else np.std(values)
+        print(f'* {key}: {avg:.2f}% +- {std:.2f}%')
+        output_results[key] = avg
     print('===')
 
-    return acc_mean, err_mean
+    return output_results
 
 
 def main(args, end_signal):
-    regex_acc = re.compile(r'\* accuracy: ([\.\deE+-]+)%')
-    regex_err = re.compile(r'\* error: ([\.\deE+-]+)%')
+    metric1 = {
+        'name': 'accuracy',
+        'regex': re.compile(r'\* accuracy: ([\.\deE+-]+)%')
+    }
+
+    metric2 = {
+        'name': 'error',
+        'regex': re.compile(r'\* error: ([\.\deE+-]+)%')
+    }
 
     if args.multi_exp:
-        accs, errs = [], []
+        final_results = defaultdict(list)
+
         for directory in listdir_nohidden(args.directory, sort=True):
             directory = osp.join(args.directory, directory)
-            acc, err = parse_dir(
-                directory, end_signal, regex_acc, regex_err, args
+            results = parse_function(
+                metric1,
+                metric2,
+                directory=directory,
+                args=args,
+                end_signal=end_signal
             )
-            accs.append(acc)
-            errs.append(err)
-        acc_mean = np.mean(accs)
-        err_mean = np.mean(errs)
-        print('overall average')
-        if args.res_format in ['acc', 'acc_and_err']:
-            print('* acc: {:.2f}%'.format(acc_mean))
-        if args.res_format in ['err', 'acc_and_err']:
-            print('* err: {:.2f}%'.format(err_mean))
+
+            for key, value in results.items():
+                final_results[key].append(value)
+
+        print('Average performance')
+        for key, values in final_results.items():
+            avg = np.mean(values)
+            print(f'* {key}: {avg:.2f}%')
+
     else:
-        parse_dir(args.directory, end_signal, regex_acc, regex_err, args)
+        parse_function(
+            metric1,
+            metric2,
+            directory=args.directory,
+            args=args,
+            end_signal=end_signal
+        )
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('directory', type=str, help='Path to directory')
+    parser.add_argument('directory', type=str, help='path to directory')
     parser.add_argument(
         '--ci95',
         action='store_true',
-        help=r'Compute 95\% confidence interval'
+        help=r'compute 95\% confidence interval'
     )
     parser.add_argument(
-        '--test-log', action='store_true', help='Process test log'
+        '--test-log', action='store_true', help='parse test-only logs'
     )
     parser.add_argument(
-        '--multi-exp', action='store_true', help='Multiple experiments'
-    )
-    parser.add_argument(
-        '--res-format',
-        type=str,
-        default='acc',
-        choices=['acc', 'err', 'acc_and_err']
+        '--multi-exp', action='store_true', help='parse multiple experiments'
     )
     args = parser.parse_args()
+
     end_signal = 'Finished training'
     if args.test_log:
         end_signal = '=> result'
+
     main(args, end_signal)
