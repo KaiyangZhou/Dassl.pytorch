@@ -154,7 +154,7 @@ _C.OPTIM.SGD_DAMPNING = 0
 _C.OPTIM.SGD_NESTEROV = False
 _C.OPTIM.RMSPROP_ALPHA = 0.99
 _C.OPTIM.ADAM_BETA1 = 0.9
-_C.OPTIM.ADAM_BETA2 = 0.99
+_C.OPTIM.ADAM_BETA2 = 0.999
 # STAGED_LR allows different layers to have
 # different lr, e.g. pre-trained base layers
 # can be assigned a smaller lr than the new

@@ -7,7 +7,7 @@ import torch.nn as nn
 
 from .radam import RAdam
 
-AVAI_OPTIMS = ['adam', 'amsgrad', 'sgd', 'rmsprop', 'radam']
+AVAI_OPTIMS = ['adam', 'amsgrad', 'sgd', 'rmsprop', 'radam', 'adamw']
 
 
 def build_optimizer(model, optim_cfg):
@@ -119,6 +119,14 @@ def build_optimizer(model, optim_cfg):
 
     elif optim == 'radam':
         optimizer = RAdam(
+            param_groups,
+            lr=lr,
+            weight_decay=weight_decay,
+            betas=(adam_beta1, adam_beta2)
+        )
+
+    elif optim == 'adamw':
+        optimizer = torch.optim.AdamW(
             param_groups,
             lr=lr,
             weight_decay=weight_decay,
