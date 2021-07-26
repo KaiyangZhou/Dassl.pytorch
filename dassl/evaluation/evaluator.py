@@ -66,7 +66,8 @@ class Classification(EvaluatorBase):
         results = OrderedDict()
         acc = 100. * self._correct / self._total
         err = 100. - acc
-        results['accuracy'] = acc # the first value will be returned by trainer.test()
+        # The first value will be returned by trainer.test()
+        results['accuracy'] = acc
         results['error_rate'] = err
 
         print(
