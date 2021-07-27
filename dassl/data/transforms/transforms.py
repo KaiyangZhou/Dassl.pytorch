@@ -27,11 +27,8 @@ INTERPOLATION_MODES = {
 
 
 class Random2DTranslation:
-    """Randomly translates the input image with a probability.
-    Specifically, given a predefined shape (height, width), the
-    input is first resized with a factor of 1.125, leading to
-    (height*1.125, width*1.125), then a random crop is performed.
-    Such operation is done with a probability.
+    """Given an image of (height, width), we resize it to
+    (height*1.125, width*1.125), and then perform random cropping.
 
     Args:
         height (int): target image height.
