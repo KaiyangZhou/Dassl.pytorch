@@ -168,6 +168,15 @@ _C.OPTIM.LR_SCHEDULER = 'single_step'
 _C.OPTIM.STEPSIZE = (-1, )
 _C.OPTIM.GAMMA = 0.1
 _C.OPTIM.MAX_EPOCH = 10
+# Warmup params
+# Set WARMUP_EPOCH larger than 0 to activate warmup
+_C.OPTIM.WARMUP_EPOCH = -1
+# Either linear or constant
+_C.OPTIM.WARMUP_TYPE = 'linear'
+# Constant learning rate when type=constant
+_C.OPTIM.WARMUP_CONS_LR = 1e-5
+# Minimum learning rate when type=linear
+_C.OPTIM.WARMUP_MIN_LR = 1e-5
 
 ###########################
 # Train
