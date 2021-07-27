@@ -101,7 +101,10 @@ def parse_function(*metrics, directory='', args=None, end_signal=None):
     for output in outputs:
         msg = ''
         for key, value in output.items():
-            msg += f'{key}: {value}. '
+            if isinstance(value, float):
+                msg += f'{key}: {value:.2f}%. '
+            else:
+                msg += f'{key}: {value}. '
             if key != 'file':
                 metrics_results[key].append(value)
         print(msg)
