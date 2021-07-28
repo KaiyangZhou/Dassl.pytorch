@@ -28,7 +28,8 @@ class _BaseWarmupScheduler(_LRScheduler):
         if self.last_epoch >= self.warmup_epoch:
             self.successor.step(epoch)
             self._last_lr = self.successor.get_last_lr()
-        super().step(epoch)
+        else:
+            super().step(epoch)
 
 
 class ConstantWarmupScheduler(_BaseWarmupScheduler):
@@ -132,6 +133,9 @@ def build_lr_scheduler(optimizer, optim_cfg):
         )
 
     if optim_cfg.WARMUP_EPOCH > 0:
+        if not optim_cfg.WARMUP_RECOUNT:
+            scheduler.last_epoch = optim_cfg.WARMUP_EPOCH
+
         if optim_cfg.WARMUP_TYPE == 'constant':
             scheduler = ConstantWarmupScheduler(
                 optimizer, scheduler, optim_cfg.WARMUP_EPOCH,
