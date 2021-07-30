@@ -154,7 +154,7 @@ class DatasetBase:
 
         print('File extracted to {}'.format(osp.dirname(dst)))
 
-    def generate_fewshot_dataset(self, data_source, num_shots):
+    def generate_fewshot_dataset(self, *data_sources, num_shots=-1):
         """Generate a few-shot dataset (typically for the training set).
 
         This function is useful when one wants to evaluate a model
@@ -162,16 +162,16 @@ class DatasetBase:
         a few number of images.
 
         Args:
-            data_source (list): a list of Datum objects.
+            data_sources: each individual is a list containing Datum objects.
             num_shots (int): number of instances per class to sample.
         """
         if num_shots < 1:
-            return data_source
+            if len(data_sources) == 1:
+                return data_sources[0]
+            return data_sources
 
+        data_source = data_sources[0]
         num_classes = self.get_num_classes(data_source)
-        tracker = defaultdict(list)
-        for item in data_source:
-            tracker[item.label].append(item)
 
         print(
             'CREATE A FEW-SHOT SETTING: '
@@ -179,17 +179,30 @@ class DatasetBase:
             f'each one of the {num_classes} classes'
         )
 
-        dataset = []
-        for label, items in tracker.items():
-            if len(items) >= num_shots:
-                sampled_items = random.sample(items, num_shots)
-            else:
-                print(
-                    f'Repetition applied to class {label} due '
-                    f'to limited size ({len(items)} vs. '
-                    f'{num_shots} required)'
-                )
-                sampled_items = random.choices(items, k=num_shots)
-            dataset.extend(sampled_items)
+        output = []
 
-        return dataset
+        for data_source in data_sources:
+            tracker = defaultdict(list)
+
+            for item in data_source:
+                tracker[item.label].append(item)
+
+            dataset = []
+
+            for label, items in tracker.items():
+                if len(items) >= num_shots:
+                    sampled_items = random.sample(items, num_shots)
+                else:
+                    print(
+                        f'Repetition applied to class {label} due '
+                        f'to limited size ({len(items)} vs. '
+                        f'{num_shots} required)'
+                    )
+                    sampled_items = random.choices(items, k=num_shots)
+                dataset.extend(sampled_items)
+
+            output.append(dataset)
+
+        if len(output) == 1:
+            return output[0]
+        return output
