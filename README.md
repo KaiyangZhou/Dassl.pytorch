@@ -15,7 +15,7 @@ Basically, Dassl is perfect for doing research in the following areas:
 
 BUT, thanks to the nice design, Dassl can also be used as a codebase to develop any deep learning projects. :-)
 
-We don't provide detailed documentations for Dassl, unlike another [project](https://kaiyangzhou.github.io/deep-person-reid/) of ours. This is because Dassl is developed for research purpose and as a researcher, we think it's important to be able to read source code and we highly encourage you to do so, especially for the parts relevant to building a new [trainer](https://github.com/KaiyangZhou/Dassl.pytorch/blob/master/dassl/engine/trainer.py)---definitely not because we are lazy. :)
+We don't provide detailed documentations for Dassl, unlike another [project](https://kaiyangzhou.github.io/deep-person-reid/) of ours. This is because Dassl is developed for research purpose and as a researcher, we think it's important to be able to read source code and we highly encourage you to do so, especially for the parts relevant to building a new [trainer](https://github.com/KaiyangZhou/Dassl.pytorch/blob/master/dassl/engine/trainer.py)---definitely not because we are lazy. :-)
 
 ## What's new
 - [Aug 2021]: `v0.4.0`: The most noteworthy update is adding the learning rate warmup scheduler. The implementation is detailed [here](https://github.com/KaiyangZhou/Dassl.pytorch/blob/master/dassl/optim/lr_scheduler.py#L10) and the config variables are specified [here](https://github.com/KaiyangZhou/Dassl.pytorch/blob/master/dassl/config/defaults.py#L171).
