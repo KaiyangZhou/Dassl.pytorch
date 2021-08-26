@@ -1,12 +1,21 @@
 # Dassl
 
-Dassl is a [PyTorch](https://pytorch.org) toolbox designed for researching Domain Adaptation and Semi-Supervised Learning (and hence the name *Dassl*). It has a modular design and unified interfaces, allowing fast prototyping and experimentation of new DA/SSL methods. With Dassl, a new method can be implemented with only a few lines of code.
+## Introduction
 
-You can use Dassl as a library for the following research:
+Dassl is a [PyTorch](https://pytorch.org) toolbox which is initially developed for our project [Domain Adaptive Ensemble Learning (DAEL)](https://arxiv.org/abs/2003.07325) to support research in domain adaptation and generalization---since in DAEL we study how to unify these two problems in a single learning framework. Given that domain adaptation is closely related to semi-supervised learning---both study how to deal with unlabeled data---we also incorporate components that support research for the latter.
 
+Why the name "Dassl"? Dassl combines the initials of domain adaptation (DA) and semi-supervised learning (SSL), which sounds natural and informative---sorry to domain generalization (DG), bro, though you are also supported in the code.
+
+Dassl has a modular design and unified interfaces, allowing fast prototyping and experimentation of new DA/DG/SSL methods. With Dassl, a new method can be implemented with only a few lines of code. Don't believe? Take a look at the [engine](https://github.com/KaiyangZhou/Dassl.pytorch/tree/master/dassl/engine) folder, which contains the implementations of many existing methods (then you will come back and star this repo). :-)
+
+Basically, Dassl is perfect for doing research in the following areas:
 - Domain adaptation
 - Domain generalization
 - Semi-supervised learning
+
+BUT, thanks to the nice design, Dassl can also be used as a codebase to develop any deep learning projects. :-)
+
+We don't provide detailed documentations for Dassl, unlike another [project](https://kaiyangzhou.github.io/deep-person-reid/) of ours. This is because Dassl is developed for research purpose and as a researcher, we think it's important to be able to read source code and we highly encourage you to do so, especially for the parts relevant to building a new [trainer](https://github.com/KaiyangZhou/Dassl.pytorch/blob/master/dassl/engine/trainer.py)---definitely not because we are lazy. :)
 
 ## What's new
 - [Aug 2021]: `v0.4.0`: The most noteworthy update is adding the learning rate warmup scheduler. The implementation is detailed [here](https://github.com/KaiyangZhou/Dassl.pytorch/blob/master/dassl/optim/lr_scheduler.py#L10) and the config variables are specified [here](https://github.com/KaiyangZhou/Dassl.pytorch/blob/master/dassl/config/defaults.py#L171).
@@ -213,7 +222,20 @@ def my_backbone(**kwargs):
 ```
 Then, you can set `MODEL.BACKBONE.NAME` to `my_backbone` to use your own architecture. For more details, please refer to the source code in `dassl/modeling`.
 
+## Relevant Research
+
+We would like to share here our research relevant to Dassl.
+
+- [MixStyle Neural Networks for Domain Generalization and Adaptation](https://arxiv.org/abs/2107.02053), arxiv preprint, 2021.
+- [Semi-Supervised Domain Generalization with Stochastic StyleMatch](https://arxiv.org/abs/2106.00592), arxiv preprint, 2021.
+- [Domain Generalization in Vision: A Survey](https://arxiv.org/abs/2103.02503), arxiv preprint, 2021.
+- [Domain Generalization with MixStyle](https://openreview.net/forum?id=6xHJ37MVxxp), in ICLR 2021.
+- [Learning to Generate Novel Domains for Domain Generalization](https://arxiv.org/abs/2007.03304), in ECCV 2020.
+- [Deep Domain-Adversarial Image Generation for Domain Generalisation](https://arxiv.org/abs/2003.06054), in AAAI 2020.
+- [Domain Adaptive Ensemble Learning](https://arxiv.org/abs/2003.07325), arxiv preprint, 2020.
+
 ## Citation
+
 If you find this code useful to your research, please give credit to the following paper
 
 ```
