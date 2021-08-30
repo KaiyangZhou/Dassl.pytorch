@@ -374,6 +374,11 @@ class SimpleTrainer(TrainerBase):
         self.sched = build_lr_scheduler(self.optim, cfg.OPTIM)
         self.register_model('model', self.model, self.optim, self.sched)
 
+        device_count = torch.cuda.device_count()
+        if device_count > 1:
+            print(f'Detected {device_count} GPUs. Activate multi-gpu training')
+            self.model = nn.DataParallel(self.model)
+
     def train(self):
         super().train(self.start_epoch, self.max_epoch)
 

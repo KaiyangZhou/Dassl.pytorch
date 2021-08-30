@@ -40,7 +40,9 @@ class DomainNet(DatasetBase):
         val = self._read_data(cfg.DATASET.SOURCE_DOMAINS, split='test')
         test = self._read_data(cfg.DATASET.TARGET_DOMAINS, split='test')
 
-        train_x = self.generate_fewshot_dataset(train_x, num_shots=cfg.DATASET.NUM_SHOTS)
+        train_x = self.generate_fewshot_dataset(
+            train_x, num_shots=cfg.DATASET.NUM_SHOTS
+        )
 
         super().__init__(train_x=train_x, train_u=train_u, val=val, test=test)
 
