@@ -13,7 +13,7 @@ Basically, Dassl is perfect for doing research in the following areas:
 - Domain generalization
 - Semi-supervised learning
 
-BUT, thanks to the neat design, Dassl can also be used as a codebase to develop any deep learning projects. :-)
+BUT, thanks to the neat design, Dassl can also be used as a codebase to develop any deep learning projects, like [this](https://github.com/KaiyangZhou/CoOp). :-)
 
 We don't provide detailed documentations for Dassl, unlike another [project](https://kaiyangzhou.github.io/deep-person-reid/) of ours. This is because Dassl is developed for research purpose and as a researcher, we think it's important to be able to read source code and we highly encourage you to do so---definitely not because we are lazy. :-)
 
