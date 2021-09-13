@@ -1,12 +1,12 @@
 # How to Install Datasets
 
 `$DATA` denotes the location where datasets are installed, e.g.
-```bash
+
+```
 $DATA/
-    office31/
-    office_home/
-    visda17/
-    ...
+|–– office31/
+|–– office_home/
+|__ visda17/
 ```
 
 [Domain Adaptation](#domain-adaptation)
@@ -41,18 +41,18 @@ File structure:
 
 ```
 office31/
-    amazon/
-        back_pack/
-        bike/
-        ...
-    dslr/
-        back_pack/
-        bike/
-        ...
-    webcam/
-        back_pack/
-        bike/
-        ...
+|–– amazon/
+|   |–– back_pack/
+|   |–– bike/
+|   |–– ...
+|–– dslr/
+|   |–– back_pack/
+|   |–– bike/
+|   |–– ...
+|–– webcam/
+|   |–– back_pack/
+|   |–– bike/
+|   |–– ...
 ```
 
 Note that within each domain folder you need to move all class folders out of the `images/` folder and then delete the `images/` folder.
@@ -65,10 +65,10 @@ File structure:
 
 ```
 office_home/
-    art/
-    clipart/
-    product/
-    real_world/
+|–– art/
+|–– clipart/
+|–– product/
+|__ real_world/
 ```
 
 ### VisDA17
@@ -85,9 +85,9 @@ Once the download is finished, the file structure will look like
 
 ```
 visda17/
-    train/
-    test/
-    validation/
+|–– train/
+|–– test/
+|__ validation/
 ```
 
 ### CIFAR10-STL10
@@ -102,12 +102,12 @@ This will create a folder named `cifar_stl` under `$DATA`. The file structure wi
 
 ```
 cifar_stl/
-    cifar/
-        train/
-        test/
-    stl/
-        train/
-        test/
+|–– cifar/
+|   |–– train/
+|   |__ test/
+|–– stl/
+|   |–– train/
+|   |__ test/
 ```
 
 Note that only 9 classes shared by both datasets are kept.
@@ -118,7 +118,7 @@ Create a folder `$DATA/digit5` and download to this folder the dataset from [her
 
 ```
 digit5/
-    Digit-Five/
+|–– Digit-Five/
 ```
 
 Then, run the following command in your terminal under `Dassl.pytorch/datasets/da`,
@@ -131,12 +131,12 @@ This will extract the data and organize the file structure as
 
 ```
 digit5/
-    Digit-Five/
-    mnist/
-    mnist_m/
-    usps/
-    svhn/
-    syn/
+|–– Digit-Five/
+|–– mnist/
+|–– mnist_m/
+|–– usps/
+|–– svhn/
+|__ syn/
 ```
 
 ### DomainNet
@@ -147,16 +147,16 @@ File structure:
 
 ```
 domainnet/
-    clipart/
-    infograph/
-    painting/
-    quickdraw/
-    real/
-    sketch/
-    splits/
-        clipart_train.txt
-        clipart_test.txt
-        ...
+|–– clipart/
+|–– infograph/
+|–– painting/
+|–– quickdraw/
+|–– real/
+|–– sketch/
+|__ splits/
+|   |–– clipart_train.txt
+|   |–– clipart_test.txt
+|   |–– ...
 ```
 
 ### miniDomainNet
@@ -173,8 +173,8 @@ File structure:
 
 ```
 pacs/
-    images/
-    splits/
+|–– images/
+|__ splits/
 ```
 
 You do not necessarily have to manually download this dataset. Once you run ``tools/train.py``, the code will detect if the dataset exists or not and automatically download the dataset to ``$DATA`` if missing. This also applies to VLCS, Office-Home-DG, and Digits-DG.
@@ -187,10 +187,10 @@ File structure:
 
 ```
 VLCS/
-    CALTECH/
-    LABELME/
-    PASCAL/
-    SUN/
+|–– CALTECH/
+|–– LABELME/
+|–– PASCAL/
+|__ SUN/
 ```
 
 ### Office-Home-DG
@@ -201,10 +201,10 @@ File structure:
 
 ```
 office_home_dg/
-    art/
-    clipart/
-    product/
-    real_world/
+|–– art/
+|–– clipart/
+|–– product/
+|__ real_world/
 ```
 
 ### Digits-DG
@@ -215,10 +215,10 @@ File structure:
 
 ```
 digits_dg/
-    mnist/
-    mnist_m/
-    svhn/
-    syn/
+|–– mnist/
+|–– mnist_m/
+|–– svhn/
+|__ syn/
 ```
 
 ### Digit-Single
@@ -235,13 +235,13 @@ where the first argument denotes the path to the (uncompressed) CIFAR-10-C datas
 The script will extract images from the `.npy` files and save them to `cifar10_c/` created under $DATA. The file structure will look like
 ```
 cifar10_c/
-    brightness/
-        1/ # 5 intensity levels in total
-        2/
-        3/
-        4/
-        5/
-    ... # 19 corruption types in total
+|–– brightness/
+|   |–– 1/ # 5 intensity levels in total
+|   |–– 2/
+|   |–– 3/
+|   |–– 4/
+|   |–– 5/
+|–– ... # 19 corruption types in total
 ```
 
 Note that `cifar10_c/` only contains the test images. The training images are the normal CIFAR-10 images. See [CIFAR10/100 and SVHN](#cifar10100-and-svhn) for how to prepare the CIFAR-10 dataset.
@@ -257,13 +257,13 @@ where the first argument denotes the path to the (uncompressed) CIFAR-100-C data
 The script will extract images from the `.npy` files and save them to `cifar100_c/` created under $DATA. The file structure will look like
 ```
 cifar100_c/
-    brightness/
-        1/ # 5 intensity levels in total
-        2/
-        3/
-        4/
-        5/
-    ... # 19 corruption types in total
+|–– brightness/
+|   |–– 1/ # 5 intensity levels in total
+|   |–– 2/
+|   |–– 3/
+|   |–– 4/
+|   |–– 5/
+|–– ... # 19 corruption types in total
 ```
 
 Note that `cifar100_c/` only contains the test images. The training images are the normal CIFAR-100 images. See [CIFAR10/100 and SVHN](#cifar10100-and-svhn) for how to prepare the CIFAR-100 dataset.
@@ -282,14 +282,14 @@ This will create three folders under `$DATA`, i.e.
 
 ```
 cifar10/
-    train/
-    test/
+|–– train/
+|__ test/
 cifar100/
-    train/
-    test/
+|–– train/
+|__ test/
 svhn/
-    train/
-    test/
+|–– train/
+|__ test/
 ```
 
 ### STL10
@@ -306,8 +306,8 @@ The file structure will look like
 
 ```
 stl10/
-    train/
-    test/
-    unlabeled/
-    stl10_binary/
+|–– train/
+|–– test/
+|–– unlabeled/
+|__ stl10_binary/
 ```
