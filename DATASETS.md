@@ -6,7 +6,7 @@
 $DATA/
 |–– office31/
 |–– office_home/
-|__ visda17/
+|–– visda17/
 ```
 
 [Domain Adaptation](#domain-adaptation)
@@ -68,7 +68,7 @@ office_home/
 |–– art/
 |–– clipart/
 |–– product/
-|__ real_world/
+|–– real_world/
 ```
 
 ### VisDA17
@@ -87,7 +87,7 @@ Once the download is finished, the file structure will look like
 visda17/
 |–– train/
 |–– test/
-|__ validation/
+|–– validation/
 ```
 
 ### CIFAR10-STL10
@@ -104,10 +104,10 @@ This will create a folder named `cifar_stl` under `$DATA`. The file structure wi
 cifar_stl/
 |–– cifar/
 |   |–– train/
-|   |__ test/
+|   |–– test/
 |–– stl/
 |   |–– train/
-|   |__ test/
+|   |–– test/
 ```
 
 Note that only 9 classes shared by both datasets are kept.
@@ -136,7 +136,7 @@ digit5/
 |–– mnist_m/
 |–– usps/
 |–– svhn/
-|__ syn/
+|–– syn/
 ```
 
 ### DomainNet
@@ -153,7 +153,7 @@ domainnet/
 |–– quickdraw/
 |–– real/
 |–– sketch/
-|__ splits/
+|–– splits/
 |   |–– clipart_train.txt
 |   |–– clipart_test.txt
 |   |–– ...
@@ -174,7 +174,7 @@ File structure:
 ```
 pacs/
 |–– images/
-|__ splits/
+|–– splits/
 ```
 
 You do not necessarily have to manually download this dataset. Once you run ``tools/train.py``, the code will detect if the dataset exists or not and automatically download the dataset to ``$DATA`` if missing. This also applies to VLCS, Office-Home-DG, and Digits-DG.
@@ -190,7 +190,7 @@ VLCS/
 |–– CALTECH/
 |–– LABELME/
 |–– PASCAL/
-|__ SUN/
+|–– SUN/
 ```
 
 ### Office-Home-DG
@@ -204,7 +204,7 @@ office_home_dg/
 |–– art/
 |–– clipart/
 |–– product/
-|__ real_world/
+|–– real_world/
 ```
 
 ### Digits-DG
@@ -218,7 +218,7 @@ digits_dg/
 |–– mnist/
 |–– mnist_m/
 |–– svhn/
-|__ syn/
+|–– syn/
 ```
 
 ### Digit-Single
@@ -283,13 +283,13 @@ This will create three folders under `$DATA`, i.e.
 ```
 cifar10/
 |–– train/
-|__ test/
+|–– test/
 cifar100/
 |–– train/
-|__ test/
+|–– test/
 svhn/
 |–– train/
-|__ test/
+|–– test/
 ```
 
 ### STL10
@@ -309,5 +309,5 @@ stl10/
 |–– train/
 |–– test/
 |–– unlabeled/
-|__ stl10_binary/
+|–– stl10_binary/
 ```
