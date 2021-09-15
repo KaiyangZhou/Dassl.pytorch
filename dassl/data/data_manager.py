@@ -178,7 +178,7 @@ class DataManager:
         if cfg.DATASET.TARGET_DOMAINS:
             print('  Target domains: {}'.format(cfg.DATASET.TARGET_DOMAINS))
 
-        print('  # classes: {}'.format(self.num_classes))
+        print('  # classes: {:,}'.format(self.num_classes))
 
         print('  # train_x: {:,}'.format(len(self.dataset.train_x)))
 
