@@ -154,7 +154,9 @@ class DatasetBase:
 
         print('File extracted to {}'.format(osp.dirname(dst)))
 
-    def generate_fewshot_dataset(self, *data_sources, num_shots=-1):
+    def generate_fewshot_dataset(
+        self, *data_sources, num_shots=-1, repeat=True
+    ):
         """Generate a few-shot dataset (typically for the training set).
 
         This function is useful when one wants to evaluate a model
@@ -164,20 +166,14 @@ class DatasetBase:
         Args:
             data_sources: each individual is a list containing Datum objects.
             num_shots (int): number of instances per class to sample.
+            repeat (bool): repeat images if needed.
         """
         if num_shots < 1:
             if len(data_sources) == 1:
                 return data_sources[0]
             return data_sources
 
-        data_source = data_sources[0]
-        num_classes = self.get_num_classes(data_source)
-
-        print(
-            'CREATE A FEW-SHOT SETTING: '
-            f'sample {num_shots} images from '
-            f'each one of the {num_classes} classes'
-        )
+        print(f'Creating a {num_shots}-shot dataset')
 
         output = []
 
@@ -189,12 +185,10 @@ class DatasetBase:
                 if len(items) >= num_shots:
                     sampled_items = random.sample(items, num_shots)
                 else:
-                    print(
-                        f'Repetition applied to class {label} due '
-                        f'to limited size ({len(items)} vs. '
-                        f'{num_shots} required)'
-                    )
-                    sampled_items = random.choices(items, k=num_shots)
+                    if repeat:
+                        sampled_items = random.choices(items, k=num_shots)
+                    else:
+                        sampled_items = items
                 dataset.extend(sampled_items)
 
             output.append(dataset)
