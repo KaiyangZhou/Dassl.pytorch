@@ -182,11 +182,7 @@ class DatasetBase:
         output = []
 
         for data_source in data_sources:
-            tracker = defaultdict(list)
-
-            for item in data_source:
-                tracker[item.label].append(item)
-
+            tracker = self.split_dataset_by_label(data_source)
             dataset = []
 
             for label, items in tracker.items():
@@ -205,4 +201,33 @@ class DatasetBase:
 
         if len(output) == 1:
             return output[0]
+
+        return output
+
+    def split_dataset_by_label(self, data_source):
+        """Split a dataset, i.e. a list of Datum objects,
+        into class-specific groups stored in a dictionary.
+
+        Args:
+            data_source (list): a list of Datum objects.
+        """
+        output = defaultdict(list)
+
+        for item in data_source:
+            output[item.label].append(item)
+
+        return output
+
+    def split_dataset_by_domain(self, data_source):
+        """Split a dataset, i.e. a list of Datum objects,
+        into domain-specific groups stored in a dictionary.
+
+        Args:
+            data_source (list): a list of Datum objects.
+        """
+        output = defaultdict(list)
+
+        for item in data_source:
+            output[item.domain].append(item)
+
         return output
