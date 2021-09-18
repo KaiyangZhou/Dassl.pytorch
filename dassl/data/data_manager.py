@@ -49,6 +49,7 @@ def build_data_loader(
         drop_last=is_train and len(data_source) >= batch_size,
         pin_memory=(torch.cuda.is_available() and cfg.USE_CUDA)
     )
+    assert len(data_loader) > 0
 
     return data_loader
 
