@@ -235,13 +235,10 @@ class NewDataset(DatasetBase):
     dataset_dir = ''
 
     def __init__(self, cfg):
-        root = os.path.abspath(os.path.expanduser(cfg.DATASET.ROOT))
-        self.dataset_dir = os.path.join(root, self.dataset_dir)
         
-        # Each is a list of Datum objects
         train_x = ...
-        train_u = ...
-        val = ...
+        train_u = ...  # optional, can be None
+        val = ...  # optional, can be None
         test = ...
 
         super().__init__(train_x=train_x, train_u=train_u, val=val, test=test)
