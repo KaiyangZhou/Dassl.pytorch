@@ -223,6 +223,32 @@ def my_backbone(**kwargs):
 ```
 Then, you can set `MODEL.BACKBONE.NAME` to `my_backbone` to use your own architecture. For more details, please refer to the source code in `dassl/modeling`.
 
+### Add a dataset
+An example code structure is shown below. Make sure you subclass `DatasetBase` and register the dataset with `@DATASET_REGISTRY.register()`. All you need is to load `train_x`, `train_u` (optional), `val` (optional) and `test`, among which `train_u` and `val` could be `None` or simply ignored. Each of these variables contains a list of `Datum` objects. A `Datum` object contains information for a single image, like `impath` (string) and `label` (int).
+
+```python
+from dassl.data.datasets import DATASET_REGISTRY, Datum, DatasetBase
+
+@DATASET_REGISTRY.register()
+class NewDataset(DatasetBase):
+
+    dataset_dir = ''
+
+    def __init__(self, cfg):
+        root = os.path.abspath(os.path.expanduser(cfg.DATASET.ROOT))
+        self.dataset_dir = os.path.join(root, self.dataset_dir)
+        
+        # Each is a list of Datum objects
+        train_x = ...
+        train_u = ...
+        val = ...
+        test = ...
+
+        super().__init__(train_x=train_x, train_u=train_u, val=val, test=test)
+```
+
+We suggest you take a look at the datasets code in some projects like [this](https://github.com/KaiyangZhou/CoOp), which is built on top of Dassl.
+
 ## Relevant Research
 
 We would like to share here our research relevant to Dassl.
