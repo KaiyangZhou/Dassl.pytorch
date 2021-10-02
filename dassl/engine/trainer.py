@@ -543,7 +543,7 @@ class TrainerXU(SimpleTrainer):
                     'data {data_time.val:.3f} ({data_time.avg:.3f})\t'
                     'eta {eta}\t'
                     '{losses}\t'
-                    'lr {lr}'.format(
+                    'lr {lr:.6e}'.format(
                         self.epoch + 1,
                         self.max_epoch,
                         self.batch_idx + 1,
@@ -605,7 +605,7 @@ class TrainerX(SimpleTrainer):
                     'data {data_time.val:.3f} ({data_time.avg:.3f})\t'
                     'eta {eta}\t'
                     '{losses}\t'
-                    'lr {lr}'.format(
+                    'lr {lr:.6e}'.format(
                         self.epoch + 1,
                         self.max_epoch,
                         self.batch_idx + 1,
