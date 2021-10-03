@@ -11,7 +11,8 @@ from dassl.data import DataManager
 from dassl.optim import build_optimizer, build_lr_scheduler
 from dassl.utils import (
     MetricMeter, AverageMeter, tolist_if_not, count_num_param, load_checkpoint,
-    save_checkpoint, resume_from_checkpoint, load_pretrained_weights
+    save_checkpoint, mkdir_if_missing, resume_from_checkpoint,
+    load_pretrained_weights
 )
 from dassl.modeling import build_head, build_backbone
 from dassl.evaluation import build_evaluator
@@ -376,7 +377,9 @@ class SimpleTrainer(TrainerBase):
 
         device_count = torch.cuda.device_count()
         if device_count > 1:
-            print(f'Detected {device_count} GPUs. Activate multi-gpu training')
+            print(
+                f'Detected {device_count} GPUs. Wrap the model with nn.DataParallel'
+            )
             self.model = nn.DataParallel(self.model)
 
     def train(self):
@@ -389,7 +392,9 @@ class SimpleTrainer(TrainerBase):
         self.start_epoch = self.resume_model_if_exist(directory)
 
         # Initialize summary writer
-        self.init_writer(self.output_dir)
+        writer_dir = osp.join(self.output_dir, 'tensorboard')
+        mkdir_if_missing(writer_dir)
+        self.init_writer(writer_dir)
 
         # Remember the starting time (for computing the elapsed time)
         self.time_start = time.time()
