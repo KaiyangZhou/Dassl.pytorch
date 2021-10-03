@@ -76,7 +76,5 @@ class MetricMeter:
     def __str__(self):
         output_str = []
         for name, meter in self.meters.items():
-            output_str.append(
-                '{} {:.6e} ({:.6e})'.format(name, meter.val, meter.avg)
-            )
+            output_str.append(f"{name} {meter.val:.4f} ({meter.avg:.4f})")
         return self.delimiter.join(output_str)
