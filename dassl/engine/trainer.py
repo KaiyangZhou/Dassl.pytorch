@@ -355,7 +355,7 @@ class SimpleTrainer(TrainerBase):
         self.num_source_domains = dm.num_source_domains
         self.lab2cname = dm.lab2cname  # dict {label: classname}
 
-        self.dm = dm  # optional
+        self.dm = dm
 
     def build_model(self):
         """Build and register model.
