@@ -75,7 +75,7 @@ def round_filters(filters, global_params):
     filters *= multiplier
     min_depth = min_depth or divisor
     new_filters = max(min_depth, int(filters + divisor/2) // divisor * divisor)
-    if new_filters < 0.9 * filters: # prevent rounding by more than 10%
+    if new_filters < 0.9 * filters:  # prevent rounding by more than 10%
         new_filters += divisor
     return int(new_filters)
 

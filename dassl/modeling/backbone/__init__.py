@@ -1,5 +1,5 @@
-from .build import build_backbone, BACKBONE_REGISTRY # isort:skip
-from .backbone import Backbone # isort:skip
+from .build import build_backbone, BACKBONE_REGISTRY  # isort:skip
+from .backbone import Backbone  # isort:skip
 
 from .vgg import vgg16
 from .resnet import (

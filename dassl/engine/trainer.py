@@ -342,16 +342,20 @@ class SimpleTrainer(TrainerBase):
     def build_data_loader(self):
         """Create essential data-related attributes.
 
-        A re-implementation of this method must create the same attributes.
+        A re-implementation of this method must create the
+        same attributes (except self.dm).
         """
         dm = DataManager(self.cfg)
+
         self.train_loader_x = dm.train_loader_x
-        self.train_loader_u = dm.train_loader_u # optional, can be None
-        self.val_loader = dm.val_loader # optional, can be None
+        self.train_loader_u = dm.train_loader_u  # optional, can be None
+        self.val_loader = dm.val_loader  # optional, can be None
         self.test_loader = dm.test_loader
         self.num_classes = dm.num_classes
         self.num_source_domains = dm.num_source_domains
-        self.lab2cname = dm.lab2cname # dict {label: classname}
+        self.lab2cname = dm.lab2cname  # dict {label: classname}
+
+        self.dm = dm  # optional
 
     def build_model(self):
         """Build and register model.

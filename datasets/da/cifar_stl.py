@@ -7,12 +7,12 @@ from dassl.utils import mkdir_if_missing
 
 cifar_label2name = {
     0: 'airplane',
-    1: 'car', # the original name was 'automobile'
+    1: 'car',  # the original name was 'automobile'
     2: 'bird',
     3: 'cat',
     4: 'deer',
     5: 'dog',
-    6: 'frog', # conflict class
+    6: 'frog',  # conflict class
     7: 'horse',
     8: 'ship',
     9: 'truck',
@@ -26,7 +26,7 @@ stl_label2name = {
     4: 'deer',
     5: 'dog',
     6: 'horse',
-    7: 'monkey', # conflict class
+    7: 'monkey',  # conflict class
     8: 'ship',
     9: 'truck'
 }

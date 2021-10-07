@@ -53,8 +53,8 @@ _C.INPUT.COLORJITTER_H = 0.1
 # Random gray scale's probability
 _C.INPUT.RGS_P = 0.2
 # Gaussian blur
-_C.INPUT.GB_P = 0.5 # propability of applying this operation
-_C.INPUT.GB_K = 21 # kernel size (should be an odd number)
+_C.INPUT.GB_P = 0.5  # propability of applying this operation
+_C.INPUT.GB_K = 21  # kernel size (should be an odd number)
 
 ###########################
 # Dataset
@@ -218,10 +218,10 @@ _C.TRAINER.NAME = ''
 
 # MCD
 _C.TRAINER.MCD = CN()
-_C.TRAINER.MCD.N_STEP_F = 4 # number of steps to train F
+_C.TRAINER.MCD.N_STEP_F = 4  # number of steps to train F
 # MME
 _C.TRAINER.MME = CN()
-_C.TRAINER.MME.LMDA = 0.1 # weight for the entropy loss
+_C.TRAINER.MME.LMDA = 0.1  # weight for the entropy loss
 # SelfEnsembling
 _C.TRAINER.SE = CN()
 _C.TRAINER.SE.EMA_ALPHA = 0.999
@@ -230,46 +230,46 @@ _C.TRAINER.SE.RAMPUP = 300
 
 # M3SDA
 _C.TRAINER.M3SDA = CN()
-_C.TRAINER.M3SDA.LMDA = 0.5 # weight for the moment distance loss
-_C.TRAINER.M3SDA.N_STEP_F = 4 # follow MCD
+_C.TRAINER.M3SDA.LMDA = 0.5  # weight for the moment distance loss
+_C.TRAINER.M3SDA.N_STEP_F = 4  # follow MCD
 # DAEL
 _C.TRAINER.DAEL = CN()
-_C.TRAINER.DAEL.WEIGHT_U = 0.5 # weight on the unlabeled loss
-_C.TRAINER.DAEL.CONF_THRE = 0.95 # confidence threshold
+_C.TRAINER.DAEL.WEIGHT_U = 0.5  # weight on the unlabeled loss
+_C.TRAINER.DAEL.CONF_THRE = 0.95  # confidence threshold
 _C.TRAINER.DAEL.STRONG_TRANSFORMS = ()
 
 # CrossGrad
 _C.TRAINER.CG = CN()
-_C.TRAINER.CG.EPS_F = 1. # scaling parameter for D's gradients
-_C.TRAINER.CG.EPS_D = 1. # scaling parameter for F's gradients
-_C.TRAINER.CG.ALPHA_F = 0.5 # balancing weight for the label net's loss
-_C.TRAINER.CG.ALPHA_D = 0.5 # balancing weight for the domain net's loss
+_C.TRAINER.CG.EPS_F = 1.  # scaling parameter for D's gradients
+_C.TRAINER.CG.EPS_D = 1.  # scaling parameter for F's gradients
+_C.TRAINER.CG.ALPHA_F = 0.5  # balancing weight for the label net's loss
+_C.TRAINER.CG.ALPHA_D = 0.5  # balancing weight for the domain net's loss
 # DDAIG
 _C.TRAINER.DDAIG = CN()
-_C.TRAINER.DDAIG.G_ARCH = '' # generator's architecture
-_C.TRAINER.DDAIG.LMDA = 0.3 # perturbation weight
-_C.TRAINER.DDAIG.CLAMP = False # clamp perturbation values
+_C.TRAINER.DDAIG.G_ARCH = ''  # generator's architecture
+_C.TRAINER.DDAIG.LMDA = 0.3  # perturbation weight
+_C.TRAINER.DDAIG.CLAMP = False  # clamp perturbation values
 _C.TRAINER.DDAIG.CLAMP_MIN = -1.
 _C.TRAINER.DDAIG.CLAMP_MAX = 1.
 _C.TRAINER.DDAIG.WARMUP = 0
-_C.TRAINER.DDAIG.ALPHA = 0.5 # balancing weight for the losses
+_C.TRAINER.DDAIG.ALPHA = 0.5  # balancing weight for the losses
 
 # EntMin
 _C.TRAINER.ENTMIN = CN()
-_C.TRAINER.ENTMIN.LMDA = 1e-3 # weight on the entropy loss
+_C.TRAINER.ENTMIN.LMDA = 1e-3  # weight on the entropy loss
 # Mean Teacher
 _C.TRAINER.MEANTEA = CN()
-_C.TRAINER.MEANTEA.WEIGHT_U = 1. # weight on the unlabeled loss
+_C.TRAINER.MEANTEA.WEIGHT_U = 1.  # weight on the unlabeled loss
 _C.TRAINER.MEANTEA.EMA_ALPHA = 0.999
-_C.TRAINER.MEANTEA.RAMPUP = 5 # epochs used to ramp up the loss_u weight
+_C.TRAINER.MEANTEA.RAMPUP = 5  # epochs used to ramp up the loss_u weight
 # MixMatch
 _C.TRAINER.MIXMATCH = CN()
-_C.TRAINER.MIXMATCH.WEIGHT_U = 100. # weight on the unlabeled loss
-_C.TRAINER.MIXMATCH.TEMP = 2. # temperature for sharpening the probability
+_C.TRAINER.MIXMATCH.WEIGHT_U = 100.  # weight on the unlabeled loss
+_C.TRAINER.MIXMATCH.TEMP = 2.  # temperature for sharpening the probability
 _C.TRAINER.MIXMATCH.MIXUP_BETA = 0.75
-_C.TRAINER.MIXMATCH.RAMPUP = 20000 # steps used to ramp up the loss_u weight
+_C.TRAINER.MIXMATCH.RAMPUP = 20000  # steps used to ramp up the loss_u weight
 # FixMatch
 _C.TRAINER.FIXMATCH = CN()
-_C.TRAINER.FIXMATCH.WEIGHT_U = 1. # weight on the unlabeled loss
-_C.TRAINER.FIXMATCH.CONF_THRE = 0.95 # confidence threshold
+_C.TRAINER.FIXMATCH.WEIGHT_U = 1.  # weight on the unlabeled loss
+_C.TRAINER.FIXMATCH.CONF_THRE = 0.95  # confidence threshold
 _C.TRAINER.FIXMATCH.STRONG_TRANSFORMS = ()

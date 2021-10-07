@@ -17,7 +17,7 @@ class OptimalTransport(nn.Module):
                 torch.pow(batch2, 2).sum(dim=1, keepdim=True).expand(n, m).t()
             dist_mat.addmm_(
                 1, -2, batch1, batch2.t()
-            ) # squared euclidean distance
+            )  # squared euclidean distance
         elif dist_metric == 'fast_euclidean':
             batch1 = batch1.unsqueeze(-2)
             batch2 = batch2.unsqueeze(-3)
@@ -77,7 +77,7 @@ class SinkhornDivergence(OptimalTransport):
             """
             return (-_C + _u.unsqueeze(-1) + _v.unsqueeze(-2)) / eps
 
-        real_iter = 0 # check if algorithm terminates before max_iter
+        real_iter = 0  # check if algorithm terminates before max_iter
         # Sinkhorn iterations
         for i in range(max_iter):
             u0 = u

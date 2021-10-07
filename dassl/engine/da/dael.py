@@ -104,11 +104,11 @@ class DAEL(TrainerXU):
                 pred_uk = self.E(k, feat_u)
                 pred_uk = pred_uk.unsqueeze(1)
                 pred_u.append(pred_uk)
-            pred_u = torch.cat(pred_u, 1) # (B, K, C)
+            pred_u = torch.cat(pred_u, 1)  # (B, K, C)
             # Get the highest probability and index (label) for each expert
-            experts_max_p, experts_max_idx = pred_u.max(2) # (B, K)
+            experts_max_p, experts_max_idx = pred_u.max(2)  # (B, K)
             # Get the most confident expert
-            max_expert_p, max_expert_idx = experts_max_p.max(1) # (B)
+            max_expert_p, max_expert_idx = experts_max_p.max(1)  # (B)
             pseudo_label_u = []
             for i, experts_label in zip(max_expert_idx, experts_max_idx):
                 pseudo_label_u.append(experts_label[i])

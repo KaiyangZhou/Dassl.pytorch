@@ -30,11 +30,11 @@ class MBConvBlock(nn.Module):
         self._bn_eps = global_params.batch_norm_epsilon
         self.has_se = (self._block_args.se_ratio is
                        not None) and (0 < self._block_args.se_ratio <= 1)
-        self.id_skip = block_args.id_skip # skip connection and drop connect
+        self.id_skip = block_args.id_skip  # skip connection and drop connect
 
         # Expansion phase
-        inp = self._block_args.input_filters # number of input channels
-        oup = self._block_args.input_filters * self._block_args.expand_ratio # number of output channels
+        inp = self._block_args.input_filters  # number of input channels
+        oup = self._block_args.input_filters * self._block_args.expand_ratio  # number of output channels
         if self._block_args.expand_ratio != 1:
             Conv2d = get_same_padding_conv2d(image_size=image_size)
             self._expand_conv = Conv2d(
@@ -52,7 +52,7 @@ class MBConvBlock(nn.Module):
         self._depthwise_conv = Conv2d(
             in_channels=oup,
             out_channels=oup,
-            groups=oup, # groups makes it depthwise
+            groups=oup,  # groups makes it depthwise
             kernel_size=k,
             stride=s,
             bias=False
@@ -123,7 +123,7 @@ class MBConvBlock(nn.Module):
                 x = drop_connect(
                     x, p=drop_connect_rate, training=self.training
                 )
-            x = x + inputs # skip connection
+            x = x + inputs  # skip connection
         return x
 
     def set_swish(self, memory_efficient=True):
@@ -160,10 +160,10 @@ class EfficientNet(Backbone):
         Conv2d = get_same_padding_conv2d(image_size=global_params.image_size)
 
         # Stem
-        in_channels = 3 # rgb
+        in_channels = 3  # rgb
         out_channels = round_filters(
             32, self._global_params
-        ) # number of output channels
+        )  # number of output channels
         self._conv_stem = Conv2d(
             in_channels, out_channels, kernel_size=3, stride=2, bias=False
         )
@@ -211,7 +211,7 @@ class EfficientNet(Backbone):
                 # image_size = calculate_output_image_size(image_size, block_args.stride) # ?
 
         # Head
-        in_channels = block_args.output_filters # output of final block
+        in_channels = block_args.output_filters  # output of final block
         out_channels = round_filters(1280, self._global_params)
         Conv2d = get_same_padding_conv2d(image_size=image_size)
         self._conv_head = Conv2d(
