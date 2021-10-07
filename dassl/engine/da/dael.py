@@ -38,7 +38,7 @@ class DAEL(TrainerXU):
         n_domain = cfg.DATALOADER.TRAIN_X.N_DOMAIN
         batch_size = cfg.DATALOADER.TRAIN_X.BATCH_SIZE
         if n_domain <= 0:
-            n_domain = self.dm.num_source_domains
+            n_domain = self.num_source_domains
         self.split_batch = batch_size // n_domain
         self.n_domain = n_domain
 
@@ -57,12 +57,14 @@ class DAEL(TrainerXU):
         choices = cfg.TRAINER.DAEL.STRONG_TRANSFORMS
         tfm_train_strong = build_transform(cfg, is_train=True, choices=choices)
         custom_tfm_train += [tfm_train_strong]
-        self.dm = DataManager(self.cfg, custom_tfm_train=custom_tfm_train)
-        self.train_loader_x = self.dm.train_loader_x
-        self.train_loader_u = self.dm.train_loader_u
-        self.val_loader = self.dm.val_loader
-        self.test_loader = self.dm.test_loader
-        self.num_classes = self.dm.num_classes
+        dm = DataManager(self.cfg, custom_tfm_train=custom_tfm_train)
+        self.train_loader_x = dm.train_loader_x
+        self.train_loader_u = dm.train_loader_u
+        self.val_loader = dm.val_loader
+        self.test_loader = dm.test_loader
+        self.num_classes = dm.num_classes
+        self.num_source_domains = dm.num_source_domains
+        self.lab2cname = dm.lab2cname
 
     def build_model(self):
         cfg = self.cfg
@@ -77,7 +79,7 @@ class DAEL(TrainerXU):
         fdim = self.F.fdim
 
         print('Building E')
-        self.E = Experts(self.dm.num_source_domains, fdim, self.num_classes)
+        self.E = Experts(self.num_source_domains, fdim, self.num_classes)
         self.E.to(self.device)
         print('# params: {:,}'.format(count_num_param(self.E)))
         self.optim_E = build_optimizer(self.E, cfg.OPTIM)
@@ -98,7 +100,7 @@ class DAEL(TrainerXU):
         with torch.no_grad():
             feat_u = self.F(input_u)
             pred_u = []
-            for k in range(self.dm.num_source_domains):
+            for k in range(self.num_source_domains):
                 pred_uk = self.E(k, feat_u)
                 pred_uk = pred_uk.unsqueeze(1)
                 pred_u.append(pred_uk)
@@ -151,7 +153,7 @@ class DAEL(TrainerXU):
 
         # Unsupervised loss
         pred_u = []
-        for k in range(self.dm.num_source_domains):
+        for k in range(self.num_source_domains):
             pred_uk = self.E(k, feat_u2)
             pred_uk = pred_uk.unsqueeze(1)
             pred_u.append(pred_uk)
@@ -199,7 +201,7 @@ class DAEL(TrainerXU):
     def model_inference(self, input):
         f = self.F(input)
         p = []
-        for k in range(self.dm.num_source_domains):
+        for k in range(self.num_source_domains):
             p_k = self.E(k, f)
             p_k = p_k.unsqueeze(1)
             p.append(p_k)

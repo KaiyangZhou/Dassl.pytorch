@@ -35,7 +35,7 @@ class M3SDA(TrainerXU):
         n_domain = cfg.DATALOADER.TRAIN_X.N_DOMAIN
         batch_size = cfg.DATALOADER.TRAIN_X.BATCH_SIZE
         if n_domain <= 0:
-            n_domain = self.dm.num_source_domains
+            n_domain = self.num_source_domains
         self.split_batch = batch_size // n_domain
         self.n_domain = n_domain
 
@@ -62,7 +62,7 @@ class M3SDA(TrainerXU):
         self.C = nn.ModuleList(
             [
                 PairClassifiers(fdim, self.num_classes)
-                for _ in range(self.dm.num_source_domains)
+                for _ in range(self.num_source_domains)
             ]
         )
         self.C.to(self.device)

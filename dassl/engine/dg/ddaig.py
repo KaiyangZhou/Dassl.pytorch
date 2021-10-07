@@ -36,7 +36,7 @@ class DDAIG(TrainerX):
         self.register_model('F', self.F, self.optim_F, self.sched_F)
 
         print('Building D')
-        self.D = SimpleNet(cfg, cfg.MODEL, self.dm.num_source_domains)
+        self.D = SimpleNet(cfg, cfg.MODEL, self.num_source_domains)
         self.D.to(self.device)
         print('# params: {:,}'.format(count_num_param(self.D)))
         self.optim_D = build_optimizer(self.D, cfg.OPTIM)

@@ -324,7 +324,7 @@ class SimpleTrainer(TrainerBase):
         self.cfg = cfg
         self.build_data_loader()
         self.build_model()
-        self.evaluator = build_evaluator(cfg, lab2cname=self.dm.lab2cname)
+        self.evaluator = build_evaluator(cfg, lab2cname=self.lab2cname)
         self.best_result = -np.inf
 
     def check_cfg(self, cfg):
@@ -342,18 +342,16 @@ class SimpleTrainer(TrainerBase):
     def build_data_loader(self):
         """Create essential data-related attributes.
 
-        What must be done in the re-implementation
-        of this method:
-        1) initialize data manager
-        2) assign as attributes the data loaders
-        3) assign as attribute the number of classes
+        A re-implementation of this method must create the same attributes.
         """
-        self.dm = DataManager(self.cfg)
-        self.train_loader_x = self.dm.train_loader_x
-        self.train_loader_u = self.dm.train_loader_u
-        self.val_loader = self.dm.val_loader
-        self.test_loader = self.dm.test_loader
-        self.num_classes = self.dm.num_classes
+        dm = DataManager(self.cfg)
+        self.train_loader_x = dm.train_loader_x
+        self.train_loader_u = dm.train_loader_u # optional, can be None
+        self.val_loader = dm.val_loader # optional, can be None
+        self.test_loader = dm.test_loader
+        self.num_classes = dm.num_classes
+        self.num_source_domains = dm.num_source_domains
+        self.lab2cname = dm.lab2cname # dict {label: classname}
 
     def build_model(self):
         """Build and register model.
