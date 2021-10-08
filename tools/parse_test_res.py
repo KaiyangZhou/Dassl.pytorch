@@ -124,14 +124,9 @@ def parse_function(*metrics, directory='', args=None, end_signal=None):
 
 
 def main(args, end_signal):
-    metric1 = {
-        'name': 'accuracy',
-        'regex': re.compile(r'\* accuracy: ([\.\deE+-]+)%')
-    }
-
-    metric2 = {
-        'name': 'error',
-        'regex': re.compile(r'\* error: ([\.\deE+-]+)%')
+    metric = {
+        'name': args.keyword,
+        'regex': re.compile(fr'\* {args.keyword}: ([\.\deE+-]+)%')
     }
 
     if args.multi_exp:
@@ -140,11 +135,7 @@ def main(args, end_signal):
         for directory in listdir_nohidden(args.directory, sort=True):
             directory = osp.join(args.directory, directory)
             results = parse_function(
-                metric1,
-                metric2,
-                directory=directory,
-                args=args,
-                end_signal=end_signal
+                metric, directory=directory, args=args, end_signal=end_signal
             )
 
             for key, value in results.items():
@@ -157,11 +148,7 @@ def main(args, end_signal):
 
     else:
         parse_function(
-            metric1,
-            metric2,
-            directory=args.directory,
-            args=args,
-            end_signal=end_signal
+            metric, directory=args.directory, args=args, end_signal=end_signal
         )
 
 
@@ -178,6 +165,12 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         '--multi-exp', action='store_true', help='parse multiple experiments'
+    )
+    parser.add_argument(
+        '--keyword',
+        default='accuracy',
+        type=str,
+        help='which keyword to extract'
     )
     args = parser.parse_args()
 
