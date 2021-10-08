@@ -2,7 +2,7 @@ import numpy as np
 import os.path as osp
 from collections import OrderedDict, defaultdict
 import torch
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import f1_score, confusion_matrix
 
 from .build import EVALUATOR_REGISTRY
 
@@ -66,16 +66,25 @@ class Classification(EvaluatorBase):
         results = OrderedDict()
         acc = 100. * self._correct / self._total
         err = 100. - acc
+        macro_f1 = 100. * f1_score(
+            self._y_true,
+            self._y_pred,
+            average='macro',
+            labels=np.unique(self._y_true)
+        )
+
         # The first value will be returned by trainer.test()
         results['accuracy'] = acc
         results['error_rate'] = err
+        results['macro_f1'] = macro_f1
 
         print(
             '=> result\n'
-            '* total: {:,}\n'
-            '* correct: {:,}\n'
-            '* accuracy: {:.2f}%\n'
-            '* error: {:.2f}%'.format(self._total, self._correct, acc, err)
+            f'* total: {self._total:,}\n'
+            f'* correct: {self._correct:,}\n'
+            f'* accuracy: {acc:.2f}%\n'
+            f'* error: {err:.2f}%\n'
+            f'* macro_f1: {macro_f1:.2f}%'
         )
 
         if self._per_class_res is not None:
