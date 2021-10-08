@@ -17,12 +17,12 @@ def extract_and_save(images, labels, level, dst):
     assert 0 <= level <= 4
 
     for i in range(10000):
-        real_i = i + level*10000
+        real_i = i + level * 10000
         im = Image.fromarray(images[real_i])
         label = int(labels[real_i])
         category_dir = osp.join(dst, str(label).zfill(3))
         mkdir_if_missing(category_dir)
-        save_path = osp.join(category_dir, str(i + 1).zfill(5) + '.jpg')
+        save_path = osp.join(category_dir, str(i + 1).zfill(5) + ".jpg")
         im.save(save_path)
 
 
@@ -30,12 +30,12 @@ def main(npy_folder):
     npy_folder = osp.abspath(osp.expanduser(npy_folder))
     dataset_cap = osp.basename(npy_folder)
 
-    assert dataset_cap in ['CIFAR-10-C', 'CIFAR-100-C']
+    assert dataset_cap in ["CIFAR-10-C", "CIFAR-100-C"]
 
-    if dataset_cap == 'CIFAR-10-C':
-        dataset = 'cifar10_c'
+    if dataset_cap == "CIFAR-10-C":
+        dataset = "cifar10_c"
     else:
-        dataset = 'cifar100_c'
+        dataset = "cifar100_c"
 
     if not osp.exists(npy_folder):
         print('The given folder "{}" does not exist'.format(npy_folder))
@@ -46,14 +46,14 @@ def main(npy_folder):
     mkdir_if_missing(im_folder)
 
     dirnames = os.listdir(npy_folder)
-    dirnames.remove('labels.npy')
-    if 'README.txt' in dirnames:
-        dirnames.remove('README.txt')
+    dirnames.remove("labels.npy")
+    if "README.txt" in dirnames:
+        dirnames.remove("README.txt")
     assert len(dirnames) == 19
-    labels = np.load(osp.join(npy_folder, 'labels.npy'))
+    labels = np.load(osp.join(npy_folder, "labels.npy"))
 
     for dirname in dirnames:
-        corruption = dirname.split('.')[0]
+        corruption = dirname.split(".")[0]
         corruption_folder = osp.join(im_folder, corruption)
         mkdir_if_missing(corruption_folder)
 
@@ -68,6 +68,6 @@ def main(npy_folder):
             extract_and_save(images, labels, level, dst)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # sys.argv[1] contains the path to CIFAR-10-C or CIFAR-100-C
     main(sys.argv[1])

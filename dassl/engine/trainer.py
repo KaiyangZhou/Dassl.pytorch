@@ -10,9 +10,15 @@ from torch.utils.tensorboard import SummaryWriter
 from dassl.data import DataManager
 from dassl.optim import build_optimizer, build_lr_scheduler
 from dassl.utils import (
-    MetricMeter, AverageMeter, tolist_if_not, count_num_param, load_checkpoint,
-    save_checkpoint, mkdir_if_missing, resume_from_checkpoint,
-    load_pretrained_weights
+    MetricMeter,
+    AverageMeter,
+    tolist_if_not,
+    count_num_param,
+    load_checkpoint,
+    save_checkpoint,
+    mkdir_if_missing,
+    resume_from_checkpoint,
+    load_pretrained_weights,
 )
 from dassl.modeling import build_head, build_backbone
 from dassl.evaluation import build_evaluator
@@ -29,7 +35,7 @@ class SimpleNet(nn.Module):
             model_cfg.BACKBONE.NAME,
             verbose=cfg.VERBOSE,
             pretrained=model_cfg.BACKBONE.PRETRAINED,
-            **kwargs
+            **kwargs,
         )
         fdim = self.backbone.out_features
 
@@ -43,7 +49,7 @@ class SimpleNet(nn.Module):
                 activation=model_cfg.HEAD.ACTIVATION,
                 bn=model_cfg.HEAD.BN,
                 dropout=model_cfg.HEAD.DROPOUT,
-                **kwargs
+                **kwargs,
             )
             fdim = self.head.out_features
 
@@ -82,23 +88,17 @@ class TrainerBase:
         self._scheds = OrderedDict()
         self._writer = None
 
-    def register_model(self, name='model', model=None, optim=None, sched=None):
-        if self.__dict__.get('_models') is None:
-            raise AttributeError(
-                'Cannot assign model before super().__init__() call'
-            )
+    def register_model(self, name="model", model=None, optim=None, sched=None):
+        if self.__dict__.get("_models") is None:
+            raise AttributeError("Cannot assign model before super().__init__() call")
 
-        if self.__dict__.get('_optims') is None:
-            raise AttributeError(
-                'Cannot assign optim before super().__init__() call'
-            )
+        if self.__dict__.get("_optims") is None:
+            raise AttributeError("Cannot assign optim before super().__init__() call")
 
-        if self.__dict__.get('_scheds') is None:
-            raise AttributeError(
-                'Cannot assign sched before super().__init__() call'
-            )
+        if self.__dict__.get("_scheds") is None:
+            raise AttributeError("Cannot assign sched before super().__init__() call")
 
-        assert name not in self._models, 'Found duplicate model names'
+        assert name not in self._models, "Found duplicate model names"
 
         self._models[name] = model
         self._optims[name] = optim
@@ -114,7 +114,7 @@ class TrainerBase:
         else:
             return names_real
 
-    def save_model(self, epoch, directory, is_best=False, model_name=''):
+    def save_model(self, epoch, directory, is_best=False, model_name=""):
         names = self.get_model_names()
 
         for name in names:
@@ -130,14 +130,14 @@ class TrainerBase:
 
             save_checkpoint(
                 {
-                    'state_dict': model_dict,
-                    'epoch': epoch + 1,
-                    'optimizer': optim_dict,
-                    'scheduler': sched_dict
+                    "state_dict": model_dict,
+                    "epoch": epoch + 1,
+                    "optimizer": optim_dict,
+                    "scheduler": sched_dict,
                 },
                 osp.join(directory, name),
                 is_best=is_best,
-                model_name=model_name
+                model_name=model_name,
             )
 
     def resume_model_if_exist(self, directory):
@@ -151,60 +151,53 @@ class TrainerBase:
                 break
 
         if file_missing:
-            print('No checkpoint found, train from scratch')
+            print("No checkpoint found, train from scratch")
             return 0
 
-        print(
-            'Found checkpoint in "{}". Will resume training'.format(directory)
-        )
+        print('Found checkpoint in "{}". Will resume training'.format(directory))
 
         for name in names:
             path = osp.join(directory, name)
             start_epoch = resume_from_checkpoint(
-                path, self._models[name], self._optims[name],
-                self._scheds[name]
+                path, self._models[name], self._optims[name], self._scheds[name]
             )
 
         return start_epoch
 
     def load_model(self, directory, epoch=None):
         if not directory:
-            print(
-                'Note that load_model() is skipped as no pretrained model is given'
-            )
+            print("Note that load_model() is skipped as no pretrained model is given")
             return
 
         names = self.get_model_names()
 
         # By default, the best model is loaded
-        model_file = 'model-best.pth.tar'
+        model_file = "model-best.pth.tar"
 
         if epoch is not None:
-            model_file = 'model.pth.tar-' + str(epoch)
+            model_file = "model.pth.tar-" + str(epoch)
 
         for name in names:
             model_path = osp.join(directory, name, model_file)
 
             if not osp.exists(model_path):
-                raise FileNotFoundError(
-                    'Model not found at "{}"'.format(model_path)
-                )
+                raise FileNotFoundError('Model not found at "{}"'.format(model_path))
 
             checkpoint = load_checkpoint(model_path)
-            state_dict = checkpoint['state_dict']
-            epoch = checkpoint['epoch']
+            state_dict = checkpoint["state_dict"]
+            epoch = checkpoint["epoch"]
 
             print(
-                'Loading weights to {} '
+                "Loading weights to {} "
                 'from "{}" (epoch = {})'.format(name, model_path, epoch)
             )
             self._models[name].load_state_dict(state_dict)
 
-    def set_model_mode(self, mode='train', names=None):
+    def set_model_mode(self, mode="train", names=None):
         names = self.get_model_names(names)
 
         for name in names:
-            if mode == 'train':
+            if mode == "train":
                 self._models[name].train()
             else:
                 self._models[name].eval()
@@ -218,13 +211,13 @@ class TrainerBase:
 
     def detect_anomaly(self, loss):
         if not torch.isfinite(loss).all():
-            raise FloatingPointError('Loss is infinite or NaN!')
+            raise FloatingPointError("Loss is infinite or NaN!")
 
     def init_writer(self, log_dir):
-        if self.__dict__.get('_writer') is None or self._writer is None:
+        if self.__dict__.get("_writer") is None or self._writer is None:
             print(
-                'Initializing summary writer for tensorboard '
-                'with log_dir={}'.format(log_dir)
+                "Initializing summary writer for tensorboard "
+                "with log_dir={}".format(log_dir)
             )
             self._writer = SummaryWriter(log_dir=log_dir)
 
@@ -312,9 +305,9 @@ class SimpleTrainer(TrainerBase):
         self.check_cfg(cfg)
 
         if torch.cuda.is_available() and cfg.USE_CUDA:
-            self.device = torch.device('cuda')
+            self.device = torch.device("cuda")
         else:
-            self.device = torch.device('cpu')
+            self.device = torch.device("cpu")
 
         # Save as attributes some frequently used variables
         self.start_epoch = self.epoch = 0
@@ -367,21 +360,19 @@ class SimpleTrainer(TrainerBase):
         """
         cfg = self.cfg
 
-        print('Building model')
+        print("Building model")
         self.model = SimpleNet(cfg, cfg.MODEL, self.num_classes)
         if cfg.MODEL.INIT_WEIGHTS:
             load_pretrained_weights(self.model, cfg.MODEL.INIT_WEIGHTS)
         self.model.to(self.device)
-        print('# params: {:,}'.format(count_num_param(self.model)))
+        print("# params: {:,}".format(count_num_param(self.model)))
         self.optim = build_optimizer(self.model, cfg.OPTIM)
         self.sched = build_lr_scheduler(self.optim, cfg.OPTIM)
-        self.register_model('model', self.model, self.optim, self.sched)
+        self.register_model("model", self.model, self.optim, self.sched)
 
         device_count = torch.cuda.device_count()
         if device_count > 1:
-            print(
-                f'Detected {device_count} GPUs. Wrap the model with nn.DataParallel'
-            )
+            print(f"Detected {device_count} GPUs. Wrap the model with nn.DataParallel")
             self.model = nn.DataParallel(self.model)
 
     def train(self):
@@ -394,7 +385,7 @@ class SimpleTrainer(TrainerBase):
         self.start_epoch = self.resume_model_if_exist(directory)
 
         # Initialize summary writer
-        writer_dir = osp.join(self.output_dir, 'tensorboard')
+        writer_dir = osp.join(self.output_dir, "tensorboard")
         mkdir_if_missing(writer_dir)
         self.init_writer(writer_dir)
 
@@ -402,19 +393,19 @@ class SimpleTrainer(TrainerBase):
         self.time_start = time.time()
 
     def after_train(self):
-        print('Finished training')
+        print("Finished training")
 
         do_test = not self.cfg.TEST.NO_TEST
         if do_test:
-            if self.cfg.TEST.FINAL_MODEL == 'best_val':
-                print('Deploy the model with the best val performance')
+            if self.cfg.TEST.FINAL_MODEL == "best_val":
+                print("Deploy the model with the best val performance")
                 self.load_model(self.output_dir)
             self.test()
 
         # Show elapsed time
         elapsed = round(time.time() - self.time_start)
         elapsed = str(datetime.timedelta(seconds=elapsed))
-        print('Elapsed: {}'.format(elapsed))
+        print("Elapsed: {}".format(elapsed))
 
         # Close writer
         self.close_writer()
@@ -423,18 +414,18 @@ class SimpleTrainer(TrainerBase):
         last_epoch = (self.epoch + 1) == self.max_epoch
         do_test = not self.cfg.TEST.NO_TEST
         meet_checkpoint_freq = (
-            self.epoch + 1
-        ) % self.cfg.TRAIN.CHECKPOINT_FREQ == 0 if self.cfg.TRAIN.CHECKPOINT_FREQ > 0 else False
+            (self.epoch + 1) % self.cfg.TRAIN.CHECKPOINT_FREQ == 0
+            if self.cfg.TRAIN.CHECKPOINT_FREQ > 0
+            else False
+        )
 
-        if do_test and self.cfg.TEST.FINAL_MODEL == 'best_val':
-            curr_result = self.test(split='val')
+        if do_test and self.cfg.TEST.FINAL_MODEL == "best_val":
+            curr_result = self.test(split="val")
             is_best = curr_result > self.best_result
             if is_best:
                 self.best_result = curr_result
                 self.save_model(
-                    self.epoch,
-                    self.output_dir,
-                    model_name='model-best.pth.tar'
+                    self.epoch, self.output_dir, model_name="model-best.pth.tar"
                 )
 
         if meet_checkpoint_freq or last_epoch:
@@ -443,18 +434,18 @@ class SimpleTrainer(TrainerBase):
     @torch.no_grad()
     def test(self, split=None):
         """A generic testing pipeline."""
-        self.set_model_mode('eval')
+        self.set_model_mode("eval")
         self.evaluator.reset()
 
         if split is None:
             split = self.cfg.TEST.SPLIT
 
-        if split == 'val' and self.val_loader is not None:
+        if split == "val" and self.val_loader is not None:
             data_loader = self.val_loader
-            print('Do evaluation on {} set'.format(split))
+            print("Do evaluation on {} set".format(split))
         else:
             data_loader = self.test_loader
-            print('Do evaluation on test set')
+            print("Do evaluation on test set")
 
         for batch_idx, batch in enumerate(data_loader):
             input, label = self.parse_batch_test(batch)
@@ -464,7 +455,7 @@ class SimpleTrainer(TrainerBase):
         results = self.evaluator.evaluate()
 
         for k, v in results.items():
-            tag = '{}/{}'.format(split, k)
+            tag = "{}/{}".format(split, k)
             self.write_scalar(tag, v, self.epoch)
 
         return list(results.values())[0]
@@ -473,8 +464,8 @@ class SimpleTrainer(TrainerBase):
         return self.model(input)
 
     def parse_batch_test(self, batch):
-        input = batch['img']
-        label = batch['label']
+        input = batch["img"]
+        label = batch["label"]
 
         input = input.to(self.device)
         label = label.to(self.device)
@@ -484,7 +475,7 @@ class SimpleTrainer(TrainerBase):
     def get_current_lr(self, names=None):
         names = self.get_model_names(names)
         name = names[0]
-        return self._optims[name].param_groups[0]['lr']
+        return self._optims[name].param_groups[0]["lr"]
 
 
 class TrainerXU(SimpleTrainer):
@@ -498,7 +489,7 @@ class TrainerXU(SimpleTrainer):
     """
 
     def run_epoch(self):
-        self.set_model_mode('train')
+        self.set_model_mode("train")
         losses = MetricMeter()
         batch_time = AverageMeter()
         data_time = AverageMeter()
@@ -506,11 +497,11 @@ class TrainerXU(SimpleTrainer):
         # Decide to iterate over labeled or unlabeled dataset
         len_train_loader_x = len(self.train_loader_x)
         len_train_loader_u = len(self.train_loader_u)
-        if self.cfg.TRAIN.COUNT_ITER == 'train_x':
+        if self.cfg.TRAIN.COUNT_ITER == "train_x":
             self.num_batches = len_train_loader_x
-        elif self.cfg.TRAIN.COUNT_ITER == 'train_u':
+        elif self.cfg.TRAIN.COUNT_ITER == "train_u":
             self.num_batches = len_train_loader_u
-        elif self.cfg.TRAIN.COUNT_ITER == 'smaller_one':
+        elif self.cfg.TRAIN.COUNT_ITER == "smaller_one":
             self.num_batches = min(len_train_loader_x, len_train_loader_u)
         else:
             raise ValueError
@@ -542,15 +533,15 @@ class TrainerXU(SimpleTrainer):
                 nb_future_epochs = (
                     self.max_epoch - (self.epoch + 1)
                 ) * self.num_batches
-                eta_seconds = batch_time.avg * (nb_this_epoch+nb_future_epochs)
+                eta_seconds = batch_time.avg * (nb_this_epoch + nb_future_epochs)
                 eta = str(datetime.timedelta(seconds=int(eta_seconds)))
                 print(
-                    'epoch [{0}/{1}][{2}/{3}]\t'
-                    'time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                    'data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                    'eta {eta}\t'
-                    '{losses}\t'
-                    'lr {lr:.6e}'.format(
+                    "epoch [{0}/{1}][{2}/{3}]\t"
+                    "time {batch_time.val:.3f} ({batch_time.avg:.3f})\t"
+                    "data {data_time.val:.3f} ({data_time.avg:.3f})\t"
+                    "eta {eta}\t"
+                    "{losses}\t"
+                    "lr {lr:.6e}".format(
                         self.epoch + 1,
                         self.max_epoch,
                         self.batch_idx + 1,
@@ -559,21 +550,21 @@ class TrainerXU(SimpleTrainer):
                         data_time=data_time,
                         eta=eta,
                         losses=losses,
-                        lr=self.get_current_lr()
+                        lr=self.get_current_lr(),
                     )
                 )
 
             n_iter = self.epoch * self.num_batches + self.batch_idx
             for name, meter in losses.meters.items():
-                self.write_scalar('train/' + name, meter.avg, n_iter)
-            self.write_scalar('train/lr', self.get_current_lr(), n_iter)
+                self.write_scalar("train/" + name, meter.avg, n_iter)
+            self.write_scalar("train/lr", self.get_current_lr(), n_iter)
 
             end = time.time()
 
     def parse_batch_train(self, batch_x, batch_u):
-        input_x = batch_x['img']
-        label_x = batch_x['label']
-        input_u = batch_u['img']
+        input_x = batch_x["img"]
+        label_x = batch_x["label"]
+        input_u = batch_u["img"]
 
         input_x = input_x.to(self.device)
         label_x = label_x.to(self.device)
@@ -586,7 +577,7 @@ class TrainerX(SimpleTrainer):
     """A base trainer using labeled data only."""
 
     def run_epoch(self):
-        self.set_model_mode('train')
+        self.set_model_mode("train")
         losses = MetricMeter()
         batch_time = AverageMeter()
         data_time = AverageMeter()
@@ -604,15 +595,15 @@ class TrainerX(SimpleTrainer):
                 nb_future_epochs = (
                     self.max_epoch - (self.epoch + 1)
                 ) * self.num_batches
-                eta_seconds = batch_time.avg * (nb_this_epoch+nb_future_epochs)
+                eta_seconds = batch_time.avg * (nb_this_epoch + nb_future_epochs)
                 eta = str(datetime.timedelta(seconds=int(eta_seconds)))
                 print(
-                    'epoch [{0}/{1}][{2}/{3}]\t'
-                    'time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                    'data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                    'eta {eta}\t'
-                    '{losses}\t'
-                    'lr {lr:.6e}'.format(
+                    "epoch [{0}/{1}][{2}/{3}]\t"
+                    "time {batch_time.val:.3f} ({batch_time.avg:.3f})\t"
+                    "data {data_time.val:.3f} ({data_time.avg:.3f})\t"
+                    "eta {eta}\t"
+                    "{losses}\t"
+                    "lr {lr:.6e}".format(
                         self.epoch + 1,
                         self.max_epoch,
                         self.batch_idx + 1,
@@ -621,21 +612,21 @@ class TrainerX(SimpleTrainer):
                         data_time=data_time,
                         eta=eta,
                         losses=losses,
-                        lr=self.get_current_lr()
+                        lr=self.get_current_lr(),
                     )
                 )
 
             n_iter = self.epoch * self.num_batches + self.batch_idx
             for name, meter in losses.meters.items():
-                self.write_scalar('train/' + name, meter.avg, n_iter)
-            self.write_scalar('train/lr', self.get_current_lr(), n_iter)
+                self.write_scalar("train/" + name, meter.avg, n_iter)
+            self.write_scalar("train/lr", self.get_current_lr(), n_iter)
 
             end = time.time()
 
     def parse_batch_train(self, batch):
-        input = batch['img']
-        label = batch['label']
-        domain = batch['domain']
+        input = batch["img"]
+        label = batch["label"]
+        domain = batch["domain"]
 
         input = input.to(self.device)
         label = label.to(self.device)

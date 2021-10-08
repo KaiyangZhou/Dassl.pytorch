@@ -6,12 +6,11 @@ from .build import BACKBONE_REGISTRY
 from .backbone import Backbone
 
 model_urls = {
-    'alexnet': 'https://download.pytorch.org/models/alexnet-owt-4df8aa71.pth',
+    "alexnet": "https://download.pytorch.org/models/alexnet-owt-4df8aa71.pth",
 }
 
 
 class AlexNet(Backbone):
-
     def __init__(self):
         super().__init__()
         self.features = nn.Sequential(
@@ -32,8 +31,12 @@ class AlexNet(Backbone):
         self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
         # Note that self.classifier outputs features rather than logits
         self.classifier = nn.Sequential(
-            nn.Dropout(), nn.Linear(256 * 6 * 6, 4096), nn.ReLU(inplace=True),
-            nn.Dropout(), nn.Linear(4096, 4096), nn.ReLU(inplace=True)
+            nn.Dropout(),
+            nn.Linear(256 * 6 * 6, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(inplace=True),
         )
 
         self._out_features = 4096
@@ -55,6 +58,6 @@ def alexnet(pretrained=True, **kwargs):
     model = AlexNet()
 
     if pretrained:
-        init_pretrained_weights(model, model_urls['alexnet'])
+        init_pretrained_weights(model, model_urls["alexnet"])
 
     return model

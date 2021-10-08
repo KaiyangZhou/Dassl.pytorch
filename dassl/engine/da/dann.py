@@ -26,21 +26,21 @@ class DANN(TrainerXU):
     def build_critic(self):
         cfg = self.cfg
 
-        print('Building critic network')
+        print("Building critic network")
         fdim = self.model.fdim
         critic_body = build_head(
-            'mlp',
+            "mlp",
             verbose=cfg.VERBOSE,
             in_features=fdim,
             hidden_layers=[fdim, fdim],
-            activation='leaky_relu'
+            activation="leaky_relu",
         )
         self.critic = nn.Sequential(critic_body, nn.Linear(fdim, 1))
-        print('# params: {:,}'.format(count_num_param(self.critic)))
+        print("# params: {:,}".format(count_num_param(self.critic)))
         self.critic.to(self.device)
         self.optim_c = build_optimizer(self.critic, cfg.OPTIM)
         self.sched_c = build_lr_scheduler(self.optim_c, cfg.OPTIM)
-        self.register_model('critic', self.critic, self.optim_c, self.sched_c)
+        self.register_model("critic", self.critic, self.optim_c, self.sched_c)
         self.revgrad = ReverseGrad()
 
     def forward_backward(self, batch_x, batch_u):
@@ -67,9 +67,9 @@ class DANN(TrainerXU):
         self.model_backward_and_update(loss)
 
         loss_summary = {
-            'loss_x': loss_x.item(),
-            'acc_x': compute_accuracy(logit_x, label_x)[0].item(),
-            'loss_d': loss_d.item()
+            "loss_x": loss_x.item(),
+            "acc_x": compute_accuracy(logit_x, label_x)[0].item(),
+            "loss_d": loss_d.item(),
         }
 
         if (self.batch_idx + 1) == self.num_batches:

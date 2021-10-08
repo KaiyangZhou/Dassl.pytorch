@@ -1,7 +1,7 @@
 """
 Modified from https://github.com/facebookresearch/fvcore
 """
-__all__ = ['Registry']
+__all__ = ["Registry"]
 
 
 class Registry:

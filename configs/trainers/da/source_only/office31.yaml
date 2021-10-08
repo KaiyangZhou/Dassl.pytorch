@@ -5,7 +5,7 @@ DATALOADER:
     BATCH_SIZE: 32
 
 OPTIM:
-  NAME: 'sgd'
+  NAME: "sgd"
   LR: 0.002
   STEPSIZE: [20]
   MAX_EPOCH: 20

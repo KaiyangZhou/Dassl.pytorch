@@ -16,12 +16,12 @@ def activate_mixstyle(m):
 
 def random_mixstyle(m):
     if type(m) == MixStyle:
-        m.update_mix_method('random')
+        m.update_mix_method("random")
 
 
 def crossdomain_mixstyle(m):
     if type(m) == MixStyle:
-        m.update_mix_method('crossdomain')
+        m.update_mix_method("crossdomain")
 
 
 @contextmanager
@@ -37,10 +37,10 @@ def run_without_mixstyle(model):
 @contextmanager
 def run_with_mixstyle(model, mix=None):
     # Assume MixStyle was initially deactivated
-    if mix == 'random':
+    if mix == "random":
         model.apply(random_mixstyle)
 
-    elif mix == 'crossdomain':
+    elif mix == "crossdomain":
         model.apply(crossdomain_mixstyle)
 
     try:
@@ -57,7 +57,7 @@ class MixStyle(nn.Module):
       Zhou et al. Domain Generalization with MixStyle. ICLR 2021.
     """
 
-    def __init__(self, p=0.5, alpha=0.1, eps=1e-6, mix='random'):
+    def __init__(self, p=0.5, alpha=0.1, eps=1e-6, mix="random"):
         """
         Args:
           p (float): probability of using MixStyle.
@@ -74,12 +74,14 @@ class MixStyle(nn.Module):
         self._activated = True
 
     def __repr__(self):
-        return f'MixStyle(p={self.p}, alpha={self.alpha}, eps={self.eps}, mix={self.mix})'
+        return (
+            f"MixStyle(p={self.p}, alpha={self.alpha}, eps={self.eps}, mix={self.mix})"
+        )
 
     def set_activation_status(self, status=True):
         self._activated = status
 
-    def update_mix_method(self, mix='random'):
+    def update_mix_method(self, mix="random"):
         self.mix = mix
 
     def forward(self, x):
@@ -95,16 +97,16 @@ class MixStyle(nn.Module):
         var = x.var(dim=[2, 3], keepdim=True)
         sig = (var + self.eps).sqrt()
         mu, sig = mu.detach(), sig.detach()
-        x_normed = (x-mu) / sig
+        x_normed = (x - mu) / sig
 
         lmda = self.beta.sample((B, 1, 1, 1))
         lmda = lmda.to(x.device)
 
-        if self.mix == 'random':
+        if self.mix == "random":
             # random shuffle
             perm = torch.randperm(B)
 
-        elif self.mix == 'crossdomain':
+        elif self.mix == "crossdomain":
             # split into two halves and swap the order
             perm = torch.arange(B - 1, -1, -1)  # inverse index
             perm_b, perm_a = perm.chunk(2)
@@ -116,7 +118,7 @@ class MixStyle(nn.Module):
             raise NotImplementedError
 
         mu2, sig2 = mu[perm], sig[perm]
-        mu_mix = mu*lmda + mu2 * (1-lmda)
-        sig_mix = sig*lmda + sig2 * (1-lmda)
+        mu_mix = mu * lmda + mu2 * (1 - lmda)
+        sig_mix = sig * lmda + sig2 * (1 - lmda)
 
-        return x_normed*sig_mix + mu_mix
+        return x_normed * sig_mix + mu_mix

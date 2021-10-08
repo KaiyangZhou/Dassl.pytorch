@@ -42,11 +42,7 @@ class FixMatch(TrainerXU):
         acc_thre = n_masked_correct / (mask.sum() + 1e-5)
         acc_raw = y_pred.eq(y_true).sum() / y_pred.numel()  # raw accuracy
         keep_rate = mask.sum() / mask.numel()
-        output = {
-            'acc_thre': acc_thre,
-            'acc_raw': acc_raw,
-            'keep_rate': keep_rate
-        }
+        output = {"acc_thre": acc_thre, "acc_raw": acc_raw, "keep_rate": keep_rate}
         return output
 
     def forward_backward(self, batch_x, batch_u):
@@ -73,19 +69,19 @@ class FixMatch(TrainerXU):
 
         # Unsupervised loss
         output_u = self.model(input_u2)
-        loss_u = F.cross_entropy(output_u, label_u_pred, reduction='none')
+        loss_u = F.cross_entropy(output_u, label_u_pred, reduction="none")
         loss_u = (loss_u * mask_u).mean()
 
         loss = loss_x + loss_u * self.weight_u
         self.model_backward_and_update(loss)
 
         loss_summary = {
-            'loss_x': loss_x.item(),
-            'acc_x': compute_accuracy(output_x, label_x)[0].item(),
-            'loss_u': loss_u.item(),
-            'y_u_pred_acc_raw': y_u_pred_stats['acc_raw'],
-            'y_u_pred_acc_thre': y_u_pred_stats['acc_thre'],
-            'y_u_pred_keep': y_u_pred_stats['keep_rate']
+            "loss_x": loss_x.item(),
+            "acc_x": compute_accuracy(output_x, label_x)[0].item(),
+            "loss_u": loss_u.item(),
+            "y_u_pred_acc_raw": y_u_pred_stats["acc_raw"],
+            "y_u_pred_acc_thre": y_u_pred_stats["acc_thre"],
+            "y_u_pred_keep": y_u_pred_stats["keep_rate"],
         }
 
         if (self.batch_idx + 1) == self.num_batches:
@@ -94,13 +90,13 @@ class FixMatch(TrainerXU):
         return loss_summary
 
     def parse_batch_train(self, batch_x, batch_u):
-        input_x = batch_x['img']
-        input_x2 = batch_x['img2']
-        label_x = batch_x['label']
-        input_u = batch_u['img']
-        input_u2 = batch_u['img2']
+        input_x = batch_x["img"]
+        input_x2 = batch_x["img2"]
+        label_x = batch_x["label"]
+        input_u = batch_u["img"]
+        input_u2 = batch_u["img2"]
         # label_u is used only for evaluating pseudo labels' accuracy
-        label_u = batch_u['label']
+        label_u = batch_u["label"]
 
         input_x = input_x.to(self.device)
         input_x2 = input_x2.to(self.device)

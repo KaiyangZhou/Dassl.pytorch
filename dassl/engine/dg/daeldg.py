@@ -12,7 +12,6 @@ from dassl.modeling.ops.utils import create_onehot
 
 
 class Experts(nn.Module):
-
     def __init__(self, n_source, fdim, num_classes):
         super().__init__()
         self.linears = nn.ModuleList(
@@ -47,7 +46,7 @@ class DAELDG(TrainerX):
         self.conf_thre = cfg.TRAINER.DAEL.CONF_THRE
 
     def check_cfg(self, cfg):
-        assert cfg.DATALOADER.TRAIN_X.SAMPLER == 'RandomDomainSampler'
+        assert cfg.DATALOADER.TRAIN_X.SAMPLER == "RandomDomainSampler"
         assert len(cfg.TRAINER.DAEL.STRONG_TRANSFORMS) > 0
 
     def build_data_loader(self):
@@ -69,22 +68,22 @@ class DAELDG(TrainerX):
     def build_model(self):
         cfg = self.cfg
 
-        print('Building F')
+        print("Building F")
         self.F = SimpleNet(cfg, cfg.MODEL, 0)
         self.F.to(self.device)
-        print('# params: {:,}'.format(count_num_param(self.F)))
+        print("# params: {:,}".format(count_num_param(self.F)))
         self.optim_F = build_optimizer(self.F, cfg.OPTIM)
         self.sched_F = build_lr_scheduler(self.optim_F, cfg.OPTIM)
-        self.register_model('F', self.F, self.optim_F, self.sched_F)
+        self.register_model("F", self.F, self.optim_F, self.sched_F)
         fdim = self.F.fdim
 
-        print('Building E')
+        print("Building E")
         self.E = Experts(self.num_source_domains, fdim, self.num_classes)
         self.E.to(self.device)
-        print('# params: {:,}'.format(count_num_param(self.E)))
+        print("# params: {:,}".format(count_num_param(self.E)))
         self.optim_E = build_optimizer(self.E, cfg.OPTIM)
         self.sched_E = build_lr_scheduler(self.optim_E, cfg.OPTIM)
-        self.register_model('E', self.E, self.optim_E, self.sched_E)
+        self.register_model("E", self.E, self.optim_E, self.sched_E)
 
     def forward_backward(self, batch):
         parsed_data = self.parse_batch_train(batch)
@@ -110,8 +109,7 @@ class DAELDG(TrainerX):
             pred_i = self.E(i, feat_i)
             loss_x += (-label_i * torch.log(pred_i + 1e-5)).sum(1).mean()
             expert_label_i = pred_i.detach()
-            acc += compute_accuracy(pred_i.detach(),
-                                    label_i.max(1)[1])[0].item()
+            acc += compute_accuracy(pred_i.detach(), label_i.max(1)[1])[0].item()
 
             # Consistency regularization
             cr_pred = []
@@ -121,7 +119,7 @@ class DAELDG(TrainerX):
                 cr_pred.append(pred_j)
             cr_pred = torch.cat(cr_pred, 1)
             cr_pred = cr_pred.mean(1)
-            loss_cr += ((cr_pred - expert_label_i)**2).sum(1).mean()
+            loss_cr += ((cr_pred - expert_label_i) ** 2).sum(1).mean()
 
         loss_x /= self.n_domain
         loss_cr /= self.n_domain
@@ -132,11 +130,7 @@ class DAELDG(TrainerX):
         loss += loss_cr
         self.model_backward_and_update(loss)
 
-        loss_summary = {
-            'loss_x': loss_x.item(),
-            'acc': acc,
-            'loss_cr': loss_cr.item()
-        }
+        loss_summary = {"loss_x": loss_x.item(), "acc": acc, "loss_cr": loss_cr.item()}
 
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()
@@ -144,10 +138,10 @@ class DAELDG(TrainerX):
         return loss_summary
 
     def parse_batch_train(self, batch):
-        input = batch['img']
-        input2 = batch['img2']
-        label = batch['label']
-        domain = batch['domain']
+        input = batch["img"]
+        input2 = batch["img2"]
+        label = batch["label"]
+        domain = batch["domain"]
 
         label = create_onehot(label, self.num_classes)
 

@@ -1,15 +1,15 @@
 INPUT:
   SIZE: (32, 32)
-  TRANSFORMS: ['random_crop', 'normalize']
+  TRANSFORMS: ["random_crop", "normalize"]
   PIXEL_MEAN: [0.5, 0.5, 0.5]
   PIXEL_STD: [0.5, 0.5, 0.5]
   CROP_PADDING: 4
 
 DATASET:
-  NAME: 'SVHN'
+  NAME: "SVHN"
   NUM_LABELED: 1000
   VAL_PERCENT: 0.
 
 MODEL:
   BACKBONE:
-    NAME: 'wide_resnet_28_2'
+    NAME: "wide_resnet_28_2"

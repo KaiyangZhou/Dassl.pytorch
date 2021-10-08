@@ -5,17 +5,17 @@ import os.path as osp
 
 from .tools import mkdir_if_missing
 
-__all__ = ['Logger', 'setup_logger']
+__all__ = ["Logger", "setup_logger"]
 
 
 class Logger:
     """Write console output to external text file.
-    
+
     Imported from `<https://github.com/Cysu/open-reid/blob/master/reid/utils/logging.py>`_
-    
+
     Args:
         fpath (str): directory to save logging file.
-    
+
     Examples::
        >>> import sys
        >>> import os.path as osp
@@ -29,7 +29,7 @@ class Logger:
         self.file = None
         if fpath is not None:
             mkdir_if_missing(osp.dirname(fpath))
-            self.file = open(fpath, 'w')
+            self.file = open(fpath, "w")
 
     def __del__(self):
         self.close()
@@ -61,13 +61,13 @@ def setup_logger(output=None):
     if output is None:
         return
 
-    if output.endswith('.txt') or output.endswith('.log'):
+    if output.endswith(".txt") or output.endswith(".log"):
         fpath = output
     else:
-        fpath = osp.join(output, 'log.txt')
+        fpath = osp.join(output, "log.txt")
 
     if osp.exists(fpath):
         # make sure the existing log file is not over-written
-        fpath += time.strftime('-%Y-%m-%d-%H-%M-%S')
+        fpath += time.strftime("-%Y-%m-%d-%H-%M-%S")
 
     sys.stdout = Logger(fpath)

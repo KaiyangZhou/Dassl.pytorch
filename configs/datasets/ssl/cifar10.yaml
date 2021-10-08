@@ -1,14 +1,14 @@
 INPUT:
   SIZE: (32, 32)
-  TRANSFORMS: ['random_flip', 'random_crop', 'normalize']
+  TRANSFORMS: ["random_flip", "random_crop", "normalize"]
   PIXEL_MEAN: [0.5, 0.5, 0.5]
   PIXEL_STD: [0.5, 0.5, 0.5]
 
 DATASET:
-  NAME: 'CIFAR10'
+  NAME: "CIFAR10"
   NUM_LABELED: 4000
   VAL_PERCENT: 0.
 
 MODEL:
   BACKBONE:
-    NAME: 'wide_resnet_28_2'
+    NAME: "wide_resnet_28_2"

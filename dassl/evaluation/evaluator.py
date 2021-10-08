@@ -64,34 +64,31 @@ class Classification(EvaluatorBase):
 
     def evaluate(self):
         results = OrderedDict()
-        acc = 100. * self._correct / self._total
-        err = 100. - acc
-        macro_f1 = 100. * f1_score(
-            self._y_true,
-            self._y_pred,
-            average='macro',
-            labels=np.unique(self._y_true)
+        acc = 100.0 * self._correct / self._total
+        err = 100.0 - acc
+        macro_f1 = 100.0 * f1_score(
+            self._y_true, self._y_pred, average="macro", labels=np.unique(self._y_true)
         )
 
         # The first value will be returned by trainer.test()
-        results['accuracy'] = acc
-        results['error_rate'] = err
-        results['macro_f1'] = macro_f1
+        results["accuracy"] = acc
+        results["error_rate"] = err
+        results["macro_f1"] = macro_f1
 
         print(
-            '=> result\n'
-            f'* total: {self._total:,}\n'
-            f'* correct: {self._correct:,}\n'
-            f'* accuracy: {acc:.2f}%\n'
-            f'* error: {err:.2f}%\n'
-            f'* macro_f1: {macro_f1:.2f}%'
+            "=> result\n"
+            f"* total: {self._total:,}\n"
+            f"* correct: {self._correct:,}\n"
+            f"* accuracy: {acc:.2f}%\n"
+            f"* error: {err:.2f}%\n"
+            f"* macro_f1: {macro_f1:.2f}%"
         )
 
         if self._per_class_res is not None:
             labels = list(self._per_class_res.keys())
             labels.sort()
 
-            print('=> per-class result')
+            print("=> per-class result")
             accs = []
 
             for label in labels:
@@ -99,26 +96,22 @@ class Classification(EvaluatorBase):
                 res = self._per_class_res[label]
                 correct = sum(res)
                 total = len(res)
-                acc = 100. * correct / total
+                acc = 100.0 * correct / total
                 accs.append(acc)
                 print(
-                    '* class: {} ({})\t'
-                    'total: {:,}\t'
-                    'correct: {:,}\t'
-                    'acc: {:.2f}%'.format(
-                        label, classname, total, correct, acc
-                    )
+                    "* class: {} ({})\t"
+                    "total: {:,}\t"
+                    "correct: {:,}\t"
+                    "acc: {:.2f}%".format(label, classname, total, correct, acc)
                 )
             mean_acc = np.mean(accs)
-            print('* average: {:.2f}%'.format(mean_acc))
+            print("* average: {:.2f}%".format(mean_acc))
 
-            results['perclass_accuracy'] = mean_acc
+            results["perclass_accuracy"] = mean_acc
 
         if self.cfg.TEST.COMPUTE_CMAT:
-            cmat = confusion_matrix(
-                self._y_true, self._y_pred, normalize='true'
-            )
-            save_path = osp.join(self.cfg.OUTPUT_DIR, 'cmat.pt')
+            cmat = confusion_matrix(self._y_true, self._y_pred, normalize="true")
+            save_path = osp.join(self.cfg.OUTPUT_DIR, "cmat.pt")
             torch.save(cmat, save_path)
             print('Confusion matrix is saved to "{}"'.format(save_path))
 

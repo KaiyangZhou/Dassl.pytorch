@@ -10,22 +10,22 @@ from .samplers import build_sampler
 from .transforms import build_transform
 
 INTERPOLATION_MODES = {
-    'bilinear': Image.BILINEAR,
-    'bicubic': Image.BICUBIC,
-    'nearest': Image.NEAREST
+    "bilinear": Image.BILINEAR,
+    "bicubic": Image.BICUBIC,
+    "nearest": Image.NEAREST,
 }
 
 
 def build_data_loader(
     cfg,
-    sampler_type='SequentialSampler',
+    sampler_type="SequentialSampler",
     data_source=None,
     batch_size=64,
     n_domain=0,
     n_ins=2,
     tfm=None,
     is_train=True,
-    dataset_wrapper=None
+    dataset_wrapper=None,
 ):
     # Build sampler
     sampler = build_sampler(
@@ -34,7 +34,7 @@ def build_data_loader(
         data_source=data_source,
         batch_size=batch_size,
         n_domain=n_domain,
-        n_ins=n_ins
+        n_ins=n_ins,
     )
 
     if dataset_wrapper is None:
@@ -47,7 +47,7 @@ def build_data_loader(
         sampler=sampler,
         num_workers=cfg.DATALOADER.NUM_WORKERS,
         drop_last=is_train and len(data_source) >= batch_size,
-        pin_memory=(torch.cuda.is_available() and cfg.USE_CUDA)
+        pin_memory=(torch.cuda.is_available() and cfg.USE_CUDA),
     )
     assert len(data_loader) > 0
 
@@ -55,13 +55,8 @@ def build_data_loader(
 
 
 class DataManager:
-
     def __init__(
-        self,
-        cfg,
-        custom_tfm_train=None,
-        custom_tfm_test=None,
-        dataset_wrapper=None
+        self, cfg, custom_tfm_train=None, custom_tfm_test=None, dataset_wrapper=None
     ):
         # Load dataset
         dataset = build_dataset(cfg)
@@ -70,13 +65,13 @@ class DataManager:
         if custom_tfm_train is None:
             tfm_train = build_transform(cfg, is_train=True)
         else:
-            print('* Using custom transform for training')
+            print("* Using custom transform for training")
             tfm_train = custom_tfm_train
 
         if custom_tfm_test is None:
             tfm_test = build_transform(cfg, is_train=False)
         else:
-            print('* Using custom transform for testing')
+            print("* Using custom transform for testing")
             tfm_test = custom_tfm_test
 
         # Build train_loader_x
@@ -89,7 +84,7 @@ class DataManager:
             n_ins=cfg.DATALOADER.TRAIN_X.N_INS,
             tfm=tfm_train,
             is_train=True,
-            dataset_wrapper=dataset_wrapper
+            dataset_wrapper=dataset_wrapper,
         )
 
         # Build train_loader_u
@@ -115,7 +110,7 @@ class DataManager:
                 n_ins=n_ins_,
                 tfm=tfm_train,
                 is_train=True,
-                dataset_wrapper=dataset_wrapper
+                dataset_wrapper=dataset_wrapper,
             )
 
         # Build val_loader
@@ -128,7 +123,7 @@ class DataManager:
                 batch_size=cfg.DATALOADER.TEST.BATCH_SIZE,
                 tfm=tfm_test,
                 is_train=False,
-                dataset_wrapper=dataset_wrapper
+                dataset_wrapper=dataset_wrapper,
             )
 
         # Build test_loader
@@ -139,7 +134,7 @@ class DataManager:
             batch_size=cfg.DATALOADER.TEST.BATCH_SIZE,
             tfm=tfm_test,
             is_train=False,
-            dataset_wrapper=dataset_wrapper
+            dataset_wrapper=dataset_wrapper,
         )
 
         # Attributes
@@ -170,30 +165,29 @@ class DataManager:
         return self._lab2cname
 
     def show_dataset_summary(self, cfg):
-        print('***** Dataset statistics *****')
+        print("***** Dataset statistics *****")
 
-        print('  Dataset: {}'.format(cfg.DATASET.NAME))
+        print("  Dataset: {}".format(cfg.DATASET.NAME))
 
         if cfg.DATASET.SOURCE_DOMAINS:
-            print('  Source domains: {}'.format(cfg.DATASET.SOURCE_DOMAINS))
+            print("  Source domains: {}".format(cfg.DATASET.SOURCE_DOMAINS))
         if cfg.DATASET.TARGET_DOMAINS:
-            print('  Target domains: {}'.format(cfg.DATASET.TARGET_DOMAINS))
+            print("  Target domains: {}".format(cfg.DATASET.TARGET_DOMAINS))
 
-        print('  # classes: {:,}'.format(self.num_classes))
+        print("  # classes: {:,}".format(self.num_classes))
 
-        print('  # train_x: {:,}'.format(len(self.dataset.train_x)))
+        print("  # train_x: {:,}".format(len(self.dataset.train_x)))
 
         if self.dataset.train_u:
-            print('  # train_u: {:,}'.format(len(self.dataset.train_u)))
+            print("  # train_u: {:,}".format(len(self.dataset.train_u)))
 
         if self.dataset.val:
-            print('  # val: {:,}'.format(len(self.dataset.val)))
+            print("  # val: {:,}".format(len(self.dataset.val)))
 
-        print('  # test: {:,}'.format(len(self.dataset.test)))
+        print("  # test: {:,}".format(len(self.dataset.test)))
 
 
 class DatasetWrapper(TorchDataset):
-
     def __init__(self, cfg, data_source, transform=None, is_train=False):
         self.cfg = cfg
         self.data_source = data_source
@@ -205,8 +199,8 @@ class DatasetWrapper(TorchDataset):
 
         if self.k_tfm > 1 and transform is None:
             raise ValueError(
-                'Cannot augment the image {} times '
-                'because transform is None'.format(self.k_tfm)
+                "Cannot augment the image {} times "
+                "because transform is None".format(self.k_tfm)
             )
 
         # Build transform that doesn't apply any data augmentation
@@ -214,10 +208,8 @@ class DatasetWrapper(TorchDataset):
         to_tensor = []
         to_tensor += [T.Resize(cfg.INPUT.SIZE, interpolation=interp_mode)]
         to_tensor += [T.ToTensor()]
-        if 'normalize' in cfg.INPUT.TRANSFORMS:
-            normalize = T.Normalize(
-                mean=cfg.INPUT.PIXEL_MEAN, std=cfg.INPUT.PIXEL_STD
-            )
+        if "normalize" in cfg.INPUT.TRANSFORMS:
+            normalize = T.Normalize(mean=cfg.INPUT.PIXEL_MEAN, std=cfg.INPUT.PIXEL_STD)
             to_tensor += [normalize]
         self.to_tensor = T.Compose(to_tensor)
 
@@ -227,11 +219,7 @@ class DatasetWrapper(TorchDataset):
     def __getitem__(self, idx):
         item = self.data_source[idx]
 
-        output = {
-            'label': item.label,
-            'domain': item.domain,
-            'impath': item.impath
-        }
+        output = {"label": item.label, "domain": item.domain, "impath": item.impath}
 
         img0 = read_image(item.impath)
 
@@ -239,16 +227,16 @@ class DatasetWrapper(TorchDataset):
             if isinstance(self.transform, (list, tuple)):
                 for i, tfm in enumerate(self.transform):
                     img = self._transform_image(tfm, img0)
-                    keyname = 'img'
+                    keyname = "img"
                     if (i + 1) > 1:
                         keyname += str(i + 1)
                     output[keyname] = img
             else:
                 img = self._transform_image(self.transform, img0)
-                output['img'] = img
+                output["img"] = img
 
         if self.return_img0:
-            output['img0'] = self.to_tensor(img0)
+            output["img0"] = self.to_tensor(img0)
 
         return output
 

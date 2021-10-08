@@ -17,8 +17,8 @@ class SourceOnly(TrainerXU):
         self.model_backward_and_update(loss)
 
         loss_summary = {
-            'loss': loss.item(),
-            'acc': compute_accuracy(output, label)[0].item()
+            "loss": loss.item(),
+            "acc": compute_accuracy(output, label)[0].item(),
         }
 
         if (self.batch_idx + 1) == self.num_batches:
@@ -27,8 +27,8 @@ class SourceOnly(TrainerXU):
         return loss_summary
 
     def parse_batch_train(self, batch_x, batch_u):
-        input = batch_x['img']
-        label = batch_x['label']
+        input = batch_x["img"]
+        label = batch_x["label"]
         input = input.to(self.device)
         label = label.to(self.device)
         return input, label

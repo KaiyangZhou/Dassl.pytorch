@@ -8,16 +8,16 @@ DATALOADER:
     BATCH_SIZE: 500
 
 OPTIM:
-  NAME: 'sgd'
+  NAME: "sgd"
   LR: 0.05
   STEPSIZE: [4000]
   MAX_EPOCH: 4000
-  LR_SCHEDULER: 'cosine'
+  LR_SCHEDULER: "cosine"
 
 TRAIN:
-  COUNT_ITER: 'train_u'
+  COUNT_ITER: "train_u"
   PRINT_FREQ: 10
 
 TRAINER:
   FIXMATCH:
-    STRONG_TRANSFORMS: ['random_flip', 'randaugment_fixmatch', 'normalize', 'cutout']
+    STRONG_TRANSFORMS: ["random_flip", "randaugment_fixmatch", "normalize", "cutout"]

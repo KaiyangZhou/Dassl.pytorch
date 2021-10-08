@@ -18,19 +18,19 @@ class AdaBN(TrainerXU):
     def check_cfg(self, cfg):
         assert check_isfile(
             cfg.MODEL.INIT_WEIGHTS
-        ), 'The weights of source model must be provided'
+        ), "The weights of source model must be provided"
 
     def before_epoch(self):
         if not self.done_reset_bn_stats:
             for m in self.model.modules():
                 classname = m.__class__.__name__
-                if classname.find('BatchNorm') != -1:
+                if classname.find("BatchNorm") != -1:
                     m.reset_running_stats()
 
             self.done_reset_bn_stats = True
 
     def forward_backward(self, batch_x, batch_u):
-        input_u = batch_u['img'].to(self.device)
+        input_u = batch_u["img"].to(self.device)
 
         with torch.no_grad():
             self.model(input_u)

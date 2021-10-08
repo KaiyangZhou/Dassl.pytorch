@@ -129,8 +129,8 @@ class RandomClassSampler(Sampler):
     def __init__(self, data_source, batch_size, n_ins):
         if batch_size < n_ins:
             raise ValueError(
-                'batch_size={} must be no less '
-                'than n_ins={}'.format(batch_size, n_ins)
+                "batch_size={} must be no less "
+                "than n_ins={}".format(batch_size, n_ins)
             )
 
         self.data_source = data_source
@@ -179,27 +179,22 @@ class RandomClassSampler(Sampler):
 
 
 def build_sampler(
-    sampler_type,
-    cfg=None,
-    data_source=None,
-    batch_size=32,
-    n_domain=0,
-    n_ins=16
+    sampler_type, cfg=None, data_source=None, batch_size=32, n_domain=0, n_ins=16
 ):
-    if sampler_type == 'RandomSampler':
+    if sampler_type == "RandomSampler":
         return RandomSampler(data_source)
 
-    elif sampler_type == 'SequentialSampler':
+    elif sampler_type == "SequentialSampler":
         return SequentialSampler(data_source)
 
-    elif sampler_type == 'RandomDomainSampler':
+    elif sampler_type == "RandomDomainSampler":
         return RandomDomainSampler(data_source, batch_size, n_domain)
 
-    elif sampler_type == 'SeqDomainSampler':
+    elif sampler_type == "SeqDomainSampler":
         return SeqDomainSampler(data_source, batch_size)
 
-    elif sampler_type == 'RandomClassSampler':
+    elif sampler_type == "RandomClassSampler":
         return RandomClassSampler(data_source, batch_size, n_ins)
 
     else:
-        raise ValueError('Unknown sampler type: {}'.format(sampler_type))
+        raise ValueError("Unknown sampler type: {}".format(sampler_type))

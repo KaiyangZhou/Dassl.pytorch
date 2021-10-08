@@ -6,7 +6,7 @@ DATALOADER:
   NUM_WORKERS: 8
 
 OPTIM:
-  NAME: 'sgd'
+  NAME: "sgd"
   LR: 0.001
   MAX_EPOCH: 50
-  LR_SCHEDULER: 'cosine'
+  LR_SCHEDULER: "cosine"

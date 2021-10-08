@@ -22,30 +22,30 @@ class MCD(TrainerXU):
     def build_model(self):
         cfg = self.cfg
 
-        print('Building F')
+        print("Building F")
         self.F = SimpleNet(cfg, cfg.MODEL, 0)
         self.F.to(self.device)
-        print('# params: {:,}'.format(count_num_param(self.F)))
+        print("# params: {:,}".format(count_num_param(self.F)))
         self.optim_F = build_optimizer(self.F, cfg.OPTIM)
         self.sched_F = build_lr_scheduler(self.optim_F, cfg.OPTIM)
-        self.register_model('F', self.F, self.optim_F, self.sched_F)
+        self.register_model("F", self.F, self.optim_F, self.sched_F)
         fdim = self.F.fdim
 
-        print('Building C1')
+        print("Building C1")
         self.C1 = nn.Linear(fdim, self.num_classes)
         self.C1.to(self.device)
-        print('# params: {:,}'.format(count_num_param(self.C1)))
+        print("# params: {:,}".format(count_num_param(self.C1)))
         self.optim_C1 = build_optimizer(self.C1, cfg.OPTIM)
         self.sched_C1 = build_lr_scheduler(self.optim_C1, cfg.OPTIM)
-        self.register_model('C1', self.C1, self.optim_C1, self.sched_C1)
+        self.register_model("C1", self.C1, self.optim_C1, self.sched_C1)
 
-        print('Building C2')
+        print("Building C2")
         self.C2 = nn.Linear(fdim, self.num_classes)
         self.C2.to(self.device)
-        print('# params: {:,}'.format(count_num_param(self.C2)))
+        print("# params: {:,}".format(count_num_param(self.C2)))
         self.optim_C2 = build_optimizer(self.C2, cfg.OPTIM)
         self.sched_C2 = build_lr_scheduler(self.optim_C2, cfg.OPTIM)
-        self.register_model('C2', self.C2, self.optim_C2, self.sched_C2)
+        self.register_model("C2", self.C2, self.optim_C2, self.sched_C2)
 
     def forward_backward(self, batch_x, batch_u):
         parsed = self.parse_batch_train(batch_x, batch_u)
@@ -76,7 +76,7 @@ class MCD(TrainerXU):
         loss_dis = self.discrepancy(pred_u1, pred_u2)
 
         loss_step_B = loss_x - loss_dis
-        self.model_backward_and_update(loss_step_B, ['C1', 'C2'])
+        self.model_backward_and_update(loss_step_B, ["C1", "C2"])
 
         # Step C
         for _ in range(self.n_step_F):
@@ -84,12 +84,12 @@ class MCD(TrainerXU):
             pred_u1 = F.softmax(self.C1(feat_u), 1)
             pred_u2 = F.softmax(self.C2(feat_u), 1)
             loss_step_C = self.discrepancy(pred_u1, pred_u2)
-            self.model_backward_and_update(loss_step_C, 'F')
+            self.model_backward_and_update(loss_step_C, "F")
 
         loss_summary = {
-            'loss_step_A': loss_step_A.item(),
-            'loss_step_B': loss_step_B.item(),
-            'loss_step_C': loss_step_C.item()
+            "loss_step_A": loss_step_A.item(),
+            "loss_step_B": loss_step_B.item(),
+            "loss_step_C": loss_step_C.item(),
         }
 
         if (self.batch_idx + 1) == self.num_batches:

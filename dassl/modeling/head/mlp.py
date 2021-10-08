@@ -5,14 +5,13 @@ from .build import HEAD_REGISTRY
 
 
 class MLP(nn.Module):
-
     def __init__(
         self,
         in_features=2048,
         hidden_layers=[],
-        activation='relu',
+        activation="relu",
         bn=True,
-        dropout=0.
+        dropout=0.0,
     ):
         super().__init__()
         if isinstance(hidden_layers, int):
@@ -23,9 +22,9 @@ class MLP(nn.Module):
 
         mlp = []
 
-        if activation == 'relu':
+        if activation == "relu":
             act_fn = functools.partial(nn.ReLU, inplace=True)
-        elif activation == 'leaky_relu':
+        elif activation == "leaky_relu":
             act_fn = functools.partial(nn.LeakyReLU, inplace=True)
         else:
             raise NotImplementedError

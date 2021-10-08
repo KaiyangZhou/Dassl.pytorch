@@ -12,7 +12,6 @@ from .backbone import Backbone
 
 
 class CNN(Backbone):
-
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(3, 64, 5)
@@ -24,9 +23,9 @@ class CNN(Backbone):
 
     def _check_input(self, x):
         H, W = x.shape[2:]
-        assert H == 32 and W == 32, \
-            'Input to network must be 32x32, ' \
-            'but got {}x{}'.format(H, W)
+        assert (
+            H == 32 and W == 32
+        ), "Input to network must be 32x32, " "but got {}x{}".format(H, W)
 
     def forward(self, x):
         self._check_input(x)
@@ -52,5 +51,5 @@ class CNN(Backbone):
 @BACKBONE_REGISTRY.register()
 def cnn_digitsingle(**kwargs):
     model = CNN()
-    init_network_weights(model, init_type='kaiming')
+    init_network_weights(model, init_type="kaiming")
     return model

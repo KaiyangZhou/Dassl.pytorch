@@ -6,7 +6,7 @@ import os.path as osp
 import argparse
 import fileinput
 
-EXTENSION = '.py'
+EXTENSION = ".py"
 
 
 def is_python_file(filename):
@@ -15,14 +15,14 @@ def is_python_file(filename):
 
 
 def update_file(filename, text_to_search, replacement_text):
-    print('Processing {}'.format(filename))
-    with fileinput.FileInput(filename, inplace=True, backup='') as file:
+    print("Processing {}".format(filename))
+    with fileinput.FileInput(filename, inplace=True, backup="") as file:
         for line in file:
-            print(line.replace(text_to_search, replacement_text), end='')
+            print(line.replace(text_to_search, replacement_text), end="")
 
 
 def recursive_update(directory, text_to_search, replacement_text):
-    filenames = glob.glob(osp.join(directory, '*'))
+    filenames = glob.glob(osp.join(directory, "*"))
 
     for filename in filenames:
         if osp.isfile(filename):
@@ -37,14 +37,10 @@ def recursive_update(directory, text_to_search, replacement_text):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        'file_or_dir', type=str, help='path to file or directory'
-    )
-    parser.add_argument('text_to_search', type=str, help='name to be replaced')
-    parser.add_argument('replacement_text', type=str, help='new name')
-    parser.add_argument(
-        '--ext', type=str, default='.py', help='file extension'
-    )
+    parser.add_argument("file_or_dir", type=str, help="path to file or directory")
+    parser.add_argument("text_to_search", type=str, help="name to be replaced")
+    parser.add_argument("replacement_text", type=str, help="new name")
+    parser.add_argument("--ext", type=str, default=".py", help="file extension")
     args = parser.parse_args()
 
     file_or_dir = args.file_or_dir
@@ -65,5 +61,5 @@ def main():
         raise NotImplementedError
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

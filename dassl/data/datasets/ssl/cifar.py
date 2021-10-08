@@ -11,18 +11,19 @@ from ..base_dataset import Datum, DatasetBase
 @DATASET_REGISTRY.register()
 class CIFAR10(DatasetBase):
     """CIFAR10 for SSL.
-    
+
     Reference:
         - Krizhevsky. Learning Multiple Layers of Features
         from Tiny Images. Tech report.
     """
-    dataset_dir = 'cifar10'
+
+    dataset_dir = "cifar10"
 
     def __init__(self, cfg):
         root = osp.abspath(osp.expanduser(cfg.DATASET.ROOT))
         self.dataset_dir = osp.join(root, self.dataset_dir)
-        train_dir = osp.join(self.dataset_dir, 'train')
-        test_dir = osp.join(self.dataset_dir, 'test')
+        train_dir = osp.join(self.dataset_dir, "train")
+        test_dir = osp.join(self.dataset_dir, "test")
 
         assert cfg.DATASET.NUM_LABELED > 0
 
@@ -95,12 +96,13 @@ class CIFAR10(DatasetBase):
 @DATASET_REGISTRY.register()
 class CIFAR100(CIFAR10):
     """CIFAR100 for SSL.
-    
+
     Reference:
         - Krizhevsky. Learning Multiple Layers of Features
         from Tiny Images. Tech report.
     """
-    dataset_dir = 'cifar100'
+
+    dataset_dir = "cifar100"
 
     def __init__(self, cfg):
         super().__init__(cfg)

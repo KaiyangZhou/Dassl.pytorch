@@ -17,9 +17,9 @@ class ADDA(TrainerXU):
 
     def __init__(self, cfg):
         super().__init__(cfg)
-        self.open_layers = ['backbone']
+        self.open_layers = ["backbone"]
         if isinstance(self.model.head, nn.Module):
-            self.open_layers.append('head')
+            self.open_layers.append("head")
 
         self.source_model = copy.deepcopy(self.model)
         self.source_model.eval()
@@ -33,26 +33,26 @@ class ADDA(TrainerXU):
     def check_cfg(self, cfg):
         assert check_isfile(
             cfg.MODEL.INIT_WEIGHTS
-        ), 'The weights of source model must be provided'
+        ), "The weights of source model must be provided"
 
     def build_critic(self):
         cfg = self.cfg
 
-        print('Building critic network')
+        print("Building critic network")
         fdim = self.model.fdim
         critic_body = build_head(
-            'mlp',
+            "mlp",
             verbose=cfg.VERBOSE,
             in_features=fdim,
             hidden_layers=[fdim, fdim // 2],
-            activation='leaky_relu'
+            activation="leaky_relu",
         )
         self.critic = nn.Sequential(critic_body, nn.Linear(fdim // 2, 1))
-        print('# params: {:,}'.format(count_num_param(self.critic)))
+        print("# params: {:,}".format(count_num_param(self.critic)))
         self.critic.to(self.device)
         self.optim_c = build_optimizer(self.critic, cfg.OPTIM)
         self.sched_c = build_lr_scheduler(self.optim_c, cfg.OPTIM)
-        self.register_model('critic', self.critic, self.optim_c, self.sched_c)
+        self.register_model("critic", self.critic, self.optim_c, self.sched_c)
 
     def forward_backward(self, batch_x, batch_u):
         open_specified_layers(self.model, self.open_layers)
@@ -68,15 +68,15 @@ class ADDA(TrainerXU):
 
         loss_critic = self.bce(logit_xd, domain_x)
         loss_critic += self.bce(logit_ud, domain_u)
-        self.model_backward_and_update(loss_critic, 'critic')
+        self.model_backward_and_update(loss_critic, "critic")
 
         logit_ud = self.critic(feat_u)
         loss_model = self.bce(logit_ud, 1 - domain_u)
-        self.model_backward_and_update(loss_model, 'model')
+        self.model_backward_and_update(loss_model, "model")
 
         loss_summary = {
-            'loss_critic': loss_critic.item(),
-            'loss_model': loss_model.item()
+            "loss_critic": loss_critic.item(),
+            "loss_model": loss_model.item(),
         }
 
         if (self.batch_idx + 1) == self.num_batches:

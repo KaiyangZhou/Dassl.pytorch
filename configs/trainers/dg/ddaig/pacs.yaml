@@ -9,13 +9,13 @@ DATALOADER:
     BATCH_SIZE: 16
 
 OPTIM:
-  NAME: 'sgd'
+  NAME: "sgd"
   LR: 0.0005
   STEPSIZE: [20]
   MAX_EPOCH: 25
 
 TRAINER:
   DDAIG:
-    G_ARCH: 'fcn_3x64_gctx'
+    G_ARCH: "fcn_3x64_gctx"
     WARMUP: 3
     LMDA: 0.3

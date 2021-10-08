@@ -20,16 +20,15 @@ class Office31(DatasetBase):
         - Saenko et al. Adapting visual category models to
         new domains. ECCV 2010.
     """
-    dataset_dir = 'office31'
-    domains = ['amazon', 'webcam', 'dslr']
+
+    dataset_dir = "office31"
+    domains = ["amazon", "webcam", "dslr"]
 
     def __init__(self, cfg):
         root = osp.abspath(osp.expanduser(cfg.DATASET.ROOT))
         self.dataset_dir = osp.join(root, self.dataset_dir)
 
-        self.check_input_domains(
-            cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS
-        )
+        self.check_input_domains(cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS)
 
         train_x = self._read_data(cfg.DATASET.SOURCE_DOMAINS)
         train_u = self._read_data(cfg.DATASET.TARGET_DOMAINS)
@@ -52,10 +51,7 @@ class Office31(DatasetBase):
                 for imname in imnames:
                     impath = osp.join(class_path, imname)
                     item = Datum(
-                        impath=impath,
-                        label=label,
-                        domain=domain,
-                        classname=class_name
+                        impath=impath, label=label, domain=domain, classname=class_name
                     )
                     items.append(item)
 

@@ -2,7 +2,6 @@ import torch.nn as nn
 
 
 class Backbone(nn.Module):
-
     def __init__(self):
         super().__init__()
 
@@ -12,6 +11,6 @@ class Backbone(nn.Module):
     @property
     def out_features(self):
         """Output feature dimension."""
-        if self.__dict__.get('_out_features') is None:
+        if self.__dict__.get("_out_features") is None:
             return None
         return self._out_features

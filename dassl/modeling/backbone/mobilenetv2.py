@@ -5,8 +5,7 @@ from .build import BACKBONE_REGISTRY
 from .backbone import Backbone
 
 model_urls = {
-    'mobilenet_v2':
-    'https://download.pytorch.org/models/mobilenet_v2-b0353104.pth',
+    "mobilenet_v2": "https://download.pytorch.org/models/mobilenet_v2-b0353104.pth",
 }
 
 
@@ -23,7 +22,7 @@ def _make_divisible(v, divisor, min_value=None):
     """
     if min_value is None:
         min_value = divisor
-    new_v = max(min_value, int(v + divisor/2) // divisor * divisor)
+    new_v = max(min_value, int(v + divisor / 2) // divisor * divisor)
     # Make sure that round down does not go down by more than 10%.
     if new_v < 0.9 * v:
         new_v += divisor
@@ -31,11 +30,8 @@ def _make_divisible(v, divisor, min_value=None):
 
 
 class ConvBNReLU(nn.Sequential):
-
-    def __init__(
-        self, in_planes, out_planes, kernel_size=3, stride=1, groups=1
-    ):
-        padding = (kernel_size-1) // 2
+    def __init__(self, in_planes, out_planes, kernel_size=3, stride=1, groups=1):
+        padding = (kernel_size - 1) // 2
         super().__init__(
             nn.Conv2d(
                 in_planes,
@@ -44,13 +40,14 @@ class ConvBNReLU(nn.Sequential):
                 stride,
                 padding,
                 groups=groups,
-                bias=False
-            ), nn.BatchNorm2d(out_planes), nn.ReLU6(inplace=True)
+                bias=False,
+            ),
+            nn.BatchNorm2d(out_planes),
+            nn.ReLU6(inplace=True),
         )
 
 
 class InvertedResidual(nn.Module):
-
     def __init__(self, inp, oup, stride, expand_ratio):
         super().__init__()
         self.stride = stride
@@ -66,9 +63,7 @@ class InvertedResidual(nn.Module):
         layers.extend(
             [
                 # dw
-                ConvBNReLU(
-                    hidden_dim, hidden_dim, stride=stride, groups=hidden_dim
-                ),
+                ConvBNReLU(hidden_dim, hidden_dim, stride=stride, groups=hidden_dim),
                 # pw-linear
                 nn.Conv2d(hidden_dim, oup, 1, 1, 0, bias=False),
                 nn.BatchNorm2d(oup),
@@ -84,13 +79,12 @@ class InvertedResidual(nn.Module):
 
 
 class MobileNetV2(Backbone):
-
     def __init__(
         self,
         width_mult=1.0,
         inverted_residual_setting=None,
         round_nearest=8,
-        block=None
+        block=None,
     ):
         """
         MobileNet V2.
@@ -122,18 +116,17 @@ class MobileNetV2(Backbone):
             ]
 
         # only check the first element, assuming user knows t,c,n,s are required
-        if len(inverted_residual_setting
-               ) == 0 or len(inverted_residual_setting[0]) != 4:
+        if (
+            len(inverted_residual_setting) == 0
+            or len(inverted_residual_setting[0]) != 4
+        ):
             raise ValueError(
                 "inverted_residual_setting should be non-empty "
-                "or a 4-element list, got {}".
-                format(inverted_residual_setting)
+                "or a 4-element list, got {}".format(inverted_residual_setting)
             )
 
         # building first layer
-        input_channel = _make_divisible(
-            input_channel * width_mult, round_nearest
-        )
+        input_channel = _make_divisible(input_channel * width_mult, round_nearest)
         self.last_channel = _make_divisible(
             last_channel * max(1.0, width_mult), round_nearest
         )
@@ -144,15 +137,11 @@ class MobileNetV2(Backbone):
             for i in range(n):
                 stride = s if i == 0 else 1
                 features.append(
-                    block(
-                        input_channel, output_channel, stride, expand_ratio=t
-                    )
+                    block(input_channel, output_channel, stride, expand_ratio=t)
                 )
                 input_channel = output_channel
         # building last several layers
-        features.append(
-            ConvBNReLU(input_channel, self.last_channel, kernel_size=1)
-        )
+        features.append(ConvBNReLU(input_channel, self.last_channel, kernel_size=1))
         # make it nn.Sequential
         self.features = nn.Sequential(*features)
 
@@ -161,7 +150,7 @@ class MobileNetV2(Backbone):
         # weight initialization
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(m.weight, mode='fan_out')
+                nn.init.kaiming_normal_(m.weight, mode="fan_out")
                 if m.bias is not None:
                     nn.init.zeros_(m.bias)
             elif isinstance(m, nn.BatchNorm2d):
@@ -184,14 +173,13 @@ class MobileNetV2(Backbone):
 
 def init_pretrained_weights(model, model_url):
     """Initializes model with pretrained weights.
-    
+
     Layers that don't match with pretrained layers in name or size are kept unchanged.
     """
     if model_url is None:
         import warnings
-        warnings.warn(
-            'ImageNet pretrained weights are unavailable for this model'
-        )
+
+        warnings.warn("ImageNet pretrained weights are unavailable for this model")
         return
     pretrain_dict = model_zoo.load_url(model_url)
     model_dict = model.state_dict()
@@ -208,5 +196,5 @@ def init_pretrained_weights(model, model_url):
 def mobilenetv2(pretrained=True, **kwargs):
     model = MobileNetV2(**kwargs)
     if pretrained:
-        init_pretrained_weights(model, model_urls['mobilenet_v2'])
+        init_pretrained_weights(model, model_urls["mobilenet_v2"])
     return model

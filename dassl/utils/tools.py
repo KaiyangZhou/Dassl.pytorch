@@ -16,10 +16,18 @@ import torch
 from PIL import Image
 
 __all__ = [
-    'mkdir_if_missing', 'check_isfile', 'read_json', 'write_json',
-    'set_random_seed', 'download_url', 'read_image', 'collect_env_info',
-    'listdir_nohidden', 'get_most_similar_str_to_a_from_b',
-    'check_availability', 'tolist_if_not'
+    "mkdir_if_missing",
+    "check_isfile",
+    "read_json",
+    "write_json",
+    "set_random_seed",
+    "download_url",
+    "read_image",
+    "collect_env_info",
+    "listdir_nohidden",
+    "get_most_similar_str_to_a_from_b",
+    "check_availability",
+    "tolist_if_not",
 ]
 
 
@@ -50,7 +58,7 @@ def check_isfile(fpath):
 
 def read_json(fpath):
     """Read json file from a path."""
-    with open(fpath, 'r') as f:
+    with open(fpath, "r") as f:
         obj = json.load(f)
     return obj
 
@@ -58,8 +66,8 @@ def read_json(fpath):
 def write_json(obj, fpath):
     """Writes to a json file."""
     mkdir_if_missing(osp.dirname(fpath))
-    with open(fpath, 'w') as f:
-        json.dump(obj, f, indent=4, separators=(',', ': '))
+    with open(fpath, "w") as f:
+        json.dump(obj, f, indent=4, separators=(",", ": "))
 
 
 def set_random_seed(seed):
@@ -77,6 +85,7 @@ def download_url(url, dst):
         dst (str): destination path.
     """
     from six.moves import urllib
+
     print('* url="{}"'.format(url))
     print('* destination="{}"'.format(dst))
 
@@ -87,16 +96,16 @@ def download_url(url, dst):
             return
         duration = time.time() - start_time
         progress_size = int(count * block_size)
-        speed = int(progress_size / (1024*duration))
+        speed = int(progress_size / (1024 * duration))
         percent = int(count * block_size * 100 / total_size)
         sys.stdout.write(
-            '\r...%d%%, %d MB, %d KB/s, %d seconds passed' %
-            (percent, progress_size / (1024*1024), speed, duration)
+            "\r...%d%%, %d MB, %d KB/s, %d seconds passed"
+            % (percent, progress_size / (1024 * 1024), speed, duration)
         )
         sys.stdout.flush()
 
     urllib.request.urlretrieve(url, dst, _reporthook)
-    sys.stdout.write('\n')
+    sys.stdout.write("\n")
 
 
 def read_image(path):
@@ -109,16 +118,16 @@ def read_image(path):
         PIL image
     """
     if not osp.exists(path):
-        raise IOError('No file exists at {}'.format(path))
+        raise IOError("No file exists at {}".format(path))
 
     while True:
         try:
-            img = Image.open(path).convert('RGB')
+            img = Image.open(path).convert("RGB")
             return img
         except IOError:
             print(
-                'Cannot read image from {}, '
-                'probably due to heavy IO. Will re-try'.format(path)
+                "Cannot read image from {}, "
+                "probably due to heavy IO. Will re-try".format(path)
             )
 
 
@@ -128,8 +137,9 @@ def collect_env_info():
     Code source: github.com/facebookresearch/maskrcnn-benchmark
     """
     from torch.utils.collect_env import get_pretty_env_info
+
     env_str = get_pretty_env_info()
-    env_str += '\n        Pillow ({})'.format(PIL.__version__)
+    env_str += "\n        Pillow ({})".format(PIL.__version__)
     return env_str
 
 
@@ -140,7 +150,7 @@ def listdir_nohidden(path, sort=False):
          path (str): directory path.
          sort (bool): sort the items.
     """
-    items = [f for f in os.listdir(path) if not f.startswith('.')]
+    items = [f for f in os.listdir(path) if not f.startswith(".")]
     if sort:
         items.sort()
     return items
@@ -173,9 +183,9 @@ def check_availability(requested, available):
     if requested not in available:
         psb_ans = get_most_similar_str_to_a_from_b(requested, available)
         raise ValueError(
-            'The requested one is expected '
-            'to belong to {}, but got [{}] '
-            '(do you mean [{}]?)'.format(available, requested, psb_ans)
+            "The requested one is expected "
+            "to belong to {}, but got [{}] "
+            "(do you mean [{}]?)".format(available, requested, psb_ans)
         )
 
 

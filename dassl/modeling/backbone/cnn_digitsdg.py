@@ -8,7 +8,6 @@ from .backbone import Backbone
 
 
 class Convolution(nn.Module):
-
     def __init__(self, c_in, c_out):
         super().__init__()
         self.conv = nn.Conv2d(c_in, c_out, 3, stride=1, padding=1)
@@ -19,7 +18,6 @@ class Convolution(nn.Module):
 
 
 class ConvNet(Backbone):
-
     def __init__(self, c_hidden=64):
         super().__init__()
         self.conv1 = Convolution(3, c_hidden)
@@ -27,13 +25,13 @@ class ConvNet(Backbone):
         self.conv3 = Convolution(c_hidden, c_hidden)
         self.conv4 = Convolution(c_hidden, c_hidden)
 
-        self._out_features = 2**2 * c_hidden
+        self._out_features = 2 ** 2 * c_hidden
 
     def _check_input(self, x):
         H, W = x.shape[2:]
-        assert H == 32 and W == 32, \
-            'Input to network must be 32x32, ' \
-            'but got {}x{}'.format(H, W)
+        assert (
+            H == 32 and W == 32
+        ), "Input to network must be 32x32, " "but got {}x{}".format(H, W)
 
     def forward(self, x):
         self._check_input(x)
@@ -57,5 +55,5 @@ def cnn_digitsdg(**kwargs):
         for Domain Generalisation. AAAI 2020.
     """
     model = ConvNet(c_hidden=64)
-    init_network_weights(model, init_type='kaiming')
+    init_network_weights(model, init_type="kaiming")
     return model

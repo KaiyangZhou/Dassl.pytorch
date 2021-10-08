@@ -19,7 +19,7 @@ class Datum:
         classname (str): class name.
     """
 
-    def __init__(self, impath='', label=0, domain=0, classname=''):
+    def __init__(self, impath="", label=0, domain=0, classname=""):
         assert isinstance(impath, str)
         assert check_isfile(impath)
 
@@ -51,7 +51,8 @@ class DatasetBase:
     2) domain generalization
     3) semi-supervised learning
     """
-    dataset_dir = ''  # the directory where the dataset is stored
+
+    dataset_dir = ""  # the directory where the dataset is stored
     domains = []  # string names of all domains
 
     def __init__(self, train_x=None, train_u=None, val=None, test=None):
@@ -125,8 +126,8 @@ class DatasetBase:
         for domain in input_domains:
             if domain not in self.domains:
                 raise ValueError(
-                    'Input domain must belong to {}, '
-                    'but got [{}]'.format(self.domains, domain)
+                    "Input domain must belong to {}, "
+                    "but got [{}]".format(self.domains, domain)
                 )
 
     def download_data(self, url, dst, from_gdrive=True):
@@ -138,22 +139,20 @@ class DatasetBase:
         else:
             raise NotImplementedError
 
-        print('Extracting file ...')
+        print("Extracting file ...")
 
         try:
             tar = tarfile.open(dst)
             tar.extractall(path=osp.dirname(dst))
             tar.close()
         except:
-            zip_ref = zipfile.ZipFile(dst, 'r')
+            zip_ref = zipfile.ZipFile(dst, "r")
             zip_ref.extractall(osp.dirname(dst))
             zip_ref.close()
 
-        print('File extracted to {}'.format(osp.dirname(dst)))
+        print("File extracted to {}".format(osp.dirname(dst)))
 
-    def generate_fewshot_dataset(
-        self, *data_sources, num_shots=-1, repeat=True
-    ):
+    def generate_fewshot_dataset(self, *data_sources, num_shots=-1, repeat=True):
         """Generate a few-shot dataset (typically for the training set).
 
         This function is useful when one wants to evaluate a model
@@ -170,7 +169,7 @@ class DatasetBase:
                 return data_sources[0]
             return data_sources
 
-        print(f'Creating a {num_shots}-shot dataset')
+        print(f"Creating a {num_shots}-shot dataset")
 
         output = []
 

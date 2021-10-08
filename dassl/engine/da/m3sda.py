@@ -9,7 +9,6 @@ from dassl.engine.trainer import SimpleNet
 
 
 class PairClassifiers(nn.Module):
-
     def __init__(self, fdim, num_classes):
         super().__init__()
         self.c1 = nn.Linear(fdim, num_classes)
@@ -43,22 +42,22 @@ class M3SDA(TrainerXU):
         self.lmda = cfg.TRAINER.M3SDA.LMDA
 
     def check_cfg(self, cfg):
-        assert cfg.DATALOADER.TRAIN_X.SAMPLER == 'RandomDomainSampler'
+        assert cfg.DATALOADER.TRAIN_X.SAMPLER == "RandomDomainSampler"
         assert not cfg.DATALOADER.TRAIN_U.SAME_AS_X
 
     def build_model(self):
         cfg = self.cfg
 
-        print('Building F')
+        print("Building F")
         self.F = SimpleNet(cfg, cfg.MODEL, 0)
         self.F.to(self.device)
-        print('# params: {:,}'.format(count_num_param(self.F)))
+        print("# params: {:,}".format(count_num_param(self.F)))
         self.optim_F = build_optimizer(self.F, cfg.OPTIM)
         self.sched_F = build_lr_scheduler(self.optim_F, cfg.OPTIM)
-        self.register_model('F', self.F, self.optim_F, self.sched_F)
+        self.register_model("F", self.F, self.optim_F, self.sched_F)
         fdim = self.F.fdim
 
-        print('Building C')
+        print("Building C")
         self.C = nn.ModuleList(
             [
                 PairClassifiers(fdim, self.num_classes)
@@ -66,10 +65,10 @@ class M3SDA(TrainerXU):
             ]
         )
         self.C.to(self.device)
-        print('# params: {:,}'.format(count_num_param(self.C)))
+        print("# params: {:,}".format(count_num_param(self.C)))
         self.optim_C = build_optimizer(self.C, cfg.OPTIM)
         self.sched_C = build_lr_scheduler(self.optim_C, cfg.OPTIM)
-        self.register_model('C', self.C, self.optim_C, self.sched_C)
+        self.register_model("C", self.C, self.optim_C, self.sched_C)
 
     def forward_backward(self, batch_x, batch_u):
         parsed = self.parse_batch_train(batch_x, batch_u)
@@ -120,7 +119,7 @@ class M3SDA(TrainerXU):
         loss_dis /= self.n_domain
 
         loss_step_B = loss_x - loss_dis
-        self.model_backward_and_update(loss_step_B, 'C')
+        self.model_backward_and_update(loss_step_B, "C")
 
         # Step C
         for _ in range(self.n_step_F):
@@ -137,12 +136,12 @@ class M3SDA(TrainerXU):
             loss_dis /= self.n_domain
             loss_step_C = loss_dis
 
-            self.model_backward_and_update(loss_step_C, 'F')
+            self.model_backward_and_update(loss_step_C, "F")
 
         loss_summary = {
-            'loss_step_A': loss_step_A.item(),
-            'loss_step_B': loss_step_B.item(),
-            'loss_step_C': loss_step_C.item()
+            "loss_step_A": loss_step_A.item(),
+            "loss_step_B": loss_step_B.item(),
+            "loss_step_C": loss_step_C.item(),
         }
 
         if (self.batch_idx + 1) == self.num_batches:
@@ -161,7 +160,7 @@ class M3SDA(TrainerXU):
         u_var = u.var(0)
         dist2 = self.pairwise_distance(x_var, u_var)
 
-        return (dist1+dist2) / 2
+        return (dist1 + dist2) / 2
 
     def pairwise_distance(self, x, u):
         # x (list): a list of feature vector.
@@ -181,16 +180,16 @@ class M3SDA(TrainerXU):
         return dist / count
 
     def euclidean(self, input1, input2):
-        return ((input1 - input2)**2).sum().sqrt()
+        return ((input1 - input2) ** 2).sum().sqrt()
 
     def discrepancy(self, y1, y2):
         return (y1 - y2).abs().mean()
 
     def parse_batch_train(self, batch_x, batch_u):
-        input_x = batch_x['img']
-        label_x = batch_x['label']
-        domain_x = batch_x['domain']
-        input_u = batch_u['img']
+        input_x = batch_x["img"]
+        label_x = batch_x["label"]
+        domain_x = batch_x["domain"]
+        input_u = batch_u["img"]
 
         input_x = input_x.to(self.device)
         label_x = label_x.to(self.device)

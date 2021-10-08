@@ -30,24 +30,23 @@ class CIFARSTL(DatasetBase):
         - Coates et al. An Analysis of Single Layer Networks in
         Unsupervised Feature Learning. AISTATS 2011.
     """
-    dataset_dir = 'cifar_stl'
-    domains = ['cifar', 'stl']
+
+    dataset_dir = "cifar_stl"
+    domains = ["cifar", "stl"]
 
     def __init__(self, cfg):
         root = osp.abspath(osp.expanduser(cfg.DATASET.ROOT))
         self.dataset_dir = osp.join(root, self.dataset_dir)
 
-        self.check_input_domains(
-            cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS
-        )
+        self.check_input_domains(cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS)
 
-        train_x = self._read_data(cfg.DATASET.SOURCE_DOMAINS, split='train')
-        train_u = self._read_data(cfg.DATASET.TARGET_DOMAINS, split='train')
-        test = self._read_data(cfg.DATASET.TARGET_DOMAINS, split='test')
+        train_x = self._read_data(cfg.DATASET.SOURCE_DOMAINS, split="train")
+        train_u = self._read_data(cfg.DATASET.TARGET_DOMAINS, split="train")
+        test = self._read_data(cfg.DATASET.TARGET_DOMAINS, split="test")
 
         super().__init__(train_x=train_x, train_u=train_u, test=test)
 
-    def _read_data(self, input_domains, split='train'):
+    def _read_data(self, input_domains, split="train"):
         items = []
 
         for domain, dname in enumerate(input_domains):
@@ -57,7 +56,7 @@ class CIFARSTL(DatasetBase):
             for class_name in class_names:
                 class_dir = osp.join(data_dir, class_name)
                 imnames = listdir_nohidden(class_dir)
-                label = int(class_name.split('_')[0])
+                label = int(class_name.split("_")[0])
 
                 for imname in imnames:
                     impath = osp.join(class_dir, imname)

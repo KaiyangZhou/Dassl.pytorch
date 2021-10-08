@@ -12,9 +12,9 @@ class _DSBN(nn.Module):
 
     def __init__(self, num_features, n_domain, bn_type):
         super().__init__()
-        if bn_type == '1d':
+        if bn_type == "1d":
             BN = nn.BatchNorm1d
-        elif bn_type == '2d':
+        elif bn_type == "2d":
             BN = nn.BatchNorm2d
         else:
             raise ValueError
@@ -34,12 +34,10 @@ class _DSBN(nn.Module):
 
 
 class DSBN1d(_DSBN):
-
     def __init__(self, num_features, n_domain):
-        super().__init__(num_features, n_domain, '1d')
+        super().__init__(num_features, n_domain, "1d")
 
 
 class DSBN2d(_DSBN):
-
     def __init__(self, num_features, n_domain):
-        super().__init__(num_features, n_domain, '2d')
+        super().__init__(num_features, n_domain, "2d")

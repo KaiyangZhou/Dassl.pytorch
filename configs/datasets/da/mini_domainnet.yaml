@@ -1,10 +1,10 @@
 INPUT:
   SIZE: (96, 96)
-  TRANSFORMS: ['random_flip', 'random_translation', 'normalize']
+  TRANSFORMS: ["random_flip", "random_translation", "normalize"]
 
 DATASET:
-  NAME: 'miniDomainNet'
+  NAME: "miniDomainNet"
 
 MODEL:
   BACKBONE:
-    NAME: 'resnet18'
+    NAME: "resnet18"

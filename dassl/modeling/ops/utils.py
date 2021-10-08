@@ -46,9 +46,9 @@ def sigmoid_rampup(current, rampup_length):
         rampup_length (int): maximum step.
     """
     assert rampup_length > 0
-    current = np.clip(current, 0., rampup_length)
-    phase = 1. - current/rampup_length
-    return float(np.exp(-5. * phase * phase))
+    current = np.clip(current, 0.0, rampup_length)
+    phase = 1.0 - current / rampup_length
+    return float(np.exp(-5.0 * phase * phase))
 
 
 def linear_rampup(current, rampup_length):
@@ -59,7 +59,7 @@ def linear_rampup(current, rampup_length):
         rampup_length (int): maximum step.
     """
     assert rampup_length > 0
-    ratio = np.clip(current / rampup_length, 0., 1.)
+    ratio = np.clip(current / rampup_length, 0.0, 1.0)
     return float(ratio)
 
 

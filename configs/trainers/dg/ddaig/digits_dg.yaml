@@ -9,12 +9,12 @@ DATALOADER:
     BATCH_SIZE: 128
 
 OPTIM:
-  NAME: 'sgd'
+  NAME: "sgd"
   LR: 0.05
   STEPSIZE: [20]
   MAX_EPOCH: 50
 
 TRAINER:
   DDAIG:
-    G_ARCH: 'fcn_3x32_gctx'
+    G_ARCH: "fcn_3x32_gctx"
     LMDA: 0.3

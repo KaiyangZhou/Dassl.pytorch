@@ -6,7 +6,7 @@ DATALOADER:
     BATCH_SIZE: 128
 
 OPTIM:
-  NAME: 'sgd'
+  NAME: "sgd"
   LR: 0.005
   MAX_EPOCH: 60
-  LR_SCHEDULER: 'cosine'
+  LR_SCHEDULER: "cosine"

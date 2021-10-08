@@ -6,7 +6,7 @@ DATALOADER:
   NUM_WORKERS: 8
 
 OPTIM:
-  NAME: 'sgd'
+  NAME: "sgd"
   LR: 0.05
   STEPSIZE: [20]
   MAX_EPOCH: 50

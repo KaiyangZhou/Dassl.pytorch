@@ -32,20 +32,20 @@ class MeanTeacher(TrainerXU):
 
         target_u = F.softmax(self.teacher(input_u), 1)
         prob_u = F.softmax(self.model(input_u), 1)
-        loss_u = ((prob_u - target_u)**2).sum(1).mean()
+        loss_u = ((prob_u - target_u) ** 2).sum(1).mean()
 
         weight_u = self.weight_u * sigmoid_rampup(self.epoch, self.rampup)
-        loss = loss_x + loss_u*weight_u
+        loss = loss_x + loss_u * weight_u
         self.model_backward_and_update(loss)
 
         global_step = self.batch_idx + self.epoch * self.num_batches
-        ema_alpha = min(1 - 1 / (global_step+1), self.ema_alpha)
+        ema_alpha = min(1 - 1 / (global_step + 1), self.ema_alpha)
         ema_model_update(self.model, self.teacher, ema_alpha)
 
         loss_summary = {
-            'loss_x': loss_x.item(),
-            'acc_x': compute_accuracy(logit_x, label_x)[0].item(),
-            'loss_u': loss_u.item()
+            "loss_x": loss_x.item(),
+            "acc_x": compute_accuracy(logit_x, label_x)[0].item(),
+            "loss_u": loss_u.item(),
         }
 
         if (self.batch_idx + 1) == self.num_batches:

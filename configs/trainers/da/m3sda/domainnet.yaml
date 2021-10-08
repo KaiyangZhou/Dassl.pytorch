@@ -1,7 +1,7 @@
 DATALOADER:
   NUM_WORKERS: 4
   TRAIN_X:
-    SAMPLER: 'RandomDomainSampler'
+    SAMPLER: "RandomDomainSampler"
     BATCH_SIZE: 30
   TRAIN_U:
     SAME_AS_X: False
@@ -10,7 +10,7 @@ DATALOADER:
     BATCH_SIZE: 30
 
 OPTIM:
-  NAME: 'sgd'
+  NAME: "sgd"
   LR: 0.002
   MAX_EPOCH: 40
-  LR_SCHEDULER: 'cosine'
+  LR_SCHEDULER: "cosine"
