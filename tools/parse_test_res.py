@@ -156,14 +156,21 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("directory", type=str, help="path to directory")
     parser.add_argument(
-        "--ci95", action="store_true", help=r"compute 95\% confidence interval"
+        "--ci95",
+        action="store_true",
+        help=r"compute 95\% confidence interval"
     )
-    parser.add_argument("--test-log", action="store_true", help="parse test-only logs")
+    parser.add_argument(
+        "--test-log", action="store_true", help="parse test-only logs"
+    )
     parser.add_argument(
         "--multi-exp", action="store_true", help="parse multiple experiments"
     )
     parser.add_argument(
-        "--keyword", default="accuracy", type=str, help="which keyword to extract"
+        "--keyword",
+        default="accuracy",
+        type=str,
+        help="which keyword to extract"
     )
     args = parser.parse_args()
 

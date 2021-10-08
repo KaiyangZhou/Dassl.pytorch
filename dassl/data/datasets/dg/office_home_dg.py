@@ -32,12 +32,18 @@ class OfficeHomeDG(DatasetBase):
             dst = osp.join(root, "office_home_dg.zip")
             self.download_data(self.data_url, dst, from_gdrive=True)
 
-        self.check_input_domains(cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS)
+        self.check_input_domains(
+            cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS
+        )
 
         train = DigitsDG.read_data(
             self.dataset_dir, cfg.DATASET.SOURCE_DOMAINS, "train"
         )
-        val = DigitsDG.read_data(self.dataset_dir, cfg.DATASET.SOURCE_DOMAINS, "val")
-        test = DigitsDG.read_data(self.dataset_dir, cfg.DATASET.TARGET_DOMAINS, "all")
+        val = DigitsDG.read_data(
+            self.dataset_dir, cfg.DATASET.SOURCE_DOMAINS, "val"
+        )
+        test = DigitsDG.read_data(
+            self.dataset_dir, cfg.DATASET.TARGET_DOMAINS, "all"
+        )
 
         super().__init__(train_x=train, val=val, test=test)

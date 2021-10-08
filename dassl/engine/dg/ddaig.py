@@ -59,7 +59,9 @@ class DDAIG(TrainerX):
         #############
         input_p = self.G(input, lmda=self.lmda)
         if self.clamp:
-            input_p = torch.clamp(input_p, min=self.clamp_min, max=self.clamp_max)
+            input_p = torch.clamp(
+                input_p, min=self.clamp_min, max=self.clamp_max
+            )
         loss_g = 0
         # Minimize label loss
         loss_g += F.cross_entropy(self.F(input_p), label)
@@ -71,7 +73,9 @@ class DDAIG(TrainerX):
         with torch.no_grad():
             input_p = self.G(input, lmda=self.lmda)
             if self.clamp:
-                input_p = torch.clamp(input_p, min=self.clamp_min, max=self.clamp_max)
+                input_p = torch.clamp(
+                    input_p, min=self.clamp_min, max=self.clamp_max
+                )
 
         #############
         # Update F

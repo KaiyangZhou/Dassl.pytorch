@@ -3,16 +3,9 @@ from torch import nn
 from torch.nn import functional as F
 
 from .utils import (
-    Swish,
-    MemoryEfficientSwish,
-    drop_connect,
-    round_filters,
-    round_repeats,
-    get_model_params,
-    efficientnet_params,
-    get_same_padding_conv2d,
-    load_pretrained_weights,
-    calculate_output_image_size,
+    Swish, MemoryEfficientSwish, drop_connect, round_filters, round_repeats,
+    get_model_params, efficientnet_params, get_same_padding_conv2d,
+    load_pretrained_weights, calculate_output_image_size
 )
 from ..build import BACKBONE_REGISTRY
 from ..backbone import Backbone
@@ -35,9 +28,8 @@ class MBConvBlock(nn.Module):
         self._block_args = block_args
         self._bn_mom = 1 - global_params.batch_norm_momentum
         self._bn_eps = global_params.batch_norm_epsilon
-        self.has_se = (self._block_args.se_ratio is not None) and (
-            0 < self._block_args.se_ratio <= 1
-        )
+        self.has_se = (self._block_args.se_ratio is
+                       not None) and (0 < self._block_args.se_ratio <= 1)
         self.id_skip = block_args.id_skip  # skip connection and drop connect
 
         # Expansion phase
@@ -76,13 +68,20 @@ class MBConvBlock(nn.Module):
         if self.has_se:
             Conv2d = get_same_padding_conv2d(image_size=(1, 1))
             num_squeezed_channels = max(
-                1, int(self._block_args.input_filters * self._block_args.se_ratio)
+                1,
+                int(
+                    self._block_args.input_filters * self._block_args.se_ratio
+                )
             )
             self._se_reduce = Conv2d(
-                in_channels=oup, out_channels=num_squeezed_channels, kernel_size=1
+                in_channels=oup,
+                out_channels=num_squeezed_channels,
+                kernel_size=1
             )
             self._se_expand = Conv2d(
-                in_channels=num_squeezed_channels, out_channels=oup, kernel_size=1
+                in_channels=num_squeezed_channels,
+                out_channels=oup,
+                kernel_size=1
             )
 
         # Output phase
@@ -112,7 +111,9 @@ class MBConvBlock(nn.Module):
         # Squeeze and Excitation
         if self.has_se:
             x_squeezed = F.adaptive_avg_pool2d(x, 1)
-            x_squeezed = self._se_expand(self._swish(self._se_reduce(x_squeezed)))
+            x_squeezed = self._se_expand(
+                self._swish(self._se_reduce(x_squeezed))
+            )
             x = torch.sigmoid(x_squeezed) * x
 
         x = self._bn2(self._project_conv(x))
@@ -123,12 +124,13 @@ class MBConvBlock(nn.Module):
             self._block_args.output_filters,
         )
         if (
-            self.id_skip
-            and self._block_args.stride == 1
+            self.id_skip and self._block_args.stride == 1
             and input_filters == output_filters
         ):
             if drop_connect_rate:
-                x = drop_connect(x, p=drop_connect_rate, training=self.training)
+                x = drop_connect(
+                    x, p=drop_connect_rate, training=self.training
+                )
             x = x + inputs  # skip connection
         return x
 
@@ -190,21 +192,29 @@ class EfficientNet(Backbone):
                 output_filters=round_filters(
                     block_args.output_filters, self._global_params
                 ),
-                num_repeat=round_repeats(block_args.num_repeat, self._global_params),
+                num_repeat=round_repeats(
+                    block_args.num_repeat, self._global_params
+                ),
             )
 
             # The first block needs to take care of stride and filter size increase.
             self._blocks.append(
-                MBConvBlock(block_args, self._global_params, image_size=image_size)
+                MBConvBlock(
+                    block_args, self._global_params, image_size=image_size
+                )
             )
-            image_size = calculate_output_image_size(image_size, block_args.stride)
+            image_size = calculate_output_image_size(
+                image_size, block_args.stride
+            )
             if block_args.num_repeat > 1:
                 block_args = block_args._replace(
                     input_filters=block_args.output_filters, stride=1
                 )
             for _ in range(block_args.num_repeat - 1):
                 self._blocks.append(
-                    MBConvBlock(block_args, self._global_params, image_size=image_size)
+                    MBConvBlock(
+                        block_args, self._global_params, image_size=image_size
+                    )
                 )
                 # image_size = calculate_output_image_size(image_size, block_args.stride) # ?
 
@@ -212,7 +222,9 @@ class EfficientNet(Backbone):
         in_channels = block_args.output_filters  # output of final block
         out_channels = round_filters(1280, self._global_params)
         Conv2d = get_same_padding_conv2d(image_size=image_size)
-        self._conv_head = Conv2d(in_channels, out_channels, kernel_size=1, bias=False)
+        self._conv_head = Conv2d(
+            in_channels, out_channels, kernel_size=1, bias=False
+        )
         self._bn1 = nn.BatchNorm2d(
             num_features=out_channels, momentum=bn_mom, eps=bn_eps
         )
@@ -268,14 +280,18 @@ class EfficientNet(Backbone):
     @classmethod
     def from_name(cls, model_name, override_params=None):
         cls._check_model_name_is_valid(model_name)
-        blocks_args, global_params = get_model_params(model_name, override_params)
+        blocks_args, global_params = get_model_params(
+            model_name, override_params
+        )
         return cls(blocks_args, global_params)
 
     @classmethod
     def from_pretrained(
         cls, model_name, advprop=False, num_classes=1000, in_channels=3
     ):
-        model = cls.from_name(model_name, override_params={"num_classes": num_classes})
+        model = cls.from_name(
+            model_name, override_params={"num_classes": num_classes}
+        )
         load_pretrained_weights(
             model, model_name, load_fc=(num_classes == 1000), advprop=advprop
         )
@@ -293,11 +309,15 @@ class EfficientNet(Backbone):
         """Validates model name."""
         valid_models = ["efficientnet-b" + str(i) for i in range(9)]
         if model_name not in valid_models:
-            raise ValueError("model_name should be one of: " + ", ".join(valid_models))
+            raise ValueError(
+                "model_name should be one of: " + ", ".join(valid_models)
+            )
 
     def _change_in_channels(model, in_channels):
         if in_channels != 3:
-            Conv2d = get_same_padding_conv2d(image_size=model._global_params.image_size)
+            Conv2d = get_same_padding_conv2d(
+                image_size=model._global_params.image_size
+            )
             out_channels = round_filters(32, model._global_params)
             model._conv_stem = Conv2d(
                 in_channels, out_channels, kernel_size=3, stride=2, bias=False

@@ -58,7 +58,10 @@ def extract_and_save_image(dataset, save_dir, discard, label2name):
             continue
         class_name = label2name[label]
         label_new = new_name2label[class_name]
-        class_dir = osp.join(save_dir, str(label_new).zfill(3) + "_" + class_name)
+        class_dir = osp.join(
+            save_dir,
+            str(label_new).zfill(3) + "_" + class_name
+        )
         mkdir_if_missing(class_dir)
         impath = osp.join(class_dir, str(i + 1).zfill(5) + ".jpg")
         img.save(impath)

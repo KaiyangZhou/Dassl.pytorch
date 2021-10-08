@@ -3,18 +3,9 @@ import random
 import torch
 from PIL import Image
 from torchvision.transforms import (
-    Resize,
-    Compose,
-    ToTensor,
-    Normalize,
-    CenterCrop,
-    RandomCrop,
-    ColorJitter,
-    RandomApply,
-    GaussianBlur,
-    RandomGrayscale,
-    RandomResizedCrop,
-    RandomHorizontalFlip,
+    Resize, Compose, ToTensor, Normalize, CenterCrop, RandomCrop, ColorJitter,
+    RandomApply, GaussianBlur, RandomGrayscale, RandomResizedCrop,
+    RandomHorizontalFlip
 )
 
 from .autoaugment import SVHNPolicy, CIFAR10Policy, ImageNetPolicy
@@ -79,7 +70,9 @@ class Random2DTranslation:
         y_maxrange = new_height - self.height
         x1 = int(round(random.uniform(0, x_maxrange)))
         y1 = int(round(random.uniform(0, y_maxrange)))
-        croped_img = resized_img.crop((x1, y1, x1 + self.width, y1 + self.height))
+        croped_img = resized_img.crop(
+            (x1, y1, x1 + self.width, y1 + self.height)
+        )
 
         return croped_img
 
@@ -102,7 +95,7 @@ class InstanceNormalization:
         img_re = img.reshape(C, H * W)
         mean = img_re.mean(1).view(C, 1, 1)
         std = img_re.std(1).view(C, 1, 1)
-        return (img - mean) / (std + self.eps)
+        return (img-mean) / (std + self.eps)
 
 
 class Cutout:
@@ -215,7 +208,9 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
 
     if "random_translation" in choices:
         print("+ random translation")
-        tfm_train += [Random2DTranslation(cfg.INPUT.SIZE[0], cfg.INPUT.SIZE[1])]
+        tfm_train += [
+            Random2DTranslation(cfg.INPUT.SIZE[0], cfg.INPUT.SIZE[1])
+        ]
 
     if "random_crop" in choices:
         crop_padding = cfg.INPUT.CROP_PADDING
@@ -224,7 +219,9 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
 
     if "random_resized_crop" in choices:
         print("+ random resized crop")
-        tfm_train += [RandomResizedCrop(cfg.INPUT.SIZE, interpolation=interp_mode)]
+        tfm_train += [
+            RandomResizedCrop(cfg.INPUT.SIZE, interpolation=interp_mode)
+        ]
 
     if "center_crop" in choices:
         print("+ center crop (on 1.125x enlarged input)")
@@ -277,7 +274,9 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
 
     if "gaussian_blur" in choices:
         print(f"+ gaussian blur (kernel={cfg.INPUT.GB_K})")
-        tfm_train += [RandomApply([GaussianBlur(cfg.INPUT.GB_K)], p=cfg.INPUT.GB_P)]
+        tfm_train += [
+            RandomApply([GaussianBlur(cfg.INPUT.GB_K)], p=cfg.INPUT.GB_P)
+        ]
 
     print("+ to torch tensor of range [0, 1]")
     tfm_train += [ToTensor()]

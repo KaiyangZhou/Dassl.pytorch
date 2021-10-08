@@ -179,7 +179,12 @@ class RandomClassSampler(Sampler):
 
 
 def build_sampler(
-    sampler_type, cfg=None, data_source=None, batch_size=32, n_domain=0, n_ins=16
+    sampler_type,
+    cfg=None,
+    data_source=None,
+    batch_size=32,
+    n_domain=0,
+    n_ins=16
 ):
     if sampler_type == "RandomSampler":
         return RandomSampler(data_source)

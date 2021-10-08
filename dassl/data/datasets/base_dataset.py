@@ -152,7 +152,9 @@ class DatasetBase:
 
         print("File extracted to {}".format(osp.dirname(dst)))
 
-    def generate_fewshot_dataset(self, *data_sources, num_shots=-1, repeat=True):
+    def generate_fewshot_dataset(
+        self, *data_sources, num_shots=-1, repeat=True
+    ):
         """Generate a few-shot dataset (typically for the training set).
 
         This function is useful when one wants to evaluate a model

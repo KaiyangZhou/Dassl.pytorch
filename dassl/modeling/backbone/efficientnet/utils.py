@@ -49,11 +49,12 @@ BlockArgs = collections.namedtuple(
 )
 
 # Change namedtuple defaults
-GlobalParams.__new__.__defaults__ = (None,) * len(GlobalParams._fields)
-BlockArgs.__new__.__defaults__ = (None,) * len(BlockArgs._fields)
+GlobalParams.__new__.__defaults__ = (None, ) * len(GlobalParams._fields)
+BlockArgs.__new__.__defaults__ = (None, ) * len(BlockArgs._fields)
 
 
 class SwishImplementation(torch.autograd.Function):
+
     @staticmethod
     def forward(ctx, i):
         result = i * torch.sigmoid(i)
@@ -64,15 +65,17 @@ class SwishImplementation(torch.autograd.Function):
     def backward(ctx, grad_output):
         i = ctx.saved_variables[0]
         sigmoid_i = torch.sigmoid(i)
-        return grad_output * (sigmoid_i * (1 + i * (1 - sigmoid_i)))
+        return grad_output * (sigmoid_i * (1 + i * (1-sigmoid_i)))
 
 
 class MemoryEfficientSwish(nn.Module):
+
     def forward(self, x):
         return SwishImplementation.apply(x)
 
 
 class Swish(nn.Module):
+
     def forward(self, x):
         return x * torch.sigmoid(x)
 
@@ -86,7 +89,7 @@ def round_filters(filters, global_params):
     min_depth = global_params.min_depth
     filters *= multiplier
     min_depth = min_depth or divisor
-    new_filters = max(min_depth, int(filters + divisor / 2) // divisor * divisor)
+    new_filters = max(min_depth, int(filters + divisor/2) // divisor * divisor)
     if new_filters < 0.9 * filters:  # prevent rounding by more than 10%
         new_filters += divisor
     return int(new_filters)
@@ -141,7 +144,9 @@ def calculate_output_image_size(input_image_size, stride):
     """
     if input_image_size is None:
         return None
-    image_height, image_width = get_width_and_height_from_size(input_image_size)
+    image_height, image_width = get_width_and_height_from_size(
+        input_image_size
+    )
     stride = stride if isinstance(stride, int) else stride[0]
     image_height = int(math.ceil(image_height / stride))
     image_width = int(math.ceil(image_width / stride))
@@ -162,20 +167,27 @@ class Conv2dDynamicSamePadding(nn.Conv2d):
         bias=True,
     ):
         super().__init__(
-            in_channels, out_channels, kernel_size, stride, 0, dilation, groups, bias
+            in_channels, out_channels, kernel_size, stride, 0, dilation,
+            groups, bias
         )
-        self.stride = self.stride if len(self.stride) == 2 else [self.stride[0]] * 2
+        self.stride = self.stride if len(self.stride
+                                         ) == 2 else [self.stride[0]] * 2
 
     def forward(self, x):
         ih, iw = x.size()[-2:]
         kh, kw = self.weight.size()[-2:]
         sh, sw = self.stride
         oh, ow = math.ceil(ih / sh), math.ceil(iw / sw)
-        pad_h = max((oh - 1) * self.stride[0] + (kh - 1) * self.dilation[0] + 1 - ih, 0)
-        pad_w = max((ow - 1) * self.stride[1] + (kw - 1) * self.dilation[1] + 1 - iw, 0)
+        pad_h = max(
+            (oh-1) * self.stride[0] + (kh-1) * self.dilation[0] + 1 - ih, 0
+        )
+        pad_w = max(
+            (ow-1) * self.stride[1] + (kw-1) * self.dilation[1] + 1 - iw, 0
+        )
         if pad_h > 0 or pad_w > 0:
             x = F.pad(
-                x, [pad_w // 2, pad_w - pad_w // 2, pad_h // 2, pad_h - pad_h // 2]
+                x,
+                [pad_w // 2, pad_w - pad_w//2, pad_h // 2, pad_h - pad_h//2]
             )
         return F.conv2d(
             x,
@@ -192,22 +204,33 @@ class Conv2dStaticSamePadding(nn.Conv2d):
     """2D Convolutions like TensorFlow, for a fixed image size"""
 
     def __init__(
-        self, in_channels, out_channels, kernel_size, image_size=None, **kwargs
+        self,
+        in_channels,
+        out_channels,
+        kernel_size,
+        image_size=None,
+        **kwargs
     ):
         super().__init__(in_channels, out_channels, kernel_size, **kwargs)
-        self.stride = self.stride if len(self.stride) == 2 else [self.stride[0]] * 2
+        self.stride = self.stride if len(self.stride
+                                         ) == 2 else [self.stride[0]] * 2
 
         # Calculate padding based on image size and save it
         assert image_size is not None
-        ih, iw = (image_size, image_size) if isinstance(image_size, int) else image_size
+        ih, iw = (image_size,
+                  image_size) if isinstance(image_size, int) else image_size
         kh, kw = self.weight.size()[-2:]
         sh, sw = self.stride
         oh, ow = math.ceil(ih / sh), math.ceil(iw / sw)
-        pad_h = max((oh - 1) * self.stride[0] + (kh - 1) * self.dilation[0] + 1 - ih, 0)
-        pad_w = max((ow - 1) * self.stride[1] + (kw - 1) * self.dilation[1] + 1 - iw, 0)
+        pad_h = max(
+            (oh-1) * self.stride[0] + (kh-1) * self.dilation[0] + 1 - ih, 0
+        )
+        pad_w = max(
+            (ow-1) * self.stride[1] + (kw-1) * self.dilation[1] + 1 - iw, 0
+        )
         if pad_h > 0 or pad_w > 0:
             self.static_padding = nn.ZeroPad2d(
-                (pad_w // 2, pad_w - pad_w // 2, pad_h // 2, pad_h - pad_h // 2)
+                (pad_w // 2, pad_w - pad_w//2, pad_h // 2, pad_h - pad_h//2)
             )
         else:
             self.static_padding = Identity()
@@ -227,9 +250,8 @@ class Conv2dStaticSamePadding(nn.Conv2d):
 
 
 class Identity(nn.Module):
-    def __init__(
-        self,
-    ):
+
+    def __init__(self, ):
         super(Identity, self).__init__()
 
     def forward(self, input):
@@ -380,10 +402,15 @@ def get_model_params(model_name, override_params):
         w, d, s, p = efficientnet_params(model_name)
         # note: all models have drop connect rate = 0.2
         blocks_args, global_params = efficientnet(
-            width_coefficient=w, depth_coefficient=d, dropout_rate=p, image_size=s
+            width_coefficient=w,
+            depth_coefficient=d,
+            dropout_rate=p,
+            image_size=s
         )
     else:
-        raise NotImplementedError("model name is not pre-defined: %s" % model_name)
+        raise NotImplementedError(
+            "model name is not pre-defined: %s" % model_name
+        )
     if override_params:
         # ValueError will be raised here if override_params has fields not included in global_params.
         global_params = global_params._replace(**override_params)
@@ -391,26 +418,43 @@ def get_model_params(model_name, override_params):
 
 
 url_map = {
-    "efficientnet-b0": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b0-355c32eb.pth",
-    "efficientnet-b1": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b1-f1951068.pth",
-    "efficientnet-b2": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b2-8bb594d6.pth",
-    "efficientnet-b3": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b3-5fb5a3c3.pth",
-    "efficientnet-b4": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b4-6ed6700e.pth",
-    "efficientnet-b5": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b5-b6417697.pth",
-    "efficientnet-b6": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b6-c76e70fd.pth",
-    "efficientnet-b7": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b7-dcc49843.pth",
+    "efficientnet-b0":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b0-355c32eb.pth",
+    "efficientnet-b1":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b1-f1951068.pth",
+    "efficientnet-b2":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b2-8bb594d6.pth",
+    "efficientnet-b3":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b3-5fb5a3c3.pth",
+    "efficientnet-b4":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b4-6ed6700e.pth",
+    "efficientnet-b5":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b5-b6417697.pth",
+    "efficientnet-b6":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b6-c76e70fd.pth",
+    "efficientnet-b7":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/efficientnet-b7-dcc49843.pth",
 }
 
 url_map_advprop = {
-    "efficientnet-b0": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b0-b64d5a18.pth",
-    "efficientnet-b1": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b1-0f3ce85a.pth",
-    "efficientnet-b2": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b2-6e9d97e5.pth",
-    "efficientnet-b3": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b3-cdd7c0f4.pth",
-    "efficientnet-b4": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b4-44fb3a87.pth",
-    "efficientnet-b5": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b5-86493f6b.pth",
-    "efficientnet-b6": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b6-ac80338e.pth",
-    "efficientnet-b7": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b7-4652b6dd.pth",
-    "efficientnet-b8": "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b8-22a8fe65.pth",
+    "efficientnet-b0":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b0-b64d5a18.pth",
+    "efficientnet-b1":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b1-0f3ce85a.pth",
+    "efficientnet-b2":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b2-6e9d97e5.pth",
+    "efficientnet-b3":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b3-cdd7c0f4.pth",
+    "efficientnet-b4":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b4-44fb3a87.pth",
+    "efficientnet-b5":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b5-86493f6b.pth",
+    "efficientnet-b6":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b6-ac80338e.pth",
+    "efficientnet-b7":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b7-4652b6dd.pth",
+    "efficientnet-b8":
+    "https://github.com/lukemelas/EfficientNet-PyTorch/releases/download/1.0/adv-efficientnet-b8-22a8fe65.pth",
 }
 
 

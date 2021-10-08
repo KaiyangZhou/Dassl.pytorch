@@ -13,6 +13,10 @@ ignore =
     # Line break after binary operator
     W504,
     # Too many leading '#' for block comment
-    E266
+    E266,
+    # line break before binary operator
+    W503,
+    # continuation line over-indented for hanging indent
+    E126
 max-line-length = 79
 exclude = __init__.py, build

@@ -11,6 +11,7 @@ from .backbone import Backbone
 
 
 class FeatureExtractor(Backbone):
+
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(3, 64, kernel_size=5, stride=1, padding=2)

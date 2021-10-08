@@ -25,7 +25,11 @@ __all__ = [
 
 
 def save_checkpoint(
-    state, save_dir, is_best=False, remove_module_from_keys=True, model_name=""
+    state,
+    save_dir,
+    is_best=False,
+    remove_module_from_keys=True,
+    model_name=""
 ):
     r"""Save checkpoint.
 
@@ -108,7 +112,9 @@ def load_checkpoint(fpath):
     except UnicodeDecodeError:
         pickle.load = partial(pickle.load, encoding="latin1")
         pickle.Unpickler = partial(pickle.Unpickler, encoding="latin1")
-        checkpoint = torch.load(fpath, pickle_module=pickle, map_location=map_location)
+        checkpoint = torch.load(
+            fpath, pickle_module=pickle, map_location=map_location
+        )
 
     except Exception:
         print('Unable to load checkpoint from "{}"'.format(fpath))
@@ -176,10 +182,10 @@ def adjust_learning_rate(
     if linear_decay:
         # linearly decay learning rate from base_lr to final_lr
         frac_done = epoch / max_epoch
-        lr = frac_done * final_lr + (1.0 - frac_done) * base_lr
+        lr = frac_done*final_lr + (1.0-frac_done) * base_lr
     else:
         # decay learning rate by gamma for every stepsize
-        lr = base_lr * (gamma ** (epoch // stepsize))
+        lr = base_lr * (gamma**(epoch // stepsize))
 
     for param_group in optimizer.param_groups:
         param_group["lr"] = lr
@@ -302,15 +308,20 @@ def load_pretrained_weights(model, weight_path):
             "(** ignored and continue **)".format(weight_path)
         )
     else:
-        print('Successfully loaded pretrained weights from "{}"'.format(weight_path))
+        print(
+            'Successfully loaded pretrained weights from "{}"'.
+            format(weight_path)
+        )
         if len(discarded_layers) > 0:
             print(
                 "** The following layers are discarded "
-                "due to unmatched keys or layer size: {}".format(discarded_layers)
+                "due to unmatched keys or layer size: {}".
+                format(discarded_layers)
             )
 
 
 def init_network_weights(model, init_type="normal", gain=0.02):
+
     def _init_func(m):
         classname = m.__class__.__name__
 
@@ -327,7 +338,8 @@ def init_network_weights(model, init_type="normal", gain=0.02):
                 nn.init.orthogonal_(m.weight.data, gain=gain)
             else:
                 raise NotImplementedError(
-                    "initialization method {} is not implemented".format(init_type)
+                    "initialization method {} is not implemented".
+                    format(init_type)
                 )
             if hasattr(m, "bias") and m.bias is not None:
                 nn.init.constant_(m.bias.data, 0.0)

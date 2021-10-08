@@ -165,7 +165,7 @@ _C.OPTIM.BASE_LR_MULT = 0.1
 # Learning rate scheduler
 _C.OPTIM.LR_SCHEDULER = "single_step"
 # -1 or 0 means the stepsize is equal to max_epoch
-_C.OPTIM.STEPSIZE = (-1,)
+_C.OPTIM.STEPSIZE = (-1, )
 _C.OPTIM.GAMMA = 0.1
 _C.OPTIM.MAX_EPOCH = 10
 # Set WARMUP_EPOCH larger than 0 to activate warmup training

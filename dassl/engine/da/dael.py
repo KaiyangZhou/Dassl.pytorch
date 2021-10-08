@@ -12,6 +12,7 @@ from dassl.modeling.ops.utils import create_onehot
 
 
 class Experts(nn.Module):
+
     def __init__(self, n_source, fdim, num_classes):
         super().__init__()
         self.linears = nn.ModuleList(
@@ -124,14 +125,17 @@ class DAEL(TrainerXU):
         feat_x2 = [self.F(x) for x in input_x2]
         feat_u2 = self.F(input_u2)
 
-        for feat_xi, feat_x2i, label_xi, i in zip(feat_x, feat_x2, label_x, domain_x):
+        for feat_xi, feat_x2i, label_xi, i in zip(
+            feat_x, feat_x2, label_x, domain_x
+        ):
             cr_s = [j for j in domain_x if j != i]
 
             # Learning expert
             pred_xi = self.E(i, feat_xi)
             loss_x += (-label_xi * torch.log(pred_xi + 1e-5)).sum(1).mean()
             expert_label_xi = pred_xi.detach()
-            acc_x += compute_accuracy(pred_xi.detach(), label_xi.max(1)[1])[0].item()
+            acc_x += compute_accuracy(pred_xi.detach(),
+                                      label_xi.max(1)[1])[0].item()
 
             # Consistency regularization
             cr_pred = []
@@ -141,7 +145,7 @@ class DAEL(TrainerXU):
                 cr_pred.append(pred_j)
             cr_pred = torch.cat(cr_pred, 1)
             cr_pred = cr_pred.mean(1)
-            loss_cr += ((cr_pred - expert_label_xi) ** 2).sum(1).mean()
+            loss_cr += ((cr_pred - expert_label_xi)**2).sum(1).mean()
 
         loss_x /= self.n_domain
         loss_cr /= self.n_domain

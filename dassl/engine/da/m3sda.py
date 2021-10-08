@@ -9,6 +9,7 @@ from dassl.engine.trainer import SimpleNet
 
 
 class PairClassifiers(nn.Module):
+
     def __init__(self, fdim, num_classes):
         super().__init__()
         self.c1 = nn.Linear(fdim, num_classes)
@@ -160,7 +161,7 @@ class M3SDA(TrainerXU):
         u_var = u.var(0)
         dist2 = self.pairwise_distance(x_var, u_var)
 
-        return (dist1 + dist2) / 2
+        return (dist1+dist2) / 2
 
     def pairwise_distance(self, x, u):
         # x (list): a list of feature vector.
@@ -180,7 +181,7 @@ class M3SDA(TrainerXU):
         return dist / count
 
     def euclidean(self, input1, input2):
-        return ((input1 - input2) ** 2).sum().sqrt()
+        return ((input1 - input2)**2).sum().sqrt()
 
     def discrepancy(self, y1, y2):
         return (y1 - y2).abs().mean()

@@ -17,7 +17,7 @@ def extract_and_save(images, labels, level, dst):
     assert 0 <= level <= 4
 
     for i in range(10000):
-        real_i = i + level * 10000
+        real_i = i + level*10000
         im = Image.fromarray(images[real_i])
         label = int(labels[real_i])
         category_dir = osp.join(dst, str(label).zfill(3))

@@ -4,10 +4,7 @@ from torch.nn import functional as F
 from dassl.engine import TRAINER_REGISTRY, TrainerXU
 from dassl.modeling.ops import mixup
 from dassl.modeling.ops.utils import (
-    sharpen_prob,
-    create_onehot,
-    linear_rampup,
-    shuffle_index,
+    sharpen_prob, create_onehot, linear_rampup, shuffle_index
 )
 
 
@@ -76,9 +73,9 @@ class MixMatch(TrainerXU):
         loss_x = (-label_x * torch.log(output_x + 1e-5)).sum(1).mean()
 
         output_u = F.softmax(self.model(input_u), 1)
-        loss_u = ((label_u - output_u) ** 2).mean()
+        loss_u = ((label_u - output_u)**2).mean()
 
-        loss = loss_x + loss_u * weight_u
+        loss = loss_x + loss_u*weight_u
         self.model_backward_and_update(loss)
 
         loss_summary = {"loss_x": loss_x.item(), "loss_u": loss_u.item()}

@@ -42,7 +42,11 @@ class FixMatch(TrainerXU):
         acc_thre = n_masked_correct / (mask.sum() + 1e-5)
         acc_raw = y_pred.eq(y_true).sum() / y_pred.numel()  # raw accuracy
         keep_rate = mask.sum() / mask.numel()
-        output = {"acc_thre": acc_thre, "acc_raw": acc_raw, "keep_rate": keep_rate}
+        output = {
+            "acc_thre": acc_thre,
+            "acc_raw": acc_raw,
+            "keep_rate": keep_rate
+        }
         return output
 
     def forward_backward(self, batch_x, batch_u):

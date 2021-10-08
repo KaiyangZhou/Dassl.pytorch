@@ -11,6 +11,7 @@ model_urls = {
 
 
 class AlexNet(Backbone):
+
     def __init__(self):
         super().__init__()
         self.features = nn.Sequential(

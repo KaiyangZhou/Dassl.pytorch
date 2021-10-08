@@ -12,6 +12,7 @@ from .backbone import Backbone
 
 
 class CNN(Backbone):
+
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(3, 64, 5)

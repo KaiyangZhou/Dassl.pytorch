@@ -16,7 +16,12 @@ model_urls = {
 def conv3x3(in_planes, out_planes, stride=1):
     """3x3 convolution with padding"""
     return nn.Conv2d(
-        in_planes, out_planes, kernel_size=3, stride=stride, padding=1, bias=False
+        in_planes,
+        out_planes,
+        kernel_size=3,
+        stride=stride,
+        padding=1,
+        bias=False
     )
 
 
@@ -60,7 +65,12 @@ class Bottleneck(nn.Module):
         self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
         self.conv2 = nn.Conv2d(
-            planes, planes, kernel_size=3, stride=stride, padding=1, bias=False
+            planes,
+            planes,
+            kernel_size=3,
+            stride=stride,
+            padding=1,
+            bias=False
         )
         self.bn2 = nn.BatchNorm2d(planes)
         self.conv3 = nn.Conv2d(
@@ -95,14 +105,24 @@ class Bottleneck(nn.Module):
 
 
 class ResNet(Backbone):
+
     def __init__(
-        self, block, layers, ms_class=None, ms_layers=[], ms_p=0.5, ms_a=0.1, **kwargs
+        self,
+        block,
+        layers,
+        ms_class=None,
+        ms_layers=[],
+        ms_p=0.5,
+        ms_a=0.1,
+        **kwargs
     ):
         self.inplanes = 64
         super().__init__()
 
         # backbone network
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        self.conv1 = nn.Conv2d(
+            3, 64, kernel_size=7, stride=2, padding=3, bias=False
+        )
         self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
@@ -149,7 +169,9 @@ class ResNet(Backbone):
     def _init_params(self):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
+                nn.init.kaiming_normal_(
+                    m.weight, mode="fan_out", nonlinearity="relu"
+                )
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0)
             elif isinstance(m, nn.BatchNorm2d):
@@ -295,7 +317,10 @@ def resnet18_ms_l1(pretrained=True, **kwargs):
     from dassl.modeling.ops import MixStyle
 
     model = ResNet(
-        block=BasicBlock, layers=[2, 2, 2, 2], ms_class=MixStyle, ms_layers=["layer1"]
+        block=BasicBlock,
+        layers=[2, 2, 2, 2],
+        ms_class=MixStyle,
+        ms_layers=["layer1"]
     )
 
     if pretrained:
@@ -343,7 +368,10 @@ def resnet50_ms_l1(pretrained=True, **kwargs):
     from dassl.modeling.ops import MixStyle
 
     model = ResNet(
-        block=Bottleneck, layers=[3, 4, 6, 3], ms_class=MixStyle, ms_layers=["layer1"]
+        block=Bottleneck,
+        layers=[3, 4, 6, 3],
+        ms_class=MixStyle,
+        ms_layers=["layer1"]
     )
 
     if pretrained:
@@ -391,7 +419,10 @@ def resnet101_ms_l1(pretrained=True, **kwargs):
     from dassl.modeling.ops import MixStyle
 
     model = ResNet(
-        block=Bottleneck, layers=[3, 4, 23, 3], ms_class=MixStyle, ms_layers=["layer1"]
+        block=Bottleneck,
+        layers=[3, 4, 23, 3],
+        ms_class=MixStyle,
+        ms_layers=["layer1"]
     )
 
     if pretrained:

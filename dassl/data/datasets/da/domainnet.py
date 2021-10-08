@@ -23,14 +23,18 @@ class DomainNet(DatasetBase):
     """
 
     dataset_dir = "domainnet"
-    domains = ["clipart", "infograph", "painting", "quickdraw", "real", "sketch"]
+    domains = [
+        "clipart", "infograph", "painting", "quickdraw", "real", "sketch"
+    ]
 
     def __init__(self, cfg):
         root = osp.abspath(osp.expanduser(cfg.DATASET.ROOT))
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.split_dir = osp.join(self.dataset_dir, "splits")
 
-        self.check_input_domains(cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS)
+        self.check_input_domains(
+            cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS
+        )
 
         train_x = self._read_data(cfg.DATASET.SOURCE_DOMAINS, split="train")
         train_u = self._read_data(cfg.DATASET.TARGET_DOMAINS, split="train")
@@ -55,7 +59,10 @@ class DomainNet(DatasetBase):
                     impath = osp.join(self.dataset_dir, impath)
                     label = int(label)
                     item = Datum(
-                        impath=impath, label=label, domain=domain, classname=classname
+                        impath=impath,
+                        label=label,
+                        domain=domain,
+                        classname=classname
                     )
                     items.append(item)
 

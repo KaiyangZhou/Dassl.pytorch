@@ -64,7 +64,9 @@ class MetricMeter:
             return
 
         if not isinstance(input_dict, dict):
-            raise TypeError("Input to MetricMeter.update() must be a dictionary")
+            raise TypeError(
+                "Input to MetricMeter.update() must be a dictionary"
+            )
 
         for k, v in input_dict.items():
             if isinstance(v, torch.Tensor):

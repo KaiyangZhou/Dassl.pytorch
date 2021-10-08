@@ -31,7 +31,9 @@ class VLCS(DatasetBase):
             dst = osp.join(root, "vlcs.zip")
             self.download_data(self.data_url, dst, from_gdrive=True)
 
-        self.check_input_domains(cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS)
+        self.check_input_domains(
+            cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS
+        )
 
         train = self._read_data(cfg.DATASET.SOURCE_DOMAINS, "train")
         val = self._read_data(cfg.DATASET.SOURCE_DOMAINS, "crossval")

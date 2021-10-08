@@ -11,6 +11,7 @@ from dassl.engine.trainer import SimpleNet
 
 
 class Prototypes(nn.Module):
+
     def __init__(self, fdim, num_classes, temp=0.05):
         super().__init__()
         self.prototypes = nn.Linear(fdim, num_classes, bias=False)

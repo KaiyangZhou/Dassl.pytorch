@@ -99,7 +99,9 @@ class DigitSingle(DatasetBase):
         root = osp.abspath(osp.expanduser(cfg.DATASET.ROOT))
         self.dataset_dir = osp.join(root, self.dataset_dir)
 
-        self.check_input_domains(cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS)
+        self.check_input_domains(
+            cfg.DATASET.SOURCE_DOMAINS, cfg.DATASET.TARGET_DOMAINS
+        )
 
         train = self._read_data(cfg.DATASET.SOURCE_DOMAINS, split="train")
         val = self._read_data(cfg.DATASET.SOURCE_DOMAINS, split="test")

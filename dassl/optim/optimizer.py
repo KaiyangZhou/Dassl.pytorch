@@ -32,7 +32,9 @@ def build_optimizer(model, optim_cfg):
 
     if optim not in AVAI_OPTIMS:
         raise ValueError(
-            "Unsupported optim: {}. Must be one of {}".format(optim, AVAI_OPTIMS)
+            "Unsupported optim: {}. Must be one of {}".format(
+                optim, AVAI_OPTIMS
+            )
         )
 
     if staged_lr:
@@ -47,7 +49,9 @@ def build_optimizer(model, optim_cfg):
 
         if isinstance(new_layers, str):
             if new_layers is None:
-                warnings.warn("new_layers is empty, therefore, staged_lr is useless")
+                warnings.warn(
+                    "new_layers is empty, therefore, staged_lr is useless"
+                )
             new_layers = [new_layers]
 
         base_params = []
@@ -62,8 +66,13 @@ def build_optimizer(model, optim_cfg):
                 base_layers.append(name)
 
         param_groups = [
-            {"params": base_params, "lr": lr * base_lr_mult},
-            {"params": new_params},
+            {
+                "params": base_params,
+                "lr": lr * base_lr_mult
+            },
+            {
+                "params": new_params
+            },
         ]
 
     else:

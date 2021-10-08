@@ -10,15 +10,9 @@ from torch.utils.tensorboard import SummaryWriter
 from dassl.data import DataManager
 from dassl.optim import build_optimizer, build_lr_scheduler
 from dassl.utils import (
-    MetricMeter,
-    AverageMeter,
-    tolist_if_not,
-    count_num_param,
-    load_checkpoint,
-    save_checkpoint,
-    mkdir_if_missing,
-    resume_from_checkpoint,
-    load_pretrained_weights,
+    MetricMeter, AverageMeter, tolist_if_not, count_num_param, load_checkpoint,
+    save_checkpoint, mkdir_if_missing, resume_from_checkpoint,
+    load_pretrained_weights
 )
 from dassl.modeling import build_head, build_backbone
 from dassl.evaluation import build_evaluator
@@ -90,13 +84,19 @@ class TrainerBase:
 
     def register_model(self, name="model", model=None, optim=None, sched=None):
         if self.__dict__.get("_models") is None:
-            raise AttributeError("Cannot assign model before super().__init__() call")
+            raise AttributeError(
+                "Cannot assign model before super().__init__() call"
+            )
 
         if self.__dict__.get("_optims") is None:
-            raise AttributeError("Cannot assign optim before super().__init__() call")
+            raise AttributeError(
+                "Cannot assign optim before super().__init__() call"
+            )
 
         if self.__dict__.get("_scheds") is None:
-            raise AttributeError("Cannot assign sched before super().__init__() call")
+            raise AttributeError(
+                "Cannot assign sched before super().__init__() call"
+            )
 
         assert name not in self._models, "Found duplicate model names"
 
@@ -154,19 +154,24 @@ class TrainerBase:
             print("No checkpoint found, train from scratch")
             return 0
 
-        print('Found checkpoint in "{}". Will resume training'.format(directory))
+        print(
+            'Found checkpoint in "{}". Will resume training'.format(directory)
+        )
 
         for name in names:
             path = osp.join(directory, name)
             start_epoch = resume_from_checkpoint(
-                path, self._models[name], self._optims[name], self._scheds[name]
+                path, self._models[name], self._optims[name],
+                self._scheds[name]
             )
 
         return start_epoch
 
     def load_model(self, directory, epoch=None):
         if not directory:
-            print("Note that load_model() is skipped as no pretrained model is given")
+            print(
+                "Note that load_model() is skipped as no pretrained model is given"
+            )
             return
 
         names = self.get_model_names()
@@ -181,7 +186,9 @@ class TrainerBase:
             model_path = osp.join(directory, name, model_file)
 
             if not osp.exists(model_path):
-                raise FileNotFoundError('Model not found at "{}"'.format(model_path))
+                raise FileNotFoundError(
+                    'Model not found at "{}"'.format(model_path)
+                )
 
             checkpoint = load_checkpoint(model_path)
             state_dict = checkpoint["state_dict"]
@@ -372,7 +379,9 @@ class SimpleTrainer(TrainerBase):
 
         device_count = torch.cuda.device_count()
         if device_count > 1:
-            print(f"Detected {device_count} GPUs. Wrap the model with nn.DataParallel")
+            print(
+                f"Detected {device_count} GPUs. Wrap the model with nn.DataParallel"
+            )
             self.model = nn.DataParallel(self.model)
 
     def train(self):
@@ -415,8 +424,7 @@ class SimpleTrainer(TrainerBase):
         do_test = not self.cfg.TEST.NO_TEST
         meet_checkpoint_freq = (
             (self.epoch + 1) % self.cfg.TRAIN.CHECKPOINT_FREQ == 0
-            if self.cfg.TRAIN.CHECKPOINT_FREQ > 0
-            else False
+            if self.cfg.TRAIN.CHECKPOINT_FREQ > 0 else False
         )
 
         if do_test and self.cfg.TEST.FINAL_MODEL == "best_val":
@@ -425,7 +433,9 @@ class SimpleTrainer(TrainerBase):
             if is_best:
                 self.best_result = curr_result
                 self.save_model(
-                    self.epoch, self.output_dir, model_name="model-best.pth.tar"
+                    self.epoch,
+                    self.output_dir,
+                    model_name="model-best.pth.tar"
                 )
 
         if meet_checkpoint_freq or last_epoch:
@@ -533,7 +543,7 @@ class TrainerXU(SimpleTrainer):
                 nb_future_epochs = (
                     self.max_epoch - (self.epoch + 1)
                 ) * self.num_batches
-                eta_seconds = batch_time.avg * (nb_this_epoch + nb_future_epochs)
+                eta_seconds = batch_time.avg * (nb_this_epoch+nb_future_epochs)
                 eta = str(datetime.timedelta(seconds=int(eta_seconds)))
                 print(
                     "epoch [{0}/{1}][{2}/{3}]\t"
@@ -595,7 +605,7 @@ class TrainerX(SimpleTrainer):
                 nb_future_epochs = (
                     self.max_epoch - (self.epoch + 1)
                 ) * self.num_batches
-                eta_seconds = batch_time.avg * (nb_this_epoch + nb_future_epochs)
+                eta_seconds = batch_time.avg * (nb_this_epoch+nb_future_epochs)
                 eta = str(datetime.timedelta(seconds=int(eta_seconds)))
                 print(
                     "epoch [{0}/{1}][{2}/{3}]\t"

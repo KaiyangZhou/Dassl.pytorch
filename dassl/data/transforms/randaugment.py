@@ -143,8 +143,8 @@ def CutoutAbs(img, v):
     x0 = np.random.uniform(w)
     y0 = np.random.uniform(h)
 
-    x0 = int(max(0, x0 - v / 2.0))
-    y0 = int(max(0, y0 - v / 2.0))
+    x0 = int(max(0, x0 - v/2.0))
+    y0 = int(max(0, y0 - v/2.0))
     x1 = min(w, x0 + v)
     y1 = min(h, y0 + v)
 
@@ -184,12 +184,9 @@ class Lighting:
 
         alpha = img.new().resize_(3).normal_(0, self.alphastd)
         rgb = (
-            self.eigvec.type_as(img)
-            .clone()
-            .mul(alpha.view(1, 3).expand(3, 3))
-            .mul(self.eigval.view(1, 3).expand(3, 3))
-            .sum(1)
-            .squeeze()
+            self.eigvec.type_as(img).clone().mul(
+                alpha.view(1, 3).expand(3, 3)
+            ).mul(self.eigval.view(1, 3).expand(3, 3)).sum(1).squeeze()
         )
 
         return img.add(rgb.view(3, 1, 1).expand_as(img))
@@ -312,6 +309,7 @@ def fixmatch_list():
 
 
 class RandAugment:
+
     def __init__(self, n=2, m=10):
         assert 0 <= m <= 30
         self.n = n
@@ -322,13 +320,14 @@ class RandAugment:
         ops = random.choices(self.augment_list, k=self.n)
 
         for op, minval, maxval in ops:
-            val = (self.m / 30) * (maxval - minval) + minval
+            val = (self.m / 30) * (maxval-minval) + minval
             img = op(img, val)
 
         return img
 
 
 class RandAugment2:
+
     def __init__(self, n=2, p=0.6):
         self.n = n
         self.p = p
@@ -341,13 +340,14 @@ class RandAugment2:
             if random.random() > self.p:
                 continue
             m = random.random()
-            val = m * (maxval - minval) + minval
+            val = m * (maxval-minval) + minval
             img = op(img, val)
 
         return img
 
 
 class RandAugmentFixMatch:
+
     def __init__(self, n=2):
         self.n = n
         self.augment_list = fixmatch_list()
@@ -357,7 +357,7 @@ class RandAugmentFixMatch:
 
         for op, minval, maxval in ops:
             m = random.random()
-            val = m * (maxval - minval) + minval
+            val = m * (maxval-minval) + minval
             img = op(img, val)
 
         return img

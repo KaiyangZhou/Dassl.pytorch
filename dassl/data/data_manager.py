@@ -55,8 +55,13 @@ def build_data_loader(
 
 
 class DataManager:
+
     def __init__(
-        self, cfg, custom_tfm_train=None, custom_tfm_test=None, dataset_wrapper=None
+        self,
+        cfg,
+        custom_tfm_train=None,
+        custom_tfm_test=None,
+        dataset_wrapper=None
     ):
         # Load dataset
         dataset = build_dataset(cfg)
@@ -188,6 +193,7 @@ class DataManager:
 
 
 class DatasetWrapper(TorchDataset):
+
     def __init__(self, cfg, data_source, transform=None, is_train=False):
         self.cfg = cfg
         self.data_source = data_source
@@ -209,7 +215,9 @@ class DatasetWrapper(TorchDataset):
         to_tensor += [T.Resize(cfg.INPUT.SIZE, interpolation=interp_mode)]
         to_tensor += [T.ToTensor()]
         if "normalize" in cfg.INPUT.TRANSFORMS:
-            normalize = T.Normalize(mean=cfg.INPUT.PIXEL_MEAN, std=cfg.INPUT.PIXEL_STD)
+            normalize = T.Normalize(
+                mean=cfg.INPUT.PIXEL_MEAN, std=cfg.INPUT.PIXEL_STD
+            )
             to_tensor += [normalize]
         self.to_tensor = T.Compose(to_tensor)
 
@@ -219,7 +227,11 @@ class DatasetWrapper(TorchDataset):
     def __getitem__(self, idx):
         item = self.data_source[idx]
 
-        output = {"label": item.label, "domain": item.domain, "impath": item.impath}
+        output = {
+            "label": item.label,
+            "domain": item.domain,
+            "impath": item.impath
+        }
 
         img0 = read_image(item.impath)
 

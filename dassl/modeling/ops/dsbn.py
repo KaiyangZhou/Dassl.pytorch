@@ -34,10 +34,12 @@ class _DSBN(nn.Module):
 
 
 class DSBN1d(_DSBN):
+
     def __init__(self, num_features, n_domain):
         super().__init__(num_features, n_domain, "1d")
 
 
 class DSBN2d(_DSBN):
+
     def __init__(self, num_features, n_domain):
         super().__init__(num_features, n_domain, "2d")

@@ -67,7 +67,10 @@ class Classification(EvaluatorBase):
         acc = 100.0 * self._correct / self._total
         err = 100.0 - acc
         macro_f1 = 100.0 * f1_score(
-            self._y_true, self._y_pred, average="macro", labels=np.unique(self._y_true)
+            self._y_true,
+            self._y_pred,
+            average="macro",
+            labels=np.unique(self._y_true)
         )
 
         # The first value will be returned by trainer.test()
@@ -102,7 +105,9 @@ class Classification(EvaluatorBase):
                     "* class: {} ({})\t"
                     "total: {:,}\t"
                     "correct: {:,}\t"
-                    "acc: {:.2f}%".format(label, classname, total, correct, acc)
+                    "acc: {:.2f}%".format(
+                        label, classname, total, correct, acc
+                    )
                 )
             mean_acc = np.mean(accs)
             print("* average: {:.2f}%".format(mean_acc))
@@ -110,7 +115,9 @@ class Classification(EvaluatorBase):
             results["perclass_accuracy"] = mean_acc
 
         if self.cfg.TEST.COMPUTE_CMAT:
-            cmat = confusion_matrix(self._y_true, self._y_pred, normalize="true")
+            cmat = confusion_matrix(
+                self._y_true, self._y_pred, normalize="true"
+            )
             save_path = osp.join(self.cfg.OUTPUT_DIR, "cmat.pt")
             torch.save(cmat, save_path)
             print('Confusion matrix is saved to "{}"'.format(save_path))

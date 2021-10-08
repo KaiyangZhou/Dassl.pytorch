@@ -9,8 +9,10 @@ from .build import BACKBONE_REGISTRY
 from .backbone import Backbone
 
 model_urls = {
-    "shufflenetv2_x0.5": "https://download.pytorch.org/models/shufflenetv2_x0.5-f707e7126e.pth",
-    "shufflenetv2_x1.0": "https://download.pytorch.org/models/shufflenetv2_x1-5666bf0f80.pth",
+    "shufflenetv2_x0.5":
+    "https://download.pytorch.org/models/shufflenetv2_x0.5-f707e7126e.pth",
+    "shufflenetv2_x1.0":
+    "https://download.pytorch.org/models/shufflenetv2_x1-5666bf0f80.pth",
     "shufflenetv2_x1.5": None,
     "shufflenetv2_x2.0": None,
 }
@@ -32,6 +34,7 @@ def channel_shuffle(x, groups):
 
 
 class InvertedResidual(nn.Module):
+
     def __init__(self, inp, oup, stride):
         super().__init__()
 
@@ -49,7 +52,12 @@ class InvertedResidual(nn.Module):
                 ),
                 nn.BatchNorm2d(inp),
                 nn.Conv2d(
-                    inp, branch_features, kernel_size=1, stride=1, padding=0, bias=False
+                    inp,
+                    branch_features,
+                    kernel_size=1,
+                    stride=1,
+                    padding=0,
+                    bias=False
                 ),
                 nn.BatchNorm2d(branch_features),
                 nn.ReLU(inplace=True),
@@ -88,7 +96,9 @@ class InvertedResidual(nn.Module):
 
     @staticmethod
     def depthwise_conv(i, o, kernel_size, stride=1, padding=0, bias=False):
-        return nn.Conv2d(i, o, kernel_size, stride, padding, bias=bias, groups=i)
+        return nn.Conv2d(
+            i, o, kernel_size, stride, padding, bias=bias, groups=i
+        )
 
     def forward(self, x):
         if self.stride == 1:
@@ -103,12 +113,17 @@ class InvertedResidual(nn.Module):
 
 
 class ShuffleNetV2(Backbone):
+
     def __init__(self, stages_repeats, stages_out_channels, **kwargs):
         super().__init__()
         if len(stages_repeats) != 3:
-            raise ValueError("expected stages_repeats as list of 3 positive ints")
+            raise ValueError(
+                "expected stages_repeats as list of 3 positive ints"
+            )
         if len(stages_out_channels) != 5:
-            raise ValueError("expected stages_out_channels as list of 5 positive ints")
+            raise ValueError(
+                "expected stages_out_channels as list of 5 positive ints"
+            )
         self._stage_out_channels = stages_out_channels
 
         input_channels = 3
@@ -128,7 +143,9 @@ class ShuffleNetV2(Backbone):
         ):
             seq = [InvertedResidual(input_channels, output_channels, 2)]
             for i in range(repeats - 1):
-                seq.append(InvertedResidual(output_channels, output_channels, 1))
+                seq.append(
+                    InvertedResidual(output_channels, output_channels, 1)
+                )
             setattr(self, name, nn.Sequential(*seq))
             input_channels = output_channels
 
@@ -165,7 +182,9 @@ def init_pretrained_weights(model, model_url):
     if model_url is None:
         import warnings
 
-        warnings.warn("ImageNet pretrained weights are unavailable for this model")
+        warnings.warn(
+            "ImageNet pretrained weights are unavailable for this model"
+        )
         return
     pretrain_dict = model_zoo.load_url(model_url)
     model_dict = model.state_dict()

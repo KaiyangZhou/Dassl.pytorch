@@ -12,6 +12,7 @@ from dassl.modeling.ops.utils import create_onehot
 
 
 class Experts(nn.Module):
+
     def __init__(self, n_source, fdim, num_classes):
         super().__init__()
         self.linears = nn.ModuleList(
@@ -109,7 +110,8 @@ class DAELDG(TrainerX):
             pred_i = self.E(i, feat_i)
             loss_x += (-label_i * torch.log(pred_i + 1e-5)).sum(1).mean()
             expert_label_i = pred_i.detach()
-            acc += compute_accuracy(pred_i.detach(), label_i.max(1)[1])[0].item()
+            acc += compute_accuracy(pred_i.detach(),
+                                    label_i.max(1)[1])[0].item()
 
             # Consistency regularization
             cr_pred = []
@@ -119,7 +121,7 @@ class DAELDG(TrainerX):
                 cr_pred.append(pred_j)
             cr_pred = torch.cat(cr_pred, 1)
             cr_pred = cr_pred.mean(1)
-            loss_cr += ((cr_pred - expert_label_i) ** 2).sum(1).mean()
+            loss_cr += ((cr_pred - expert_label_i)**2).sum(1).mean()
 
         loss_x /= self.n_domain
         loss_cr /= self.n_domain
@@ -130,7 +132,11 @@ class DAELDG(TrainerX):
         loss += loss_cr
         self.model_backward_and_update(loss)
 
-        loss_summary = {"loss_x": loss_x.item(), "acc": acc, "loss_cr": loss_cr.item()}
+        loss_summary = {
+            "loss_x": loss_x.item(),
+            "acc": acc,
+            "loss_cr": loss_cr.item()
+        }
 
         if (self.batch_idx + 1) == self.num_batches:
             self.update_lr()

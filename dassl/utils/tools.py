@@ -96,11 +96,11 @@ def download_url(url, dst):
             return
         duration = time.time() - start_time
         progress_size = int(count * block_size)
-        speed = int(progress_size / (1024 * duration))
+        speed = int(progress_size / (1024*duration))
         percent = int(count * block_size * 100 / total_size)
         sys.stdout.write(
-            "\r...%d%%, %d MB, %d KB/s, %d seconds passed"
-            % (percent, progress_size / (1024 * 1024), speed, duration)
+            "\r...%d%%, %d MB, %d KB/s, %d seconds passed" %
+            (percent, progress_size / (1024*1024), speed, duration)
         )
         sys.stdout.flush()
 
