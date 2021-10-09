@@ -18,7 +18,7 @@ AVAI_CHOICES = [
     "instance_norm",
     "random_crop",
     "random_translation",
-    "center_crop",
+    "center_crop",  # This has become a default operation for test
     "cutout",
     "imagenet_policy",
     "cifar10_policy",
@@ -177,34 +177,31 @@ def build_transform(cfg, is_train=True, choices=None):
         choices = cfg.INPUT.TRANSFORMS
 
     for choice in choices:
-        assert (
-            choice in AVAI_CHOICES
-        ), "Invalid transform choice ({}), " "expected to be one of {}".format(
-            choice, AVAI_CHOICES
-        )
+        assert choice in AVAI_CHOICES
 
-    expected_size = "{}x{}".format(cfg.INPUT.SIZE[0], cfg.INPUT.SIZE[1])
+    target_size = f"{cfg.INPUT.SIZE[0]}x{cfg.INPUT.SIZE[1]}"
 
     normalize = Normalize(mean=cfg.INPUT.PIXEL_MEAN, std=cfg.INPUT.PIXEL_STD)
 
     if is_train:
-        return _build_transform_train(cfg, choices, expected_size, normalize)
+        return _build_transform_train(cfg, choices, target_size, normalize)
     else:
-        return _build_transform_test(cfg, choices, expected_size, normalize)
+        return _build_transform_test(cfg, choices, target_size, normalize)
 
 
-def _build_transform_train(cfg, choices, expected_size, normalize):
+def _build_transform_train(cfg, choices, target_size, normalize):
     print("Building transform_train")
     tfm_train = []
 
     interp_mode = INTERPOLATION_MODES[cfg.INPUT.INTERPOLATION]
 
-    print("+ resize to {}".format(expected_size))
-    tfm_train += [Resize(cfg.INPUT.SIZE, interpolation=interp_mode)]
-
-    if "random_flip" in choices:
-        print("+ random flip")
-        tfm_train += [RandomHorizontalFlip()]
+    # Make sure the image size matches the target size
+    conditions = []
+    conditions += ["random_crop" not in choices]
+    conditions += ["random_resized_crop" not in choices]
+    if all(conditions):
+        print(f"+ resize to {target_size}")
+        tfm_train += [Resize(cfg.INPUT.SIZE, interpolation=interp_mode)]
 
     if "random_translation" in choices:
         print("+ random translation")
@@ -218,16 +215,14 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
         tfm_train += [RandomCrop(cfg.INPUT.SIZE, padding=crop_padding)]
 
     if "random_resized_crop" in choices:
-        print("+ random resized crop")
+        print(f"+ random resized crop (size={cfg.INPUT.SIZE})")
         tfm_train += [
             RandomResizedCrop(cfg.INPUT.SIZE, interpolation=interp_mode)
         ]
 
-    if "center_crop" in choices:
-        print("+ center crop (on 1.125x enlarged input)")
-        enlarged_size = [int(x * 1.125) for x in cfg.INPUT.SIZE]
-        tfm_train += [Resize(enlarged_size, interpolation=interp_mode)]
-        tfm_train += [CenterCrop(cfg.INPUT.SIZE)]
+    if "random_flip" in choices:
+        print("+ random flip")
+        tfm_train += [RandomHorizontalFlip()]
 
     if "imagenet_policy" in choices:
         print("+ imagenet policy")
@@ -311,20 +306,17 @@ def _build_transform_train(cfg, choices, expected_size, normalize):
     return tfm_train
 
 
-def _build_transform_test(cfg, choices, expected_size, normalize):
+def _build_transform_test(cfg, choices, target_size, normalize):
     print("Building transform_test")
     tfm_test = []
 
     interp_mode = INTERPOLATION_MODES[cfg.INPUT.INTERPOLATION]
 
-    print("+ resize to {}".format(expected_size))
-    tfm_test += [Resize(cfg.INPUT.SIZE, interpolation=interp_mode)]
+    print(f"+ resize the smaller edge to {max(cfg.INPUT.SIZE)}")
+    tfm_test += [Resize(max(cfg.INPUT.SIZE), interpolation=interp_mode)]
 
-    if "center_crop" in choices:
-        print("+ center crop (on 1.125x enlarged input)")
-        enlarged_size = [int(x * 1.125) for x in cfg.INPUT.SIZE]
-        tfm_test += [Resize(enlarged_size, interpolation=interp_mode)]
-        tfm_test += [CenterCrop(cfg.INPUT.SIZE)]
+    print(f"+ {target_size} center crop")
+    tfm_test += [CenterCrop(cfg.INPUT.SIZE)]
 
     print("+ to torch tensor of range [0, 1]")
     tfm_test += [ToTensor()]
