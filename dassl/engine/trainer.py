@@ -170,7 +170,8 @@ class TrainerBase:
     def load_model(self, directory, epoch=None):
         if not directory:
             print(
-                "Note that load_model() is skipped as no pretrained model is given"
+                "Note that load_model() is skipped as no pretrained "
+                "model is given (ignore this if it's done on purpose)"
             )
             return
 
