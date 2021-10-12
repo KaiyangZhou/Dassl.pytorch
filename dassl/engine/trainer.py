@@ -207,8 +207,10 @@ class TrainerBase:
         for name in names:
             if mode == "train":
                 self._models[name].train()
-            else:
+            elif mode in ["test", "eval"]:
                 self._models[name].eval()
+            else:
+                raise KeyError
 
     def update_lr(self, names=None):
         names = self.get_model_names(names)
