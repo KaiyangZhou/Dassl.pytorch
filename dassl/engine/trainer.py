@@ -541,12 +541,15 @@ class TrainerXU(SimpleTrainer):
             batch_time.update(time.time() - end)
             losses.update(loss_summary)
 
-            if (self.batch_idx + 1) % self.cfg.TRAIN.PRINT_FREQ == 0:
-                nb_this_epoch = self.num_batches - (self.batch_idx + 1)
-                nb_future_epochs = (
-                    self.max_epoch - (self.epoch + 1)
+            if (
+                self.batch_idx + 1
+            ) % self.cfg.TRAIN.PRINT_FREQ == 0 or self.num_batches < self.cfg.TRAIN.PRINT_FREQ:
+                nb_remain = 0
+                nb_remain += self.num_batches - self.batch_idx - 1
+                nb_remain += (
+                    self.max_epoch - self.epoch - 1
                 ) * self.num_batches
-                eta_seconds = batch_time.avg * (nb_this_epoch+nb_future_epochs)
+                eta_seconds = batch_time.avg * nb_remain
                 eta = str(datetime.timedelta(seconds=int(eta_seconds)))
                 print(
                     "epoch [{0}/{1}][{2}/{3}]\t"
@@ -603,12 +606,15 @@ class TrainerX(SimpleTrainer):
             batch_time.update(time.time() - end)
             losses.update(loss_summary)
 
-            if (self.batch_idx + 1) % self.cfg.TRAIN.PRINT_FREQ == 0:
-                nb_this_epoch = self.num_batches - (self.batch_idx + 1)
-                nb_future_epochs = (
-                    self.max_epoch - (self.epoch + 1)
+            if (
+                self.batch_idx + 1
+            ) % self.cfg.TRAIN.PRINT_FREQ == 0 or self.num_batches < self.cfg.TRAIN.PRINT_FREQ:
+                nb_remain = 0
+                nb_remain += self.num_batches - self.batch_idx - 1
+                nb_remain += (
+                    self.max_epoch - self.epoch - 1
                 ) * self.num_batches
-                eta_seconds = batch_time.avg * (nb_this_epoch+nb_future_epochs)
+                eta_seconds = batch_time.avg * nb_remain
                 eta = str(datetime.timedelta(seconds=int(eta_seconds)))
                 print(
                     "epoch [{0}/{1}][{2}/{3}]\t"
