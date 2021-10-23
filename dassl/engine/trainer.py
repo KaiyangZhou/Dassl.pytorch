@@ -5,6 +5,7 @@ import datetime
 from collections import OrderedDict
 import torch
 import torch.nn as nn
+from tqdm import tqdm
 from torch.utils.tensorboard import SummaryWriter
 
 from dassl.data import DataManager
@@ -460,7 +461,7 @@ class SimpleTrainer(TrainerBase):
             data_loader = self.test_loader
             print("Do evaluation on test set")
 
-        for batch_idx, batch in enumerate(data_loader):
+        for batch_idx, batch in enumerate(tqdm(data_loader)):
             input, label = self.parse_batch_test(batch)
             output = self.model_inference(input)
             self.evaluator.process(output, label)

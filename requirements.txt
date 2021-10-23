@@ -7,3 +7,4 @@ tb-nightly
 future
 scipy
 scikit-learn
+tqdm
