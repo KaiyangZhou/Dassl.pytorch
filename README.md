@@ -270,7 +270,7 @@ If you find this code useful to your research, please give credit to the followi
 @article{zhou2020domain,
   title={Domain Adaptive Ensemble Learning},
   author={Zhou, Kaiyang and Yang, Yongxin and Qiao, Yu and Xiang, Tao},
-  journal={arXiv preprint arXiv:2003.07325},
-  year={2020}
+  journal={IEEE Transactions on Image Processing (TIP)},
+  year={2021}
 }
 ```
