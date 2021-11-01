@@ -42,6 +42,8 @@ class Classification(EvaluatorBase):
     def reset(self):
         self._correct = 0
         self._total = 0
+        self._y_true = []
+        self._y_pred = []
         if self._per_class_res is not None:
             self._per_class_res = defaultdict(list)
 
