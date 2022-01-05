@@ -110,8 +110,8 @@ class MixStyle(nn.Module):
             # split into two halves and swap the order
             perm = torch.arange(B - 1, -1, -1)  # inverse index
             perm_b, perm_a = perm.chunk(2)
-            perm_b = perm_b[torch.randperm(B // 2)]
-            perm_a = perm_a[torch.randperm(B // 2)]
+            perm_b = perm_b[torch.randperm(perm_b.shape[0])]
+            perm_a = perm_a[torch.randperm(perm_a.shape[0])]
             perm = torch.cat([perm_b, perm_a], 0)
 
         else:
