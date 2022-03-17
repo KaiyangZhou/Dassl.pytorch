@@ -430,6 +430,7 @@ def resnet101_ms_l1(pretrained=True, **kwargs):
 
     return model
 
+
 """
 Residual networks with efdmix
 """
@@ -586,4 +587,3 @@ def resnet101_efdmix_l1(pretrained=True, **kwargs):
         init_pretrained_weights(model, model_urls["resnet101"])
 
     return model
-

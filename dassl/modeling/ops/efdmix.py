@@ -91,9 +91,9 @@ class EFDMix(nn.Module):
         if random.random() > self.p:
             return x
 
-        B,C,W,H = x.size(0), x.size(1), x.size(2),  x.size(3)
+        B, C, W, H = x.size(0), x.size(1), x.size(2), x.size(3)
         x_view = x.view(B, C, -1)
-        value_x, index_x = torch.sort(x_view) ## sort inputs
+        value_x, index_x = torch.sort(x_view)  # sort inputs
         lmda = self.beta.sample((B, 1, 1))
         lmda = lmda.to(x.device)
 
