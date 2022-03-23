@@ -55,10 +55,12 @@ def load_svhn(data_dir, raw_data_dir):
     train = loadmat(osp.join(raw_data_dir, "svhn_train_32x32.mat"))
     train_data = train["X"].transpose(3, 0, 1, 2)
     train_label = train["y"][:, 0]
+    train_label[train_label == 10] = 0
 
     test = loadmat(osp.join(raw_data_dir, "svhn_test_32x32.mat"))
     test_data = test["X"].transpose(3, 0, 1, 2)
     test_label = test["y"][:, 0]
+    test_label[test_label == 10] = 0
 
     return train_data, test_data, train_label, test_label
 
