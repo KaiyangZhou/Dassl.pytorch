@@ -14,3 +14,5 @@ from .sequential2 import Sequential2
 from .reverse_grad import ReverseGrad
 from .cross_entropy import cross_entropy
 from .optimal_transport import SinkhornDivergence, MinibatchEnergyDistance
+from .attention import *
+from .conv import *
