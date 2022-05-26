@@ -251,16 +251,25 @@ def open_specified_layers(model, open_layers):
                 p.requires_grad = False
 
 
-def count_num_param(model):
+def count_num_param(model=None, params=None):
     r"""Count number of parameters in a model.
 
     Args:
         model (nn.Module): network model.
-
+        params: network model`s params.
     Examples::
         >>> model_size = count_num_param(model)
     """
-    return sum(p.numel() for p in model.parameters())
+    if model:
+        return sum(p.numel() for p in model.parameters())
+    if params:
+        s = 0
+        for p in params:
+            if isinstance(p, dict):
+                s += p["params"].numel()
+            else:
+                s += p.numel()
+        return s
 
 
 def load_pretrained_weights(model, weight_path):
