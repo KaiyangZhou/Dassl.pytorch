@@ -8,6 +8,8 @@ from torchvision.transforms import (
     RandomHorizontalFlip
 )
 
+from torchvision.transforms.functional import InterpolationMode
+
 from .autoaugment import SVHNPolicy, CIFAR10Policy, ImageNetPolicy
 from .randaugment import RandAugment, RandAugment2, RandAugmentFixMatch
 
@@ -33,9 +35,9 @@ AVAI_CHOICES = [
 ]
 
 INTERPOLATION_MODES = {
-    "bilinear": Image.BILINEAR,
-    "bicubic": Image.BICUBIC,
-    "nearest": Image.NEAREST,
+    "bilinear": InterpolationMode.BILINEAR,
+    "bicubic": InterpolationMode.BICUBIC,
+    "nearest": InterpolationMode.NEAREST,
 }
 
 
@@ -49,10 +51,10 @@ class Random2DTranslation:
         p (float, optional): probability that this operation takes place.
             Default is 0.5.
         interpolation (int, optional): desired interpolation. Default is
-            ``PIL.Image.BILINEAR``
+            ``torchvision.transforms.functional.InterpolationMode.BILINEAR``
     """
 
-    def __init__(self, height, width, p=0.5, interpolation=Image.BILINEAR):
+    def __init__(self, height, width, p=0.5, interpolation=InterpolationMode.BILINEAR):
         self.height = height
         self.width = width
         self.p = p
