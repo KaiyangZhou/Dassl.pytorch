@@ -37,6 +37,12 @@ def build_optimizer(model, optim_cfg, param_groups=None):
                 optim, AVAI_OPTIMS
             )
         )
+
+    if param_groups is not None and staged_lr:
+        warnings.warn(
+            "staged_lr will be ignored, if you need to use staged_lr, please bind it with param_groups yourself."
+        )
+
     if param_groups is None:
         if staged_lr:
             if not isinstance(model, nn.Module):

@@ -260,9 +260,11 @@ def count_num_param(model=None, params=None):
     Examples::
         >>> model_size = count_num_param(model)
     """
-    if model:
+
+    if model is not None:
         return sum(p.numel() for p in model.parameters())
-    if params:
+
+    if params is not None:
         s = 0
         for p in params:
             if isinstance(p, dict):
@@ -270,6 +272,8 @@ def count_num_param(model=None, params=None):
             else:
                 s += p.numel()
         return s
+
+    raise ValueError("model and params must provide at least one.")
 
 
 def load_pretrained_weights(model, weight_path):
