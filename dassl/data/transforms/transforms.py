@@ -1,13 +1,11 @@
 import numpy as np
 import random
 import torch
-from PIL import Image
 from torchvision.transforms import (
     Resize, Compose, ToTensor, Normalize, CenterCrop, RandomCrop, ColorJitter,
     RandomApply, GaussianBlur, RandomGrayscale, RandomResizedCrop,
     RandomHorizontalFlip
 )
-
 from torchvision.transforms.functional import InterpolationMode
 
 from .autoaugment import SVHNPolicy, CIFAR10Policy, ImageNetPolicy
@@ -54,7 +52,9 @@ class Random2DTranslation:
             ``torchvision.transforms.functional.InterpolationMode.BILINEAR``
     """
 
-    def __init__(self, height, width, p=0.5, interpolation=InterpolationMode.BILINEAR):
+    def __init__(
+        self, height, width, p=0.5, interpolation=InterpolationMode.BILINEAR
+    ):
         self.height = height
         self.width = width
         self.p = p

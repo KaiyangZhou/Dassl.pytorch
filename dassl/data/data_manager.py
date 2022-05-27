@@ -1,15 +1,12 @@
 import torch
 import torchvision.transforms as T
-from PIL import Image
 from torch.utils.data import Dataset as TorchDataset
 
 from dassl.utils import read_image
 
 from .datasets import build_dataset
 from .samplers import build_sampler
-from .transforms import build_transform
-
-from .transforms import INTERPOLATION_MODES
+from .transforms import INTERPOLATION_MODES, build_transform
 
 
 def build_data_loader(
