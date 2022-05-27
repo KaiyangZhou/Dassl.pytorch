@@ -9,11 +9,7 @@ from .datasets import build_dataset
 from .samplers import build_sampler
 from .transforms import build_transform
 
-INTERPOLATION_MODES = {
-    "bilinear": Image.BILINEAR,
-    "bicubic": Image.BICUBIC,
-    "nearest": Image.NEAREST,
-}
+from .transforms import INTERPOLATION_MODES
 
 
 def build_data_loader(
