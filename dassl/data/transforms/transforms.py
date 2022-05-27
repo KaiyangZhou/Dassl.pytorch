@@ -7,6 +7,7 @@ from torchvision.transforms import (
     RandomHorizontalFlip
 )
 from torchvision.transforms.functional import InterpolationMode
+import torchvision.transforms.functional as F
 
 from .autoaugment import SVHNPolicy, CIFAR10Policy, ImageNetPolicy
 from .randaugment import RandAugment, RandAugment2, RandAugmentFixMatch
@@ -62,18 +63,29 @@ class Random2DTranslation:
 
     def __call__(self, img):
         if random.uniform(0, 1) > self.p:
-            return img.resize((self.width, self.height), self.interpolation)
+            return F.resize(
+                img=img,
+                size=[self.height, self.width],
+                interpolation=self.interpolation
+            )
 
         new_width = int(round(self.width * 1.125))
         new_height = int(round(self.height * 1.125))
-        resized_img = img.resize((new_width, new_height), self.interpolation)
-
+        resized_img = F.resize(
+            img=img,
+            size=[new_height, new_width],
+            interpolation=self.interpolation
+        )
         x_maxrange = new_width - self.width
         y_maxrange = new_height - self.height
         x1 = int(round(random.uniform(0, x_maxrange)))
         y1 = int(round(random.uniform(0, y_maxrange)))
-        croped_img = resized_img.crop(
-            (x1, y1, x1 + self.width, y1 + self.height)
+        croped_img = F.crop(
+            img=resized_img,
+            top=y1,
+            left=x1,
+            height=self.height,
+            width=self.width
         )
 
         return croped_img
