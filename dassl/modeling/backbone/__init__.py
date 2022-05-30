@@ -22,7 +22,7 @@ from .shufflenetv2 import (
     shufflenet_v2_x0_5, shufflenet_v2_x1_0, shufflenet_v2_x1_5,
     shufflenet_v2_x2_0
 )
+from .resnet_dynamic import *
 from .cnn_digitsingle import cnn_digitsingle
 from .preact_resnet18 import preact_resnet18
 from .cnn_digit5_m3sda import cnn_digit5_m3sda
-from .resnet_dynamic import *
