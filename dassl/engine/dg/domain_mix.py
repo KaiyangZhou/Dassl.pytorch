@@ -6,7 +6,7 @@ from dassl.metrics import compute_accuracy
 
 from .vanilla import Vanilla
 
-__all__ = ['DomainMix']
+__all__ = ["DomainMix"]
 
 
 @TRAINER_REGISTRY.register()
@@ -16,9 +16,9 @@ class DomainMix(Vanilla):
 
     def __init__(self, cfg):
         super(DomainMix, self).__init__(cfg)
-        self.mix_type = cfg['TRAINER']['DOMAINMIX']['TYPE']
-        self.alpha = cfg['TRAINER']['DOMAINMIX']['ALPHA']
-        self.beta = cfg['TRAINER']['DOMAINMIX']['BETA']
+        self.mix_type = cfg["TRAINER"]["DOMAINMIX"]["TYPE"]
+        self.alpha = cfg["TRAINER"]["DOMAINMIX"]["ALPHA"]
+        self.beta = cfg["TRAINER"]["DOMAINMIX"]["BETA"]
         self.dist_beta = torch.distributions.Beta(self.alpha, self.beta)
 
     def forward_backward(self, batch):
@@ -30,8 +30,8 @@ class DomainMix(Vanilla):
         self.model_backward_and_update(loss)
 
         loss_summary = {
-            'loss': loss.item(),
-            'acc': compute_accuracy(output, label_a)[0].item()
+            "loss": loss.item(),
+            "acc": compute_accuracy(output, label_a)[0].item()
         }
 
         if (self.batch_idx + 1) == self.num_batches:
@@ -59,7 +59,7 @@ class DomainMix(Vanilla):
 
         # random shuffle
         perm = torch.randperm(x.size(0), dtype=torch.int64, device=x.device)
-        if self.mix_type == 'crossdomain':
+        if self.mix_type == "crossdomain":
             domain_list = torch.unique(domain)
             if len(domain_list) > 1:
                 for idx in domain_list:
@@ -70,7 +70,7 @@ class DomainMix(Vanilla):
                         num_samples=cnt_a, replacement=bool(cnt_a > cnt_b)
                     )
                     perm[domain == idx] = idx_b[perm_b]
-        elif self.mix_type != 'random':
+        elif self.mix_type != "random":
             raise NotImplementedError(
                 f"Chooses {'random', 'crossdomain'}, but got {self.mix_type}."
             )

@@ -15,21 +15,21 @@ from .build import BACKBONE_REGISTRY
 from .backbone import Backbone
 
 __all__ = [
-    'resnet18_dynamic', 'resnet50_dynamic', 'resnet101_dynamic',
-    'resnet18_dynamic_ms_l123', 'resnet18_dynamic_ms_l12',
-    'resnet18_dynamic_ms_l1', 'resnet50_dynamic_ms_l123',
-    'resnet50_dynamic_ms_l12', 'resnet50_dynamic_ms_l1',
-    'resnet101_dynamic_ms_l123', 'resnet101_dynamic_ms_l12',
-    'resnet101_dynamic_ms_l1'
+    "resnet18_dynamic", "resnet50_dynamic", "resnet101_dynamic",
+    "resnet18_dynamic_ms_l123", "resnet18_dynamic_ms_l12",
+    "resnet18_dynamic_ms_l1", "resnet50_dynamic_ms_l123",
+    "resnet50_dynamic_ms_l12", "resnet50_dynamic_ms_l1",
+    "resnet101_dynamic_ms_l123", "resnet101_dynamic_ms_l12",
+    "resnet101_dynamic_ms_l1"
 ]
 
 model_urls = {
-    'resnet18_dynamic':
-    'https://csip.fzu.edu.cn/files/models/resnet18_dynamic-074db766.pth',
-    'resnet50_dynamic':
-    'https://csip.fzu.edu.cn/files/models/resnet50_dynamic-2c3b0201.pth',
-    'resnet101_dynamic':
-    'https://csip.fzu.edu.cn/files/models/resnet101_dynamic-c5f15780.pth',
+    "resnet18_dynamic":
+    "https://csip.fzu.edu.cn/files/models/resnet18_dynamic-074db766.pth",
+    "resnet50_dynamic":
+    "https://csip.fzu.edu.cn/files/models/resnet50_dynamic-2c3b0201.pth",
+    "resnet101_dynamic":
+    "https://csip.fzu.edu.cn/files/models/resnet101_dynamic-c5f15780.pth",
 }
 
 
@@ -80,7 +80,7 @@ def conv1x1(in_planes: int, out_planes: int, stride: int = 1) -> nn.Conv2d:
 
 def load_state_dict(
     model: nn.Module,
-    state_dict: 'OrderedDict[str, Tensor]',
+    state_dict: "OrderedDict[str, Tensor]",
     allowed_missing_keys: List = None
 ):
     r"""Copies parameters and buffers from :attr:`state_dict` into
@@ -114,8 +114,8 @@ def load_state_dict(
     if len(unexpected_keys) > 0:
         raise_error = True
         msgs.insert(
-            0, 'Unexpected key(s) in state_dict: {}. '.format(
-                ', '.join('"{}"'.format(k) for k in unexpected_keys)
+            0, "Unexpected key(s) in state_dict: {}. ".format(
+                ", ".join("'{}'".format(k) for k in unexpected_keys)
             )
         )
     if len(missing_keys) > 0:
@@ -124,19 +124,19 @@ def load_state_dict(
         ):
             raise_error = True
         msgs.insert(
-            0, 'Missing key(s) in state_dict: {}. '.format(
-                ', '.join('"{}"'.format(k) for k in missing_keys)
+            0, "Missing key(s) in state_dict: {}. ".format(
+                ", ".join("'{}'".format(k) for k in missing_keys)
             )
         )
     if raise_error:
         raise RuntimeError(
-            'Error(s) in loading state_dict for {}:\n\t{}'.format(
+            "Error(s) in loading state_dict for {}:\n\t{}".format(
                 model.__class__.__name__, "\n\t".join(msgs)
             )
         )
     if len(msgs) > 0:
         print(
-            '\nInfo(s) in loading state_dict for {}:\n\t{}'.format(
+            "\nInfo(s) in loading state_dict for {}:\n\t{}".format(
                 model.__class__.__name__, "\n\t".join(msgs)
             )
         )
@@ -161,7 +161,7 @@ class BasicBlock(nn.Module):
             norm_layer = nn.BatchNorm2d
         if groups != 1 or base_width != 64:
             raise ValueError(
-                'BasicBlock only supports groups=1 and base_width=64'
+                "BasicBlock only supports groups=1 and base_width=64"
             )
         if dilation > 1:
             raise NotImplementedError(
@@ -272,7 +272,7 @@ class BasicBlockDynamic(nn.Module):
             norm_layer = nn.BatchNorm2d
         if groups != 1 or base_width != 64:
             raise ValueError(
-                'BasicBlock only supports groups=1 and base_width=64'
+                "BasicBlock only supports groups=1 and base_width=64"
             )
         if dilation > 1:
             raise NotImplementedError(
@@ -332,7 +332,7 @@ class BottleneckDynamic(nn.Module):
     ) -> None:
         super(BottleneckDynamic, self).__init__()
         if groups != 1:
-            raise ValueError('BottleneckDynamic only supports groups=1')
+            raise ValueError("BottleneckDynamic only supports groups=1")
         if dilation > 1:
             raise NotImplementedError(
                 "Dilation > 1 not supported in BottleneckDynamic"
@@ -453,7 +453,7 @@ class ResNet(Backbone):
         if ms_class is not None and ms_layers is not None:
             self.ms_class = ms_class(p=ms_p, alpha=ms_a)
             for layer in ms_layers:
-                assert layer in ['layer1', 'layer2', 'layer3']
+                assert layer in ["layer1", "layer2", "layer3"]
             self.ms_layers = ms_layers
         else:
             self.ms_class = None
@@ -462,7 +462,7 @@ class ResNet(Backbone):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.kaiming_normal_(
-                    m.weight, mode='fan_out', nonlinearity='relu'
+                    m.weight, mode="fan_out", nonlinearity="relu"
                 )
             elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm)):
                 nn.init.constant_(m.weight, 1)
@@ -532,13 +532,13 @@ class ResNet(Backbone):
         x = self.maxpool(x)
 
         x = self.layer1(x)
-        if 'layer1' in self.ms_layers:
+        if "layer1" in self.ms_layers:
             x = self.ms_class(x)
         x = self.layer2(x)
-        if 'layer2' in self.ms_layers:
+        if "layer2" in self.ms_layers:
             x = self.ms_class(x)
         x = self.layer3(x)
-        if 'layer3' in self.ms_layers:
+        if "layer3" in self.ms_layers:
             x = self.ms_class(x)
         x = self.layer4(x)
 
@@ -567,7 +567,7 @@ def _resnet(
         removed_keys = model.has_fc is False or (
             model.has_fc is True and model.out_features != 1000
         )
-        removed_keys = ['fc.weight', 'fc.bias'] if removed_keys else []
+        removed_keys = ["fc.weight", "fc.bias"] if removed_keys else []
         for key in removed_keys:
             state_dict.pop(key)
         # if has fc, then allow missing key, else strict load state_dict.
@@ -579,7 +579,7 @@ def _resnet(
 @BACKBONE_REGISTRY.register()
 def resnet18_dynamic(pretrained=True, **kwargs) -> ResNet:
     model = _resnet(
-        'resnet18_dynamic',
+        "resnet18_dynamic",
         BasicBlockDynamic, [2, 2, 2, 2],
         pretrained=pretrained,
         progress=True,
@@ -591,7 +591,7 @@ def resnet18_dynamic(pretrained=True, **kwargs) -> ResNet:
 @BACKBONE_REGISTRY.register()
 def resnet50_dynamic(pretrained=True, **kwargs) -> ResNet:
     model = _resnet(
-        'resnet50_dynamic',
+        "resnet50_dynamic",
         BottleneckDynamic, [3, 4, 6, 3],
         pretrained=pretrained,
         progress=True,
@@ -603,7 +603,7 @@ def resnet50_dynamic(pretrained=True, **kwargs) -> ResNet:
 @BACKBONE_REGISTRY.register()
 def resnet101_dynamic(pretrained=True, **kwargs) -> ResNet:
     model = _resnet(
-        'resnet101_dynamic',
+        "resnet101_dynamic",
         BottleneckDynamic, [3, 4, 23, 3],
         pretrained=pretrained,
         progress=True,
@@ -615,13 +615,13 @@ def resnet101_dynamic(pretrained=True, **kwargs) -> ResNet:
 @BACKBONE_REGISTRY.register()
 def resnet18_dynamic_ms_l123(pretrained=True, **kwargs) -> ResNet:
     model = _resnet(
-        'resnet18_dynamic',
+        "resnet18_dynamic",
         BasicBlockDynamic, [2, 2, 2, 2],
         pretrained=pretrained,
         progress=True,
         has_fc=False,
         ms_class=MixStyle,
-        ms_layers=['layer1', 'layer2', 'layer3']
+        ms_layers=["layer1", "layer2", "layer3"]
     )
     return model
 
@@ -629,13 +629,13 @@ def resnet18_dynamic_ms_l123(pretrained=True, **kwargs) -> ResNet:
 @BACKBONE_REGISTRY.register()
 def resnet18_dynamic_ms_l12(pretrained=True, **kwargs) -> ResNet:
     model = _resnet(
-        'resnet18_dynamic',
+        "resnet18_dynamic",
         BasicBlockDynamic, [2, 2, 2, 2],
         pretrained=pretrained,
         progress=True,
         has_fc=False,
         ms_class=MixStyle,
-        ms_layers=['layer1', 'layer2']
+        ms_layers=["layer1", "layer2"]
     )
     return model
 
@@ -643,13 +643,13 @@ def resnet18_dynamic_ms_l12(pretrained=True, **kwargs) -> ResNet:
 @BACKBONE_REGISTRY.register()
 def resnet18_dynamic_ms_l1(pretrained=True, **kwargs) -> ResNet:
     model = _resnet(
-        'resnet18_dynamic',
+        "resnet18_dynamic",
         BasicBlockDynamic, [2, 2, 2, 2],
         pretrained=pretrained,
         progress=True,
         has_fc=False,
         ms_class=MixStyle,
-        ms_layers=['layer1']
+        ms_layers=["layer1"]
     )
     return model
 
@@ -657,13 +657,13 @@ def resnet18_dynamic_ms_l1(pretrained=True, **kwargs) -> ResNet:
 @BACKBONE_REGISTRY.register()
 def resnet50_dynamic_ms_l123(pretrained=True, **kwargs) -> ResNet:
     model = _resnet(
-        'resnet50_dynamic',
+        "resnet50_dynamic",
         BottleneckDynamic, [3, 4, 6, 3],
         pretrained=pretrained,
         progress=True,
         has_fc=False,
         ms_class=MixStyle,
-        ms_layers=['layer1', 'layer2', 'layer3']
+        ms_layers=["layer1", "layer2", "layer3"]
     )
     return model
 
@@ -671,13 +671,13 @@ def resnet50_dynamic_ms_l123(pretrained=True, **kwargs) -> ResNet:
 @BACKBONE_REGISTRY.register()
 def resnet50_dynamic_ms_l12(pretrained=True, **kwargs) -> ResNet:
     model = _resnet(
-        'resnet50_dynamic',
+        "resnet50_dynamic",
         BottleneckDynamic, [3, 4, 6, 3],
         pretrained=pretrained,
         progress=True,
         has_fc=False,
         ms_class=MixStyle,
-        ms_layers=['layer1', 'layer2']
+        ms_layers=["layer1", "layer2"]
     )
     return model
 
@@ -685,13 +685,13 @@ def resnet50_dynamic_ms_l12(pretrained=True, **kwargs) -> ResNet:
 @BACKBONE_REGISTRY.register()
 def resnet50_dynamic_ms_l1(pretrained=True, **kwargs) -> ResNet:
     model = _resnet(
-        'resnet50_dynamic',
+        "resnet50_dynamic",
         BottleneckDynamic, [3, 4, 6, 3],
         pretrained=pretrained,
         progress=True,
         has_fc=False,
         ms_class=MixStyle,
-        ms_layers=['layer1']
+        ms_layers=["layer1"]
     )
     return model
 
@@ -699,13 +699,13 @@ def resnet50_dynamic_ms_l1(pretrained=True, **kwargs) -> ResNet:
 @BACKBONE_REGISTRY.register()
 def resnet101_dynamic_ms_l123(pretrained=True, **kwargs) -> ResNet:
     model = _resnet(
-        'resnet101_dynamic',
+        "resnet101_dynamic",
         BottleneckDynamic, [3, 4, 23, 3],
         pretrained=pretrained,
         progress=True,
         has_fc=False,
         ms_class=MixStyle,
-        ms_layers=['layer1', 'layer2', 'layer3']
+        ms_layers=["layer1", "layer2", "layer3"]
     )
     return model
 
@@ -713,13 +713,13 @@ def resnet101_dynamic_ms_l123(pretrained=True, **kwargs) -> ResNet:
 @BACKBONE_REGISTRY.register()
 def resnet101_dynamic_ms_l12(pretrained=True, **kwargs) -> ResNet:
     model = _resnet(
-        'resnet101_dynamic',
+        "resnet101_dynamic",
         BottleneckDynamic, [3, 4, 23, 3],
         pretrained=pretrained,
         progress=True,
         has_fc=False,
         ms_class=MixStyle,
-        ms_layers=['layer1', 'layer2']
+        ms_layers=["layer1", "layer2"]
     )
     return model
 
@@ -727,12 +727,12 @@ def resnet101_dynamic_ms_l12(pretrained=True, **kwargs) -> ResNet:
 @BACKBONE_REGISTRY.register()
 def resnet101_dynamic_ms_l1(pretrained=True, **kwargs) -> ResNet:
     model = _resnet(
-        'resnet101_dynamic',
+        "resnet101_dynamic",
         BottleneckDynamic, [3, 4, 23, 3],
         pretrained=pretrained,
         progress=True,
         has_fc=False,
         ms_class=MixStyle,
-        ms_layers=['layer1']
+        ms_layers=["layer1"]
     )
     return model

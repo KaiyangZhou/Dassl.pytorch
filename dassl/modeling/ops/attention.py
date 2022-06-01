@@ -1,14 +1,12 @@
-"""
-Attention from `"Dynamic Domain Generalization" <https://github.com/MetaVisionLab/DDG>`_.
-"""
-
 import torch.nn as nn
 from torch.nn import functional as F
 
-__all__ = ['Attention']
+__all__ = ["Attention"]
 
 
 class Attention(nn.Module):
+    """Attention from `"Dynamic Domain Generalization" <https://github.com/MetaVisionLab/DDG>`_.
+    """
 
     def __init__(
         self,
