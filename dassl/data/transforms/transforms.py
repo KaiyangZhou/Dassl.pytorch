@@ -1,13 +1,13 @@
 import numpy as np
 import random
 import torch
+import torchvision.transforms.functional as F
 from torchvision.transforms import (
     Resize, Compose, ToTensor, Normalize, CenterCrop, RandomCrop, ColorJitter,
     RandomApply, GaussianBlur, RandomGrayscale, RandomResizedCrop,
     RandomHorizontalFlip
 )
 from torchvision.transforms.functional import InterpolationMode
-import torchvision.transforms.functional as F
 
 from .autoaugment import SVHNPolicy, CIFAR10Policy, ImageNetPolicy
 from .randaugment import RandAugment, RandAugment2, RandAugmentFixMatch

@@ -1,4 +1,5 @@
 from .mmd import MaximumMeanDiscrepancy
+from .conv import *
 from .dsbn import DSBN1d, DSBN2d
 from .mixup import mixup
 from .efdmix import (
@@ -9,6 +10,7 @@ from .mixstyle import (
     MixStyle, random_mixstyle, activate_mixstyle, run_with_mixstyle,
     deactivate_mixstyle, crossdomain_mixstyle, run_without_mixstyle
 )
+from .attention import *
 from .transnorm import TransNorm1d, TransNorm2d
 from .sequential2 import Sequential2
 from .reverse_grad import ReverseGrad
