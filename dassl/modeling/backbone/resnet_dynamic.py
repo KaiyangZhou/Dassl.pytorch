@@ -474,13 +474,9 @@ class ResNet(Backbone):
         if zero_init_residual:
             for m in self.modules():
                 if isinstance(m, Bottleneck):
-                    nn.init.constant_(
-                        m.bn3.weight, 0
-                    )  # type: ignore[arg-type]
+                    nn.init.constant_(m.bn3.weight, 0)
                 elif isinstance(m, BasicBlock):
-                    nn.init.constant_(
-                        m.bn2.weight, 0
-                    )  # type: ignore[arg-type]
+                    nn.init.constant_(m.bn2.weight, 0)
 
     def _make_layer(
         self,
