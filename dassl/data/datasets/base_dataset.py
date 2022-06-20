@@ -140,14 +140,23 @@ class DatasetBase:
 
         print("Extracting file ...")
 
-        try:
-            tar = tarfile.open(dst)
-            tar.extractall(path=osp.dirname(dst))
-            tar.close()
-        except:
+        if dst.endswith(".zip"):
             zip_ref = zipfile.ZipFile(dst, "r")
             zip_ref.extractall(osp.dirname(dst))
             zip_ref.close()
+
+        elif dst.endswith(".tar"):
+            tar = tarfile.open(dst, "r:")
+            tar.extractall(osp.dirname(dst))
+            tar.close()
+
+        elif dst.endswith(".tar.gz"):
+            tar = tarfile.open(dst, "r:gz")
+            tar.extractall(osp.dirname(dst))
+            tar.close()
+
+        else:
+            raise NotImplementedError
 
         print("File extracted to {}".format(osp.dirname(dst)))
 
