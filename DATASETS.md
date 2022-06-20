@@ -26,6 +26,7 @@ $DATA/
 - [Digit-Single](#digit-single)
 - [CIFAR-10-C](#cifar-10-c)
 - [CIFAR-100-C](#cifar-100-c)
+- [WILDS](#wilds)
 
 [Semi-Supervised Learning](#semi-supervised-learning)
 - [CIFAR10/100 and SVHN](#cifar10100-and-svhn)
@@ -267,6 +268,10 @@ cifar100_c/
 ```
 
 Note that `cifar100_c/` only contains the test images. The training images are the normal CIFAR-100 images. See [CIFAR10/100 and SVHN](#cifar10100-and-svhn) for how to prepare the CIFAR-100 dataset.
+
+### WILDS
+
+No action is required to preprocess WILDS's datasets. The code will automatically download the data.
 
 ## Semi-Supervised Learning
 
