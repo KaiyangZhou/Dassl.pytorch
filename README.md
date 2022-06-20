@@ -20,7 +20,7 @@ A drawback of Dassl is that it doesn't (yet? hmm) support distributed multi-GPU 
 We don't provide detailed documentations for Dassl, unlike another [project](https://kaiyangzhou.github.io/deep-person-reid/) of ours. This is because Dassl is developed for research purpose and as a researcher, we think it's important to be able to read source code and we highly encourage you to do so---definitely not because we are lazy. :-)
 
 ## What's new
-- Jun 2022: Adds three datasets from the [WILDS](https://wilds.stanford.edu/) benchmark: IWildCam, FMoW and Camelyon17. See [here](https://github.com/KaiyangZhou/Dassl.pytorch/commit/7f7eab8e22f6e176b97a539100eca12d6a403909) for more details.
+- Jun 2022: Adds three datasets from the [WILDS](https://wilds.stanford.edu/) benchmark: iWildCam, FMoW and Camelyon17. See [here](https://github.com/KaiyangZhou/Dassl.pytorch/commit/7f7eab8e22f6e176b97a539100eca12d6a403909) for more details.
 - May 2022: A new domain generalization method [DDG](https://arxiv.org/abs/2205.13913) developed by [Zhishu Sun](https://github.com/siaimes) and to appear at IJCAI'22 is added to this repo. See [here](https://github.com/MetaVisionLab/DDG) for more details.
 - Mar 2022: A new domain generalization method [EFDM](https://arxiv.org/abs/2203.07740) developed by [Yabin Zhang (PolyU)](https://ybzh.github.io/) and to appear at CVPR'22 is added to this repo. See [here](https://github.com/KaiyangZhou/Dassl.pytorch/pull/36) for more details.
 - Feb 2022: In case you don't know, a class in the painting domain of DomainNet (the official splits) only has test images (no training images), which could affect performance. See section 4.a in our [paper](https://arxiv.org/abs/2003.07325) for more details.
