@@ -60,7 +60,6 @@ class DatasetBase:
         self._train_u = train_u  # unlabeled training data (optional)
         self._val = val  # validation data (optional)
         self._test = test  # test data
-
         self._num_classes = self.get_num_classes(train_x)
         self._lab2cname, self._classnames = self.get_lab2cname(train_x)
 

@@ -1,0 +1,6 @@
+INPUT:
+  SIZE: (224, 224)
+  TRANSFORMS: ["random_resized_crop", "random_flip", "normalize"]
+
+DATASET:
+  NAME: "Camelyon17"

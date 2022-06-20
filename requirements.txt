@@ -8,3 +8,6 @@ future
 scipy
 scikit-learn
 tqdm
+ftfy
+regex
+wilds==1.2.2
