@@ -19,7 +19,7 @@ AVAI_CHOICES = [
     "instance_norm",
     "random_crop",
     "random_translation",
-    "center_crop",  # This has become a default operation for test
+    "center_crop",  # This has become a default operation during testing
     "cutout",
     "imagenet_policy",
     "cifar10_policy",
