@@ -107,6 +107,9 @@ Dassl supports the following datasets:
     - [Digit-Single](https://arxiv.org/abs/1805.12018)
     - [CIFAR-10-C](https://arxiv.org/abs/1807.01697)
     - [CIFAR-100-C](https://arxiv.org/abs/1807.01697)
+    - [iWildCam-WILDS](https://wilds.stanford.edu/datasets/#iwildcam)
+    - [Camelyon17-WILDS](https://wilds.stanford.edu/datasets/#camelyon17)
+    - [FMoW-WILDS](https://wilds.stanford.edu/datasets/#fmow)
 
 - Semi-supervised learning
     - [CIFAR10/100](https://www.cs.toronto.edu/~kriz/cifar.html.)
