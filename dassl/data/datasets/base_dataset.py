@@ -167,7 +167,7 @@ class DatasetBase:
 
         This function is useful when one wants to evaluate a model
         in a few-shot learning setting where each class only contains
-        a few number of images.
+        a small number of images.
 
         Args:
             data_sources: each individual is a list containing Datum objects.
