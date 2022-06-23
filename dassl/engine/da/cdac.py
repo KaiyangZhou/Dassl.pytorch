@@ -1,7 +1,9 @@
 import numpy as np
+from functools import partial
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
+from torch.optim.lr_scheduler import LambdaLR
 
 from dassl.data import DataManager
 from dassl.optim import build_optimizer, build_lr_scheduler
@@ -9,8 +11,18 @@ from dassl.utils import count_num_param
 from dassl.engine import TRAINER_REGISTRY, TrainerXU
 from dassl.metrics import compute_accuracy
 from dassl.modeling.ops import ReverseGrad
-from dassl.data.transforms.transforms import build_transform
 from dassl.engine.trainer import SimpleNet
+from dassl.data.transforms.transforms import build_transform
+
+
+def custom_scheduler(iter, max_iter=None, alpha=10, beta=0.75, init_lr=0.001):
+    """Custom LR Annealing
+
+    https://arxiv.org/pdf/1409.7495.pdf
+    """
+    if max_iter is None:
+        return init_lr
+    return (1 + float(iter / max_iter) * alpha)**(-1.0 * beta)
 
 
 class AAC(nn.Module):
@@ -21,7 +33,7 @@ class AAC(nn.Module):
 
         loss = -(
             sim_mat * torch.log(P + 1e-7) +
-            (1. - sim_mat) * torch.log(1. - P + 1e-7)
+            (1.-sim_mat) * torch.log(1. - P + 1e-7)
         )
         return loss.mean()
 
@@ -84,12 +96,27 @@ class CDAC(TrainerXU):
     def build_model(self):
         cfg = self.cfg
 
+        # Custom LR Scheduler for CDAC
+        if self.cfg.TRAIN.COUNT_ITER == "train_x":
+            self.num_batches = len(self.train_loader_x)
+        elif self.cfg.TRAIN.COUNT_ITER == "train_u":
+            self.num_batches = len(self.len_train_loader_u)
+        elif self.cfg.TRAIN.COUNT_ITER == "smaller_one":
+            self.num_batches = min(
+                len(self.train_loader_x), len(self.train_loader_u)
+            )
+        self.max_iter = self.max_epoch * self.num_batches
+        print("Max Iterations: %d" % self.max_iter)
+
         print("Building F")
         self.F = SimpleNet(cfg, cfg.MODEL, 0)
         self.F.to(self.device)
         print("# params: {:,}".format(count_num_param(self.F)))
         self.optim_F = build_optimizer(self.F, cfg.OPTIM)
-        self.sched_F = build_lr_scheduler(self.optim_F, cfg.OPTIM)
+        custom_lr_F = partial(
+            custom_scheduler, max_iter=self.max_iter, init_lr=cfg.OPTIM.LR
+        )
+        self.sched_F = LambdaLR(self.optim_F, custom_lr_F)
         self.register_model("F", self.F, self.optim_F, self.sched_F)
 
         print("Building C")
@@ -97,9 +124,16 @@ class CDAC(TrainerXU):
         self.C.to(self.device)
         print("# params: {:,}".format(count_num_param(self.C)))
         self.optim_C = build_optimizer(self.C, cfg.OPTIM)
+
         # Multiply the learning rate of C by lr_multi
         for group_param in self.optim_C.param_groups:
             group_param['lr'] *= self.lr_multi
+        custom_lr_C = partial(
+            custom_scheduler,
+            max_iter=self.max_iter,
+            init_lr=cfg.OPTIM.LR * self.lr_multi
+        )
+        self.sched_F = LambdaLR(self.optim_C, custom_lr_C)
 
         self.sched_C = build_lr_scheduler(self.optim_C, cfg.OPTIM)
         self.register_model("C", self.C, self.optim_C, self.sched_C)
@@ -137,15 +171,13 @@ class CDAC(TrainerXU):
         feat_us2 = self.F(input_us2)
 
         # Paper Reference Eq.3 - Adversarial Adaptive Loss
-
-        # Gradient Reversal Layer
         logit_u = self.C(feat_u, reverse=True)
         logit_us = self.C(feat_us, reverse=True)
         prob_u, prob_us = F.softmax(logit_u, dim=1), F.softmax(logit_us, dim=1)
 
         # Get similarity matrix s_ij
-
         sim_mat = self.get_similarity_matrix(feat_u, self.topk, self.device)
+
         aac_loss = (-1. * self.aac_criterion(sim_mat, prob_u, prob_us))
 
         # Paper Reference Eq. 4 - Pseudo label Loss
@@ -190,9 +222,9 @@ class CDAC(TrainerXU):
             "p_u_pred_keep": p_u_stats["keep_rate"]
         }
 
-        # Update LR after every epoch
-        if (self.batch_idx + 1) == self.num_batches:
-            self.update_lr()
+        # Update LR after every iteration as mentioned in the paper
+
+        self.update_lr()
 
         return loss_summary
 
@@ -223,11 +255,12 @@ class CDAC(TrainerXU):
     def get_similarity_matrix(feat, topk, device):
 
         feat_d = feat.detach()
+
         feat_d = torch.sort(
-            torch.argsort(feat_d, dim=1, descending=True)[:, :topk], dim=1)[0]
+            torch.argsort(feat_d, dim=1, descending=True)[:, :topk], dim=1
+        )[0]
         sim_mat = torch.zeros((feat_d.shape[0], feat_d.shape[0])).to(device)
         for row in range(feat_d.shape[0]):
-
             sim_mat[row, torch.all(feat_d == feat_d[row, :], dim=1)] = 1
         return sim_mat
 
@@ -240,5 +273,5 @@ class CDAC(TrainerXU):
             return 1.0
         else:
             var = np.clip(current_itr, 0.0, rampup_itr)
-            phase = 1.0 - var / rampup_itr
+            phase = 1.0 - var/rampup_itr
             return float(np.exp(-5.0 * phase * phase))
