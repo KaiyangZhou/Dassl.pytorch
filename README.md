@@ -62,6 +62,7 @@ We don't provide detailed documentations for Dassl, unlike another [project](htt
 Dassl has implemented the following methods:
 
 - Single-source domain adaptation
+    - [Cross Domain Adaptive Clustering for Semi Supervised Domain Adaptation (CVPR'21)](https://arxiv.org/pdf/2104.09415.pdf) [[dassl/engine/da/cdac.py](dassl/engine/da/cdac.py)]
     - [Semi-supervised Domain Adaptation via Minimax Entropy (ICCV'19)](https://arxiv.org/abs/1904.06487) [[dassl/engine/da/mme.py](dassl/engine/da/mme.py)]
     - [Maximum Classifier Discrepancy for Unsupervised Domain Adaptation (CVPR'18)](https://arxiv.org/abs/1712.02560https://arxiv.org/abs/1712.02560) [[dassl/engine/da/mcd.py](dassl/engine/da/mcd.py)]
     - [Self-ensembling for visual domain adaptation (ICLR'18)](https://arxiv.org/abs/1706.05208) [[dassl/engine/da/self_ensembling.py](dassl/engine/da/self_ensembling.py)]

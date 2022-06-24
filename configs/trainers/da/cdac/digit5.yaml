@@ -1,0 +1,19 @@
+DATALOADER:
+  TRAIN_X:
+    SAMPLER: "RandomSampler"
+    BATCH_SIZE: 64
+  TRAIN_U:
+    SAME_AS_X: False
+    BATCH_SIZE: 192
+  TEST:
+    BATCH_SIZE: 256
+  K_TRANSFORMS: 2
+
+OPTIM:
+  NAME: "sgd"
+  LR: 0.01
+  MAX_EPOCH: 90
+
+TRAINER:
+  CDAC:
+    STRONG_TRANSFORMS: ["randaugment", "normalize"]
