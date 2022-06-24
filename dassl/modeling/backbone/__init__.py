@@ -11,16 +11,11 @@ from .resnet import (
     resnet50_efdmix_l123, resnet101_efdmix_l12, resnet101_efdmix_l123
 )
 from .alexnet import alexnet
-from .mobilenetv2 import mobilenetv2
 from .wide_resnet import wide_resnet_16_4, wide_resnet_28_2
 from .cnn_digitsdg import cnn_digitsdg
 from .efficientnet import (
     efficientnet_b0, efficientnet_b1, efficientnet_b2, efficientnet_b3,
     efficientnet_b4, efficientnet_b5, efficientnet_b6, efficientnet_b7
-)
-from .shufflenetv2 import (
-    shufflenet_v2_x0_5, shufflenet_v2_x1_0, shufflenet_v2_x1_5,
-    shufflenet_v2_x2_0
 )
 from .resnet_dynamic import *
 from .cnn_digitsingle import cnn_digitsingle
