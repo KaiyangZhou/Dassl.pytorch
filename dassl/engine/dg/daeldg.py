@@ -43,18 +43,17 @@ class DAELDG(TrainerX):
             n_domain = self.num_source_domains
         self.split_batch = batch_size // n_domain
         self.n_domain = n_domain
-
-        self.conf_thre = cfg.TRAINER.DAEL.CONF_THRE
+        self.conf_thre = cfg.TRAINER.DAELDG.CONF_THRE
 
     def check_cfg(self, cfg):
         assert cfg.DATALOADER.TRAIN_X.SAMPLER == "RandomDomainSampler"
-        assert len(cfg.TRAINER.DAEL.STRONG_TRANSFORMS) > 0
+        assert len(cfg.TRAINER.DAELDG.STRONG_TRANSFORMS) > 0
 
     def build_data_loader(self):
         cfg = self.cfg
         tfm_train = build_transform(cfg, is_train=True)
         custom_tfm_train = [tfm_train]
-        choices = cfg.TRAINER.DAEL.STRONG_TRANSFORMS
+        choices = cfg.TRAINER.DAELDG.STRONG_TRANSFORMS
         tfm_train_strong = build_transform(cfg, is_train=True, choices=choices)
         custom_tfm_train += [tfm_train_strong]
         dm = DataManager(self.cfg, custom_tfm_train=custom_tfm_train)

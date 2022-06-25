@@ -16,10 +16,10 @@ class CrossGrad(TrainerX):
 
     def __init__(self, cfg):
         super().__init__(cfg)
-        self.eps_f = cfg.TRAINER.CG.EPS_F
-        self.eps_d = cfg.TRAINER.CG.EPS_D
-        self.alpha_f = cfg.TRAINER.CG.ALPHA_F
-        self.alpha_d = cfg.TRAINER.CG.ALPHA_D
+        self.eps_f = cfg.TRAINER.CROSSGRAD.EPS_F
+        self.eps_d = cfg.TRAINER.CROSSGRAD.EPS_D
+        self.alpha_f = cfg.TRAINER.CROSSGRAD.ALPHA_F
+        self.alpha_d = cfg.TRAINER.CROSSGRAD.ALPHA_D
 
     def build_model(self):
         cfg = self.cfg

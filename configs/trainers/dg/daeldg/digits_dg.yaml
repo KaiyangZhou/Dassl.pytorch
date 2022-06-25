@@ -12,5 +12,5 @@ OPTIM:
   MAX_EPOCH: 50
 
 TRAINER:
-  DAEL:
+  DAELDG:
     STRONG_TRANSFORMS: ["randaugment2", "normalize"]

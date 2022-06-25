@@ -15,9 +15,9 @@ class MeanTeacher(TrainerXU):
 
     def __init__(self, cfg):
         super().__init__(cfg)
-        self.weight_u = cfg.TRAINER.MEANTEA.WEIGHT_U
-        self.ema_alpha = cfg.TRAINER.MEANTEA.EMA_ALPHA
-        self.rampup = cfg.TRAINER.MEANTEA.RAMPUP
+        self.weight_u = cfg.TRAINER.MEANTEACHER.WEIGHT_U
+        self.ema_alpha = cfg.TRAINER.MEANTEACHER.EMA_ALPHA
+        self.rampup = cfg.TRAINER.MEANTEACHER.RAMPUP
 
         self.teacher = copy.deepcopy(self.model)
         self.teacher.train()

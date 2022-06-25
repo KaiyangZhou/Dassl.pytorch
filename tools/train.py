@@ -2,7 +2,7 @@ import argparse
 import torch
 
 from dassl.utils import setup_logger, set_random_seed, collect_env_info
-from dassl.config import get_cfg_default
+from dassl.config import clean_cfg, get_cfg_default
 from dassl.engine import build_trainer
 
 
@@ -84,6 +84,7 @@ def setup_cfg(args):
     # 4. From optional input arguments
     cfg.merge_from_list(args.opts)
 
+    clean_cfg(cfg, args.trainer)
     cfg.freeze()
 
     return cfg

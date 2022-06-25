@@ -12,5 +12,5 @@ OPTIM:
   LR_SCHEDULER: "cosine"
 
 TRAINER:
-  DAEL:
+  DAELDG:
     STRONG_TRANSFORMS: ["random_flip", "cutout", "randaugment2", "normalize"]

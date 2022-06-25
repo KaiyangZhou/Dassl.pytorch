@@ -216,6 +216,9 @@ _C.TEST.FINAL_MODEL = "last_step"
 _C.TRAINER = CN()
 _C.TRAINER.NAME = ""
 
+######
+# DA
+######
 # MCD
 _C.TRAINER.MCD = CN()
 _C.TRAINER.MCD.N_STEP_F = 4  # number of steps to train F
@@ -230,8 +233,7 @@ _C.TRAINER.CDAC.RAMPUP_ITRS = 1000
 _C.TRAINER.CDAC.TOPK_MATCH = 5
 _C.TRAINER.CDAC.P_THRESH = 0.95
 _C.TRAINER.CDAC.STRONG_TRANSFORMS = ()
-
-# SelfEnsembling
+# SE (SelfEnsembling)
 _C.TRAINER.SE = CN()
 _C.TRAINER.SE.EMA_ALPHA = 0.999
 _C.TRAINER.SE.CONF_THRE = 0.95
@@ -246,12 +248,15 @@ _C.TRAINER.DAEL.WEIGHT_U = 0.5  # weight on the unlabeled loss
 _C.TRAINER.DAEL.CONF_THRE = 0.95  # confidence threshold
 _C.TRAINER.DAEL.STRONG_TRANSFORMS = ()
 
+######
+# DG
+######
 # CrossGrad
-_C.TRAINER.CG = CN()
-_C.TRAINER.CG.EPS_F = 1.0  # scaling parameter for D's gradients
-_C.TRAINER.CG.EPS_D = 1.0  # scaling parameter for F's gradients
-_C.TRAINER.CG.ALPHA_F = 0.5  # balancing weight for the label net's loss
-_C.TRAINER.CG.ALPHA_D = 0.5  # balancing weight for the domain net's loss
+_C.TRAINER.CROSSGRAD = CN()
+_C.TRAINER.CROSSGRAD.EPS_F = 1.0  # scaling parameter for D's gradients
+_C.TRAINER.CROSSGRAD.EPS_D = 1.0  # scaling parameter for F's gradients
+_C.TRAINER.CROSSGRAD.ALPHA_F = 0.5  # balancing weight for the label net's loss
+_C.TRAINER.CROSSGRAD.ALPHA_D = 0.5  # balancing weight for the domain net's loss
 # DDAIG
 _C.TRAINER.DDAIG = CN()
 _C.TRAINER.DDAIG.G_ARCH = ""  # generator's architecture
@@ -261,15 +266,28 @@ _C.TRAINER.DDAIG.CLAMP_MIN = -1.0
 _C.TRAINER.DDAIG.CLAMP_MAX = 1.0
 _C.TRAINER.DDAIG.WARMUP = 0
 _C.TRAINER.DDAIG.ALPHA = 0.5  # balancing weight for the losses
+# DAELDG (the DG version of DAEL)
+_C.TRAINER.DAELDG = CN()
+_C.TRAINER.DAELDG.WEIGHT_U = 0.5  # weight on the unlabeled loss
+_C.TRAINER.DAELDG.CONF_THRE = 0.95  # confidence threshold
+_C.TRAINER.DAELDG.STRONG_TRANSFORMS = ()
+# DOMAINMIX
+_C.TRAINER.DOMAINMIX = CN()
+_C.TRAINER.DOMAINMIX.TYPE = "crossdomain"
+_C.TRAINER.DOMAINMIX.ALPHA = 1.0
+_C.TRAINER.DOMAINMIX.BETA = 1.0
 
+######
+# SSL
+######
 # EntMin
 _C.TRAINER.ENTMIN = CN()
 _C.TRAINER.ENTMIN.LMDA = 1e-3  # weight on the entropy loss
 # Mean Teacher
-_C.TRAINER.MEANTEA = CN()
-_C.TRAINER.MEANTEA.WEIGHT_U = 1.0  # weight on the unlabeled loss
-_C.TRAINER.MEANTEA.EMA_ALPHA = 0.999
-_C.TRAINER.MEANTEA.RAMPUP = 5  # epochs used to ramp up the loss_u weight
+_C.TRAINER.MEANTEACHER = CN()
+_C.TRAINER.MEANTEACHER.WEIGHT_U = 1.0  # weight on the unlabeled loss
+_C.TRAINER.MEANTEACHER.EMA_ALPHA = 0.999
+_C.TRAINER.MEANTEACHER.RAMPUP = 5  # epochs used to ramp up the loss_u weight
 # MixMatch
 _C.TRAINER.MIXMATCH = CN()
 _C.TRAINER.MIXMATCH.WEIGHT_U = 100.0  # weight on the unlabeled loss
@@ -281,9 +299,3 @@ _C.TRAINER.FIXMATCH = CN()
 _C.TRAINER.FIXMATCH.WEIGHT_U = 1.0  # weight on the unlabeled loss
 _C.TRAINER.FIXMATCH.CONF_THRE = 0.95  # confidence threshold
 _C.TRAINER.FIXMATCH.STRONG_TRANSFORMS = ()
-
-# DDG
-_C.TRAINER.DOMAINMIX = CN()
-_C.TRAINER.DOMAINMIX.TYPE = "crossdomain"
-_C.TRAINER.DOMAINMIX.ALPHA = 1.0
-_C.TRAINER.DOMAINMIX.BETA = 1.0

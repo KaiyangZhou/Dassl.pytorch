@@ -1,24 +1,26 @@
 import torch
 from torch.nn import functional as F
 
-from dassl.engine import TRAINER_REGISTRY
+from dassl.engine import TRAINER_REGISTRY, TrainerX
 from dassl.metrics import compute_accuracy
-
-from .vanilla import Vanilla
 
 __all__ = ["DomainMix"]
 
 
 @TRAINER_REGISTRY.register()
-class DomainMix(Vanilla):
-    """DomainMix trainer from `"Dynamic Domain Generalization" <https://github.com/MetaVisionLab/DDG>`_.
+class DomainMix(TrainerX):
+    """DomainMix.
+    
+    Dynamic Domain Generalization.
+
+    https://github.com/MetaVisionLab/DDG
     """
 
     def __init__(self, cfg):
         super(DomainMix, self).__init__(cfg)
-        self.mix_type = cfg["TRAINER"]["DOMAINMIX"]["TYPE"]
-        self.alpha = cfg["TRAINER"]["DOMAINMIX"]["ALPHA"]
-        self.beta = cfg["TRAINER"]["DOMAINMIX"]["BETA"]
+        self.mix_type = cfg.TRAINER.DOMAINMIX.TYPE
+        self.alpha = cfg.TRAINER.DOMAINMIX.ALPHA
+        self.beta = cfg.TRAINER.DOMAINMIX.BETA
         self.dist_beta = torch.distributions.Beta(self.alpha, self.beta)
 
     def forward_backward(self, batch):

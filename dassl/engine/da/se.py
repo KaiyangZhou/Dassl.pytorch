@@ -7,7 +7,7 @@ from dassl.modeling.ops.utils import sigmoid_rampup, ema_model_update
 
 
 @TRAINER_REGISTRY.register()
-class SelfEnsembling(TrainerXU):
+class SE(TrainerXU):
     """Self-ensembling for visual domain adaptation.
 
     https://arxiv.org/abs/1706.05208.
