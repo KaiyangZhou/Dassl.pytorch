@@ -63,9 +63,9 @@ _C.DATASET = CN()
 # Directory where datasets are stored
 _C.DATASET.ROOT = ""
 _C.DATASET.NAME = ""
-# List of names of source domains
+# List of source/target domains' names (strings)
+# Do not apply to some datasets, which have pre-defined splits
 _C.DATASET.SOURCE_DOMAINS = ()
-# List of names of target domains
 _C.DATASET.TARGET_DOMAINS = ()
 # Number of labeled instances in total
 # Useful for the semi-supervised learning
