@@ -1,4 +1,8 @@
+import logging  # isort:skip
+logging.disable(logging.WARNING)  # isort:skip
+
 import pickle
+import logging
 import os.path as osp
 from wilds import get_dataset as wilds_get_dataset
 

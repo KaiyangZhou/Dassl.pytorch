@@ -14,9 +14,11 @@ ignore =
     W504,
     # Too many leading '#' for block comment
     E266,
-    # line break before binary operator
+    # Line break before binary operator
     W503,
-    # continuation line over-indented for hanging indent
-    E126
+    # Continuation line over-indented for hanging indent
+    E126,
+    # Module level import not at top of file
+    E402
 max-line-length = 79
 exclude = __init__.py, build
