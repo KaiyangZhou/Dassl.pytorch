@@ -413,6 +413,8 @@ class SimpleTrainer(TrainerBase):
             if self.cfg.TEST.FINAL_MODEL == "best_val":
                 print("Deploy the model with the best val performance")
                 self.load_model(self.output_dir)
+            else:
+                print("Deploy the last-epoch model")
             self.test()
 
         # Show elapsed time
