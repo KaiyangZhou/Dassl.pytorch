@@ -118,6 +118,8 @@ class DatasetBase:
         return mapping, classnames
 
     def check_input_domains(self, source_domains, target_domains):
+        assert len(source_domains) > 0, "source_domains (list) is empty"
+        assert len(target_domains) > 0, "target_domains (list) is empty"
         self.is_input_domain_valid(source_domains)
         self.is_input_domain_valid(target_domains)
 
