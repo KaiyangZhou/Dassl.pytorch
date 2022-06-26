@@ -133,9 +133,7 @@ class CDAC(TrainerXU):
             max_iter=self.max_iter,
             init_lr=cfg.OPTIM.LR * self.lr_multi
         )
-        self.sched_F = LambdaLR(self.optim_C, custom_lr_C)
-
-        self.sched_C = build_lr_scheduler(self.optim_C, cfg.OPTIM)
+        self.sched_C = LambdaLR(self.optim_C, custom_lr_C)
         self.register_model("C", self.C, self.optim_C, self.sched_C)
 
     def assess_y_pred_quality(self, y_pred, y_true, mask):
