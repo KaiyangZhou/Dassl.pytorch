@@ -33,14 +33,13 @@ def build_optimizer(model, optim_cfg, param_groups=None):
 
     if optim not in AVAI_OPTIMS:
         raise ValueError(
-            "Unsupported optim: {}. Must be one of {}".format(
-                optim, AVAI_OPTIMS
-            )
+            f"optim must be one of {AVAI_OPTIMS}, but got {optim}"
         )
 
     if param_groups is not None and staged_lr:
         warnings.warn(
-            "staged_lr will be ignored, if you need to use staged_lr, please bind it with param_groups yourself."
+            "staged_lr will be ignored, if you need to use staged_lr, "
+            "please bind it with param_groups yourself."
         )
 
     if param_groups is None:
@@ -56,9 +55,7 @@ def build_optimizer(model, optim_cfg, param_groups=None):
 
             if isinstance(new_layers, str):
                 if new_layers is None:
-                    warnings.warn(
-                        "new_layers is empty, therefore, staged_lr is useless"
-                    )
+                    warnings.warn("new_layers is empty (staged_lr is useless)")
                 new_layers = [new_layers]
 
             base_params = []

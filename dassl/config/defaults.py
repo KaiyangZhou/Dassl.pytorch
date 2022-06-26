@@ -153,6 +153,8 @@ _C.OPTIM.MOMENTUM = 0.9
 _C.OPTIM.SGD_DAMPNING = 0
 _C.OPTIM.SGD_NESTEROV = False
 _C.OPTIM.RMSPROP_ALPHA = 0.99
+# The following also apply to other
+# adaptive optimizers like adamw
 _C.OPTIM.ADAM_BETA1 = 0.9
 _C.OPTIM.ADAM_BETA2 = 0.999
 # STAGED_LR allows different layers to have

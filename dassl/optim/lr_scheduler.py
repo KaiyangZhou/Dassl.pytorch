@@ -94,9 +94,7 @@ def build_lr_scheduler(optimizer, optim_cfg):
 
     if lr_scheduler not in AVAI_SCHEDS:
         raise ValueError(
-            "Unsupported scheduler: {}. Must be one of {}".format(
-                lr_scheduler, AVAI_SCHEDS
-            )
+            f"scheduler must be one of {AVAI_SCHEDS}, but got {lr_scheduler}"
         )
 
     if lr_scheduler == "single_step":
@@ -106,7 +104,7 @@ def build_lr_scheduler(optimizer, optim_cfg):
         if not isinstance(stepsize, int):
             raise TypeError(
                 "For single_step lr_scheduler, stepsize must "
-                "be an integer, but got {}".format(type(stepsize))
+                f"be an integer, but got {type(stepsize)}"
             )
 
         if stepsize <= 0:
@@ -120,7 +118,7 @@ def build_lr_scheduler(optimizer, optim_cfg):
         if not isinstance(stepsize, (list, tuple)):
             raise TypeError(
                 "For multi_step lr_scheduler, stepsize must "
-                "be a list, but got {}".format(type(stepsize))
+                f"be a list, but got {type(stepsize)}"
             )
 
         scheduler = torch.optim.lr_scheduler.MultiStepLR(
