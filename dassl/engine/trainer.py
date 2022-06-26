@@ -155,9 +155,7 @@ class TrainerBase:
             print("No checkpoint found, train from scratch")
             return 0
 
-        print(
-            'Found checkpoint in "{}". Will resume training'.format(directory)
-        )
+        print(f"Found checkpoint at {directory} (will resume training)")
 
         for name in names:
             path = osp.join(directory, name)
@@ -188,18 +186,13 @@ class TrainerBase:
             model_path = osp.join(directory, name, model_file)
 
             if not osp.exists(model_path):
-                raise FileNotFoundError(
-                    'Model not found at "{}"'.format(model_path)
-                )
+                raise FileNotFoundError(f"No model at {model_path}")
 
             checkpoint = load_checkpoint(model_path)
             state_dict = checkpoint["state_dict"]
             epoch = checkpoint["epoch"]
 
-            print(
-                "Loading weights to {} "
-                'from "{}" (epoch = {})'.format(name, model_path, epoch)
-            )
+            print(f"Load {model_path} to {name} (epoch={epoch})")
             self._models[name].load_state_dict(state_dict)
 
     def set_model_mode(self, mode="train", names=None):
@@ -226,10 +219,7 @@ class TrainerBase:
 
     def init_writer(self, log_dir):
         if self.__dict__.get("_writer") is None or self._writer is None:
-            print(
-                "Initializing summary writer for tensorboard "
-                "with log_dir={}".format(log_dir)
-            )
+            print(f"Initialize tensorboard (log_dir={log_dir})")
             self._writer = SummaryWriter(log_dir=log_dir)
 
     def close_writer(self):
@@ -355,6 +345,7 @@ class SimpleTrainer(TrainerBase):
         self.train_loader_u = dm.train_loader_u  # optional, can be None
         self.val_loader = dm.val_loader  # optional, can be None
         self.test_loader = dm.test_loader
+
         self.num_classes = dm.num_classes
         self.num_source_domains = dm.num_source_domains
         self.lab2cname = dm.lab2cname  # dict {label: classname}
@@ -376,16 +367,14 @@ class SimpleTrainer(TrainerBase):
         if cfg.MODEL.INIT_WEIGHTS:
             load_pretrained_weights(self.model, cfg.MODEL.INIT_WEIGHTS)
         self.model.to(self.device)
-        print("# params: {:,}".format(count_num_param(self.model)))
+        print(f"# params: {count_num_param(self.model):,}")
         self.optim = build_optimizer(self.model, cfg.OPTIM)
         self.sched = build_lr_scheduler(self.optim, cfg.OPTIM)
         self.register_model("model", self.model, self.optim, self.sched)
 
         device_count = torch.cuda.device_count()
         if device_count > 1:
-            print(
-                f"Detected {device_count} GPUs. Wrap the model with nn.DataParallel"
-            )
+            print(f"Detected {device_count} GPUs (use nn.DataParallel)")
             self.model = nn.DataParallel(self.model)
 
     def train(self):
@@ -406,7 +395,7 @@ class SimpleTrainer(TrainerBase):
         self.time_start = time.time()
 
     def after_train(self):
-        print("Finished training")
+        print("Finish training")
 
         do_test = not self.cfg.TEST.NO_TEST
         if do_test:
@@ -420,7 +409,7 @@ class SimpleTrainer(TrainerBase):
         # Show elapsed time
         elapsed = round(time.time() - self.time_start)
         elapsed = str(datetime.timedelta(seconds=elapsed))
-        print("Elapsed: {}".format(elapsed))
+        print(f"Elapsed: {elapsed}")
 
         # Close writer
         self.close_writer()
@@ -458,10 +447,10 @@ class SimpleTrainer(TrainerBase):
 
         if split == "val" and self.val_loader is not None:
             data_loader = self.val_loader
-            print("Do evaluation on {} set".format(split))
         else:
             data_loader = self.test_loader
-            print("Do evaluation on test set")
+
+        print(f"Evaluate on the {split} set")
 
         for batch_idx, batch in enumerate(tqdm(data_loader)):
             input, label = self.parse_batch_test(batch)
@@ -471,7 +460,7 @@ class SimpleTrainer(TrainerBase):
         results = self.evaluator.evaluate()
 
         for k, v in results.items():
-            tag = "{}/{}".format(split, k)
+            tag = f"{split}/{k}"
             self.write_scalar(tag, v, self.epoch)
 
         return list(results.values())[0]
@@ -544,9 +533,9 @@ class TrainerXU(SimpleTrainer):
             batch_time.update(time.time() - end)
             losses.update(loss_summary)
 
-            if (
-                self.batch_idx + 1
-            ) % self.cfg.TRAIN.PRINT_FREQ == 0 or self.num_batches < self.cfg.TRAIN.PRINT_FREQ:
+            meet_freq = (self.batch_idx + 1) % self.cfg.TRAIN.PRINT_FREQ == 0
+            only_few_batches = self.num_batches < self.cfg.TRAIN.PRINT_FREQ
+            if meet_freq or only_few_batches:
                 nb_remain = 0
                 nb_remain += self.num_batches - self.batch_idx - 1
                 nb_remain += (
@@ -554,24 +543,16 @@ class TrainerXU(SimpleTrainer):
                 ) * self.num_batches
                 eta_seconds = batch_time.avg * nb_remain
                 eta = str(datetime.timedelta(seconds=int(eta_seconds)))
-                print(
-                    "epoch [{0}/{1}][{2}/{3}]\t"
-                    "time {batch_time.val:.3f} ({batch_time.avg:.3f})\t"
-                    "data {data_time.val:.3f} ({data_time.avg:.3f})\t"
-                    "eta {eta}\t"
-                    "{losses}\t"
-                    "lr {lr:.6e}".format(
-                        self.epoch + 1,
-                        self.max_epoch,
-                        self.batch_idx + 1,
-                        self.num_batches,
-                        batch_time=batch_time,
-                        data_time=data_time,
-                        eta=eta,
-                        losses=losses,
-                        lr=self.get_current_lr(),
-                    )
-                )
+
+                info = []
+                info += [f"epoch [{self.epoch + 1}/{self.max_epoch}]"]
+                info += [f"batch [{self.batch_idx + 1}/{self.num_batches}]"]
+                info += [f"time {batch_time.val:.3f} ({batch_time.avg:.3f})"]
+                info += [f"data {data_time.val:.3f} ({data_time.avg:.3f})"]
+                info += [f"{losses}"]
+                info += [f"lr {self.get_current_lr():.4e}"]
+                info += [f"eta {eta}"]
+                print(" ".join(info))
 
             n_iter = self.epoch * self.num_batches + self.batch_idx
             for name, meter in losses.meters.items():
@@ -609,9 +590,9 @@ class TrainerX(SimpleTrainer):
             batch_time.update(time.time() - end)
             losses.update(loss_summary)
 
-            if (
-                self.batch_idx + 1
-            ) % self.cfg.TRAIN.PRINT_FREQ == 0 or self.num_batches < self.cfg.TRAIN.PRINT_FREQ:
+            meet_freq = (self.batch_idx + 1) % self.cfg.TRAIN.PRINT_FREQ == 0
+            only_few_batches = self.num_batches < self.cfg.TRAIN.PRINT_FREQ
+            if meet_freq or only_few_batches:
                 nb_remain = 0
                 nb_remain += self.num_batches - self.batch_idx - 1
                 nb_remain += (
@@ -619,24 +600,16 @@ class TrainerX(SimpleTrainer):
                 ) * self.num_batches
                 eta_seconds = batch_time.avg * nb_remain
                 eta = str(datetime.timedelta(seconds=int(eta_seconds)))
-                print(
-                    "epoch [{0}/{1}][{2}/{3}]\t"
-                    "time {batch_time.val:.3f} ({batch_time.avg:.3f})\t"
-                    "data {data_time.val:.3f} ({data_time.avg:.3f})\t"
-                    "eta {eta}\t"
-                    "{losses}\t"
-                    "lr {lr:.6e}".format(
-                        self.epoch + 1,
-                        self.max_epoch,
-                        self.batch_idx + 1,
-                        self.num_batches,
-                        batch_time=batch_time,
-                        data_time=data_time,
-                        eta=eta,
-                        losses=losses,
-                        lr=self.get_current_lr(),
-                    )
-                )
+
+                info = []
+                info += [f"epoch [{self.epoch + 1}/{self.max_epoch}]"]
+                info += [f"batch [{self.batch_idx + 1}/{self.num_batches}]"]
+                info += [f"time {batch_time.val:.3f} ({batch_time.avg:.3f})"]
+                info += [f"data {data_time.val:.3f} ({data_time.avg:.3f})"]
+                info += [f"{losses}"]
+                info += [f"lr {self.get_current_lr():.4e}"]
+                info += [f"eta {eta}"]
+                print(" ".join(info))
 
             n_iter = self.epoch * self.num_batches + self.batch_idx
             for name, meter in losses.meters.items():

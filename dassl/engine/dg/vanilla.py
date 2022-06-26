@@ -6,7 +6,10 @@ from dassl.metrics import compute_accuracy
 
 @TRAINER_REGISTRY.register()
 class Vanilla(TrainerX):
-    """Vanilla baseline."""
+    """Vanilla model.
+    
+    A.k.a. Empirical Risk Minimization, or ERM.
+    """
 
     def forward_backward(self, batch):
         input, label = self.parse_batch_train(batch)

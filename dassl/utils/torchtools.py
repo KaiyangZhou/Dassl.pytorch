@@ -68,7 +68,7 @@ def save_checkpoint(
         model_name = "model.pth.tar-" + str(epoch)
     fpath = osp.join(save_dir, model_name)
     torch.save(state, fpath)
-    print('Checkpoint saved to "{}"'.format(fpath))
+    print(f"Checkpoint saved to {fpath}")
 
     # save current model name
     checkpoint_file = osp.join(save_dir, "checkpoint")
@@ -234,11 +234,7 @@ def open_specified_layers(model, open_layers):
         open_layers = [open_layers]
 
     for layer in open_layers:
-        assert hasattr(
-            model, layer
-        ), '"{}" is not an attribute of the model, please provide the correct name'.format(
-            layer
-        )
+        assert hasattr(model, layer), f"{layer} is not an attribute"
 
     for name, module in model.named_children():
         if name in open_layers:
@@ -316,20 +312,13 @@ def load_pretrained_weights(model, weight_path):
 
     if len(matched_layers) == 0:
         warnings.warn(
-            'The pretrained weights "{}" cannot be loaded, '
-            "please check the key names manually "
-            "(** ignored and continue **)".format(weight_path)
+            f"Cannot load {weight_path} (check the key names manually)"
         )
     else:
-        print(
-            'Successfully loaded pretrained weights from "{}"'.
-            format(weight_path)
-        )
+        print(f"Successfully loaded pretrained weights from {weight_path}")
         if len(discarded_layers) > 0:
             print(
-                "** The following layers are discarded "
-                "due to unmatched keys or layer size: {}".
-                format(discarded_layers)
+                f"Layers discarded due to unmatched keys or size: {discarded_layers}"
             )
 
 
@@ -350,10 +339,7 @@ def init_network_weights(model, init_type="normal", gain=0.02):
             elif init_type == "orthogonal":
                 nn.init.orthogonal_(m.weight.data, gain=gain)
             else:
-                raise NotImplementedError(
-                    "initialization method {} is not implemented".
-                    format(init_type)
-                )
+                raise NotImplementedError
             if hasattr(m, "bias") and m.bias is not None:
                 nn.init.constant_(m.bias.data, 0.0)
 

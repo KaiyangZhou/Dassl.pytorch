@@ -55,7 +55,7 @@ class MetricMeter:
         >>> print(str(metric))
     """
 
-    def __init__(self, delimiter="\t"):
+    def __init__(self, delimiter=" "):
         self.meters = defaultdict(AverageMeter)
         self.delimiter = delimiter
 
