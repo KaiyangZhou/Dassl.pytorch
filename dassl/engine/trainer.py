@@ -450,7 +450,7 @@ class SimpleTrainer(TrainerBase):
         else:
             data_loader = self.test_loader
 
-        print(f"Evaluate on the {split} set")
+        print(f"Evaluate on the *{split}* set")
 
         for batch_idx, batch in enumerate(tqdm(data_loader)):
             input, label = self.parse_batch_test(batch)

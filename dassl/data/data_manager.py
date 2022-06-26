@@ -184,6 +184,8 @@ class DataManager:
 
         print("  # test: {:,}".format(len(self.dataset.test)))
 
+        print("******************************")
+
 
 class DatasetWrapper(TorchDataset):
 
