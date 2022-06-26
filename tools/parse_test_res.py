@@ -174,7 +174,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    end_signal = "Finished training"
+    end_signal = "Finish training"  # needs to be adapted to the latest
     if args.test_log:
         end_signal = "=> result"
 
