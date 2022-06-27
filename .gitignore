@@ -136,5 +136,4 @@ dmypy.json
 
 # This project
 output/
-debug.sh
-debug.py
+debug/
