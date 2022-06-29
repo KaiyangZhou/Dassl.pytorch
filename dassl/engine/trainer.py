@@ -448,6 +448,7 @@ class SimpleTrainer(TrainerBase):
         if split == "val" and self.val_loader is not None:
             data_loader = self.val_loader
         else:
+            split = "test"  # in case val_loader is None
             data_loader = self.test_loader
 
         print(f"Evaluate on the *{split}* set")
