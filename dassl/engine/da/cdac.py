@@ -6,7 +6,7 @@ from torch.nn import functional as F
 from torch.optim.lr_scheduler import LambdaLR
 
 from dassl.data import DataManager
-from dassl.optim import build_optimizer, build_lr_scheduler
+from dassl.optim import build_optimizer
 from dassl.utils import count_num_param
 from dassl.engine import TRAINER_REGISTRY, TrainerXU
 from dassl.metrics import compute_accuracy

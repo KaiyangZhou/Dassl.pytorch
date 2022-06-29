@@ -225,7 +225,7 @@ def _build_transform_train(cfg, choices, target_size, normalize):
 
     if "random_crop" in choices:
         crop_padding = cfg.INPUT.CROP_PADDING
-        print("+ random crop (padding = {})".format(crop_padding))
+        print(f"+ random crop (padding = {crop_padding})")
         tfm_train += [RandomCrop(cfg.INPUT.SIZE, padding=crop_padding)]
 
     if "random_resized_crop" in choices:
@@ -253,17 +253,17 @@ def _build_transform_train(cfg, choices, target_size, normalize):
     if "randaugment" in choices:
         n_ = cfg.INPUT.RANDAUGMENT_N
         m_ = cfg.INPUT.RANDAUGMENT_M
-        print("+ randaugment (n={}, m={})".format(n_, m_))
+        print(f"+ randaugment (n={n_}, m={m_})")
         tfm_train += [RandAugment(n_, m_)]
 
     if "randaugment_fixmatch" in choices:
         n_ = cfg.INPUT.RANDAUGMENT_N
-        print("+ randaugment_fixmatch (n={})".format(n_))
+        print(f"+ randaugment_fixmatch (n={n_})")
         tfm_train += [RandAugmentFixMatch(n_)]
 
     if "randaugment2" in choices:
         n_ = cfg.INPUT.RANDAUGMENT_N
-        print("+ randaugment2 (n={})".format(n_))
+        print(f"+ randaugment2 (n={n_})")
         tfm_train += [RandAugment2(n_)]
 
     if "colorjitter" in choices:
@@ -293,21 +293,18 @@ def _build_transform_train(cfg, choices, target_size, normalize):
     if "cutout" in choices:
         cutout_n = cfg.INPUT.CUTOUT_N
         cutout_len = cfg.INPUT.CUTOUT_LEN
-        print("+ cutout (n_holes={}, length={})".format(cutout_n, cutout_len))
+        print(f"+ cutout (n_holes={cutout_n}, length={cutout_len})")
         tfm_train += [Cutout(cutout_n, cutout_len)]
 
     if "normalize" in choices:
         print(
-            "+ normalization (mean={}, "
-            "std={})".format(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD)
+            f"+ normalization (mean={cfg.INPUT.PIXEL_MEAN}, std={cfg.INPUT.PIXEL_STD})"
         )
         tfm_train += [normalize]
 
     if "gaussian_noise" in choices:
         print(
-            "+ gaussian noise (mean={}, std={})".format(
-                cfg.INPUT.GN_MEAN, cfg.INPUT.GN_STD
-            )
+            f"+ gaussian noise (mean={cfg.INPUT.GN_MEAN}, std={cfg.INPUT.GN_STD})"
         )
         tfm_train += [GaussianNoise(cfg.INPUT.GN_MEAN, cfg.INPUT.GN_STD)]
 
@@ -337,8 +334,7 @@ def _build_transform_test(cfg, choices, target_size, normalize):
 
     if "normalize" in choices:
         print(
-            "+ normalization (mean={}, "
-            "std={})".format(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD)
+            f"+ normalization (mean={cfg.INPUT.PIXEL_MEAN}, std={cfg.INPUT.PIXEL_STD})"
         )
         tfm_test += [normalize]
 
