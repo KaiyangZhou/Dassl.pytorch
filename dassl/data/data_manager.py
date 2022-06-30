@@ -241,9 +241,11 @@ class DatasetWrapper(TorchDataset):
             else:
                 img = self._transform_image(self.transform, img0)
                 output["img"] = img
+        else:
+            output["img"] = img0
 
         if self.return_img0:
-            output["img0"] = self.to_tensor(img0)
+            output["img0"] = self.to_tensor(img0)  # without any augmentation
 
         return output
 
