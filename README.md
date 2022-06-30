@@ -138,7 +138,7 @@ conda activate dassl
 
 # Install torch (requires version >= 1.8.1) and torchvision
 # Please refer to https://pytorch.org/ if you need a different cuda version
-conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
+conda install pytorch torchvision cudatoolkit=10.2 -c pytorch
 
 # Install dependencies
 pip install -r requirements.txt
