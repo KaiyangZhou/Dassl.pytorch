@@ -31,11 +31,13 @@ _C.INPUT.INTERPOLATION = "bilinear"
 _C.INPUT.TRANSFORMS = ()
 # If True, tfm_train and tfm_test will be None
 _C.INPUT.NO_TRANSFORM = False
-# Default mean and std come from ImageNet
+# Mean and std (default: ImageNet)
 _C.INPUT.PIXEL_MEAN = [0.485, 0.456, 0.406]
 _C.INPUT.PIXEL_STD = [0.229, 0.224, 0.225]
-# Padding for random crop
+# Random crop
 _C.INPUT.CROP_PADDING = 4
+# Random resized crop
+_C.INPUT.RRCROP_SCALE = (0.08, 1.0)
 # Cutout
 _C.INPUT.CUTOUT_N = 1
 _C.INPUT.CUTOUT_LEN = 16

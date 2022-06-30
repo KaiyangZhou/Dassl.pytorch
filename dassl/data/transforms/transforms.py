@@ -208,6 +208,7 @@ def _build_transform_train(cfg, choices, target_size, normalize):
     tfm_train = []
 
     interp_mode = INTERPOLATION_MODES[cfg.INPUT.INTERPOLATION]
+    input_size = cfg.INPUT.SIZE
 
     # Make sure the image size matches the target size
     conditions = []
@@ -215,23 +216,22 @@ def _build_transform_train(cfg, choices, target_size, normalize):
     conditions += ["random_resized_crop" not in choices]
     if all(conditions):
         print(f"+ resize to {target_size}")
-        tfm_train += [Resize(cfg.INPUT.SIZE, interpolation=interp_mode)]
+        tfm_train += [Resize(input_size, interpolation=interp_mode)]
 
     if "random_translation" in choices:
         print("+ random translation")
-        tfm_train += [
-            Random2DTranslation(cfg.INPUT.SIZE[0], cfg.INPUT.SIZE[1])
-        ]
+        tfm_train += [Random2DTranslation(input_size[0], input_size[1])]
 
     if "random_crop" in choices:
         crop_padding = cfg.INPUT.CROP_PADDING
         print(f"+ random crop (padding = {crop_padding})")
-        tfm_train += [RandomCrop(cfg.INPUT.SIZE, padding=crop_padding)]
+        tfm_train += [RandomCrop(input_size, padding=crop_padding)]
 
     if "random_resized_crop" in choices:
-        print(f"+ random resized crop (size={cfg.INPUT.SIZE})")
+        print(f"+ random resized crop (size={input_size})")
+        s = cfg.INPUT.RRCROP_SCALE
         tfm_train += [
-            RandomResizedCrop(cfg.INPUT.SIZE, interpolation=interp_mode)
+            RandomResizedCrop(input_size, scale=s, interpolation=interp_mode)
         ]
 
     if "random_flip" in choices:
@@ -283,9 +283,8 @@ def _build_transform_train(cfg, choices, target_size, normalize):
 
     if "gaussian_blur" in choices:
         print(f"+ gaussian blur (kernel={cfg.INPUT.GB_K})")
-        tfm_train += [
-            RandomApply([GaussianBlur(cfg.INPUT.GB_K)], p=cfg.INPUT.GB_P)
-        ]
+        gb_k, gb_p = cfg.INPUT.GB_K, cfg.INPUT.GB_P
+        tfm_train += [RandomApply([GaussianBlur(gb_k)], p=gb_p)]
 
     print("+ to torch tensor of range [0, 1]")
     tfm_train += [ToTensor()]
@@ -322,12 +321,13 @@ def _build_transform_test(cfg, choices, target_size, normalize):
     tfm_test = []
 
     interp_mode = INTERPOLATION_MODES[cfg.INPUT.INTERPOLATION]
+    input_size = cfg.INPUT.SIZE
 
-    print(f"+ resize the smaller edge to {max(cfg.INPUT.SIZE)}")
-    tfm_test += [Resize(max(cfg.INPUT.SIZE), interpolation=interp_mode)]
+    print(f"+ resize the smaller edge to {max(input_size)}")
+    tfm_test += [Resize(max(input_size), interpolation=interp_mode)]
 
     print(f"+ {target_size} center crop")
-    tfm_test += [CenterCrop(cfg.INPUT.SIZE)]
+    tfm_test += [CenterCrop(input_size)]
 
     print("+ to torch tensor of range [0, 1]")
     tfm_test += [ToTensor()]
