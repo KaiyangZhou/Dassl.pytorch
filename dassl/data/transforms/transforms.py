@@ -228,10 +228,10 @@ def _build_transform_train(cfg, choices, target_size, normalize):
         tfm_train += [RandomCrop(input_size, padding=crop_padding)]
 
     if "random_resized_crop" in choices:
-        print(f"+ random resized crop (size={input_size})")
-        s = cfg.INPUT.RRCROP_SCALE
+        s_ = cfg.INPUT.RRCROP_SCALE
+        print(f"+ random resized crop (size={input_size}, scale={s_})")
         tfm_train += [
-            RandomResizedCrop(input_size, scale=s, interpolation=interp_mode)
+            RandomResizedCrop(input_size, scale=s_, interpolation=interp_mode)
         ]
 
     if "random_flip" in choices:
@@ -267,13 +267,20 @@ def _build_transform_train(cfg, choices, target_size, normalize):
         tfm_train += [RandAugment2(n_)]
 
     if "colorjitter" in choices:
-        print("+ color jitter")
+        b_ = cfg.INPUT.COLORJITTER_B
+        c_ = cfg.INPUT.COLORJITTER_C
+        s_ = cfg.INPUT.COLORJITTER_S
+        h_ = cfg.INPUT.COLORJITTER_H
+        print(
+            f"+ color jitter (brightness={b_}, "
+            f"contrast={c_}, saturation={s_}, hue={h_})"
+        )
         tfm_train += [
             ColorJitter(
-                brightness=cfg.INPUT.COLORJITTER_B,
-                contrast=cfg.INPUT.COLORJITTER_C,
-                saturation=cfg.INPUT.COLORJITTER_S,
-                hue=cfg.INPUT.COLORJITTER_H,
+                brightness=b_,
+                contrast=c_,
+                saturation=s_,
+                hue=h_,
             )
         ]
 
