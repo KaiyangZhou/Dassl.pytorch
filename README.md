@@ -131,14 +131,14 @@ git clone https://github.com/KaiyangZhou/Dassl.pytorch.git
 cd Dassl.pytorch/
 
 # Create a conda environment
-conda create -n dassl python=3.7
+conda create -y -n dassl python=3.8
 
 # Activate the environment
 conda activate dassl
 
 # Install torch (requires version >= 1.8.1) and torchvision
 # Please refer to https://pytorch.org/ if you need a different cuda version
-pip install torch==1.8.1+cu101 torchvision==0.9.1+cu101 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
+conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
 
 # Install dependencies
 pip install -r requirements.txt
