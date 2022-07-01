@@ -84,9 +84,9 @@ class Classification(EvaluatorBase):
             "=> result\n"
             f"* total: {self._total:,}\n"
             f"* correct: {self._correct:,}\n"
-            f"* accuracy: {acc:.2f}%\n"
-            f"* error: {err:.2f}%\n"
-            f"* macro_f1: {macro_f1:.2f}%"
+            f"* accuracy: {acc:.1f}%\n"
+            f"* error: {err:.1f}%\n"
+            f"* macro_f1: {macro_f1:.1f}%"
         )
 
         if self._per_class_res is not None:
@@ -104,15 +104,13 @@ class Classification(EvaluatorBase):
                 acc = 100.0 * correct / total
                 accs.append(acc)
                 print(
-                    "* class: {} ({})\t"
-                    "total: {:,}\t"
-                    "correct: {:,}\t"
-                    "acc: {:.2f}%".format(
-                        label, classname, total, correct, acc
-                    )
+                    f"* class: {label} ({classname})\t"
+                    f"total: {total:,}\t"
+                    f"correct: {correct:,}\t"
+                    f"acc: {acc:.1f}%"
                 )
             mean_acc = np.mean(accs)
-            print("* average: {:.2f}%".format(mean_acc))
+            print(f"* average: {mean_acc:.1f}%")
 
             results["perclass_accuracy"] = mean_acc
 
@@ -122,6 +120,6 @@ class Classification(EvaluatorBase):
             )
             save_path = osp.join(self.cfg.OUTPUT_DIR, "cmat.pt")
             torch.save(cmat, save_path)
-            print('Confusion matrix is saved to "{}"'.format(save_path))
+            print(f"Confusion matrix is saved to {save_path}")
 
         return results
