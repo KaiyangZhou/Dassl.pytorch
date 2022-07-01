@@ -210,8 +210,9 @@ _C.TEST.COMPUTE_CMAT = False
 _C.TEST.NO_TEST = False
 # Use test or val set for FINAL evaluation
 _C.TEST.SPLIT = "test"
-# Which model to test after training
-# Either last_step or best_val
+# Which model to test after training (last_step or best_val)
+# If best_val, evaluation is done every epoch (if val data
+# is unavailable, test data will be used)
 _C.TEST.FINAL_MODEL = "last_step"
 
 ###########################
