@@ -102,7 +102,7 @@ def parse_function(*metrics, directory="", args=None, end_signal=None):
         msg = ""
         for key, value in output.items():
             if isinstance(value, float):
-                msg += f"{key}: {value:.2f}%. "
+                msg += f"{key}: {value:.1f}%. "
             else:
                 msg += f"{key}: {value}. "
             if key != "file":
@@ -116,7 +116,7 @@ def parse_function(*metrics, directory="", args=None, end_signal=None):
     for key, values in metrics_results.items():
         avg = np.mean(values)
         std = compute_ci95(values) if args.ci95 else np.std(values)
-        print(f"* {key}: {avg:.2f}% +- {std:.2f}%")
+        print(f"* {key}: {avg:.1f}% +- {std:.1f}%")
         output_results[key] = avg
     print("===")
 
@@ -144,7 +144,7 @@ def main(args, end_signal):
         print("Average performance")
         for key, values in final_results.items():
             avg = np.mean(values)
-            print(f"* {key}: {avg:.2f}%")
+            print(f"* {key}: {avg:.1f}%")
 
     else:
         parse_function(
