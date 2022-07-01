@@ -31,7 +31,7 @@ class WILDSBase(DatasetBase):
                 test = dataset["test"]
         else:
             dataset = wilds_get_dataset(
-                dataset=name, root_dir=root, download=False
+                dataset=name, root_dir=root, download=True
             )
             subset_train = dataset.get_subset("train")
             subset_val = dataset.get_subset("val")
