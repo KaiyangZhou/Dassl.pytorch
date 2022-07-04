@@ -139,7 +139,9 @@ class ResNet(Backbone):
             self.mixstyle = ms_class(p=ms_p, alpha=ms_a)
             for layer_name in ms_layers:
                 assert layer_name in ["layer1", "layer2", "layer3"]
-            print(f"Insert MixStyle after {ms_layers}")
+            print(
+                f"Insert {self.mixstyle.__class__.__name__} after {ms_layers}"
+            )
         self.ms_layers = ms_layers
 
         self._init_params()
