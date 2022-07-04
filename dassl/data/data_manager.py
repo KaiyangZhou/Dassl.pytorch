@@ -18,7 +18,7 @@ def build_data_loader(
     n_ins=2,
     tfm=None,
     is_train=True,
-    dataset_wrapper=None,
+    dataset_wrapper=None
 ):
     # Build sampler
     sampler = build_sampler(
@@ -27,7 +27,7 @@ def build_data_loader(
         data_source=data_source,
         batch_size=batch_size,
         n_domain=n_domain,
-        n_ins=n_ins,
+        n_ins=n_ins
     )
 
     if dataset_wrapper is None:
@@ -40,7 +40,7 @@ def build_data_loader(
         sampler=sampler,
         num_workers=cfg.DATALOADER.NUM_WORKERS,
         drop_last=is_train and len(data_source) >= batch_size,
-        pin_memory=(torch.cuda.is_available() and cfg.USE_CUDA),
+        pin_memory=(torch.cuda.is_available() and cfg.USE_CUDA)
     )
     assert len(data_loader) > 0
 
@@ -82,7 +82,7 @@ class DataManager:
             n_ins=cfg.DATALOADER.TRAIN_X.N_INS,
             tfm=tfm_train,
             is_train=True,
-            dataset_wrapper=dataset_wrapper,
+            dataset_wrapper=dataset_wrapper
         )
 
         # Build train_loader_u
@@ -108,7 +108,7 @@ class DataManager:
                 n_ins=n_ins_,
                 tfm=tfm_train,
                 is_train=True,
-                dataset_wrapper=dataset_wrapper,
+                dataset_wrapper=dataset_wrapper
             )
 
         # Build val_loader
@@ -121,7 +121,7 @@ class DataManager:
                 batch_size=cfg.DATALOADER.TEST.BATCH_SIZE,
                 tfm=tfm_test,
                 is_train=False,
-                dataset_wrapper=dataset_wrapper,
+                dataset_wrapper=dataset_wrapper
             )
 
         # Build test_loader
@@ -132,7 +132,7 @@ class DataManager:
             batch_size=cfg.DATALOADER.TEST.BATCH_SIZE,
             tfm=tfm_test,
             is_train=False,
-            dataset_wrapper=dataset_wrapper,
+            dataset_wrapper=dataset_wrapper
         )
 
         # Attributes
