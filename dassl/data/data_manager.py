@@ -1,5 +1,6 @@
 import torch
 import torchvision.transforms as T
+from tabulate import tabulate
 from torch.utils.data import Dataset as TorchDataset
 
 from dassl.utils import read_image
@@ -163,28 +164,25 @@ class DataManager:
         return self._lab2cname
 
     def show_dataset_summary(self, cfg):
-        print("***** Dataset statistics *****")
+        dataset_name = cfg.DATASET.NAME
+        source_domains = cfg.DATASET.SOURCE_DOMAINS
+        target_domains = cfg.DATASET.TARGET_DOMAINS
 
-        print("  Dataset: {}".format(cfg.DATASET.NAME))
-
-        if cfg.DATASET.SOURCE_DOMAINS:
-            print("  Source domains: {}".format(cfg.DATASET.SOURCE_DOMAINS))
-        if cfg.DATASET.TARGET_DOMAINS:
-            print("  Target domains: {}".format(cfg.DATASET.TARGET_DOMAINS))
-
-        print("  # classes: {:,}".format(self.num_classes))
-
-        print("  # train_x: {:,}".format(len(self.dataset.train_x)))
-
+        table = []
+        table.append(["Dataset", dataset_name])
+        if source_domains:
+            table.append(["Source", source_domains])
+        if target_domains:
+            table.append(["Target", target_domains])
+        table.append(["# classes", f"{self.num_classes:,}"])
+        table.append(["# train_x", f"{len(self.dataset.train_x):,}"])
         if self.dataset.train_u:
-            print("  # train_u: {:,}".format(len(self.dataset.train_u)))
-
+            table.append(["# train_u", f"{len(self.dataset.train_u):,}"])
         if self.dataset.val:
-            print("  # val: {:,}".format(len(self.dataset.val)))
+            table.append(["# val", f"{len(self.dataset.val):,}"])
+        table.append(["# test", f"{len(self.dataset.test):,}"])
 
-        print("  # test: {:,}".format(len(self.dataset.test)))
-
-        print("******************************")
+        print(tabulate(table))
 
 
 class DatasetWrapper(TorchDataset):
