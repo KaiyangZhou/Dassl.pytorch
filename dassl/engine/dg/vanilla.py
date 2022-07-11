@@ -12,14 +12,14 @@ class Vanilla(TrainerX):
     """
 
     def forward_backward(self, batch):
-        input, label = self.parse_batch_train(batch)
+        input, target = self.parse_batch_train(batch)
         output = self.model(input)
-        loss = F.cross_entropy(output, label)
+        loss = F.cross_entropy(output, target)
         self.model_backward_and_update(loss)
 
         loss_summary = {
             "loss": loss.item(),
-            "acc": compute_accuracy(output, label)[0].item(),
+            "acc": compute_accuracy(output, target)[0].item(),
         }
 
         if (self.batch_idx + 1) == self.num_batches:
@@ -29,7 +29,7 @@ class Vanilla(TrainerX):
 
     def parse_batch_train(self, batch):
         input = batch["img"]
-        label = batch["label"]
+        target = batch["label"]
         input = input.to(self.device)
-        label = label.to(self.device)
-        return input, label
+        target = target.to(self.device)
+        return input, target
