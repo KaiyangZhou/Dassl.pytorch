@@ -337,7 +337,7 @@ class SimpleTrainer(TrainerBase):
         """Create essential data-related attributes.
 
         A re-implementation of this method must create the
-        same attributes (except self.dm).
+        same attributes (self.dm is optional).
         """
         dm = DataManager(self.cfg)
 
