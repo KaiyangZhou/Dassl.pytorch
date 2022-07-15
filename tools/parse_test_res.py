@@ -62,6 +62,7 @@ def compute_ci95(res):
 
 
 def parse_function(*metrics, directory="", args=None, end_signal=None):
+    print("===")
     print(f"Parsing files in {directory}")
     subdirs = listdir_nohidden(directory, sort=True)
 
@@ -97,7 +98,6 @@ def parse_function(*metrics, directory="", args=None, end_signal=None):
     assert len(outputs) > 0, f"Nothing found in {directory}"
 
     metrics_results = defaultdict(list)
-
     for output in outputs:
         msg = ""
         for key, value in output.items():
@@ -110,13 +110,10 @@ def parse_function(*metrics, directory="", args=None, end_signal=None):
         print(msg)
 
     output_results = OrderedDict()
-
-    print("===")
-    print(f"Summary of directory: {directory}")
     for key, values in metrics_results.items():
         avg = np.mean(values)
         std = compute_ci95(values) if args.ci95 else np.std(values)
-        print(f"* {key}: {avg:.1f}% +- {std:.1f}%")
+        print(f"* average {key}: {avg:.1f}% +- {std:.1f}%")
         output_results[key] = avg
     print("===")
 
