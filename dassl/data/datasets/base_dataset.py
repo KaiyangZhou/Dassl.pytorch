@@ -91,7 +91,8 @@ class DatasetBase:
     def num_classes(self):
         return self._num_classes
 
-    def get_num_classes(self, data_source):
+    @staticmethod
+    def get_num_classes(data_source):
         """Count number of classes.
 
         Args:
@@ -102,7 +103,8 @@ class DatasetBase:
             label_set.add(item.label)
         return max(label_set) + 1
 
-    def get_lab2cname(self, data_source):
+    @staticmethod
+    def get_lab2cname(data_source):
         """Get a label-to-classname mapping (dict).
 
         Args:
