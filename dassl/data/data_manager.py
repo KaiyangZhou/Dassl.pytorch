@@ -223,7 +223,8 @@ class DatasetWrapper(TorchDataset):
         output = {
             "label": item.label,
             "domain": item.domain,
-            "impath": item.impath
+            "impath": item.impath,
+            "index": idx
         }
 
         img0 = read_image(item.impath)
