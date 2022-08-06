@@ -41,14 +41,6 @@ def save_checkpoint(
         remove_module_from_keys (bool, optional): whether to remove "module."
             from layer names. Default is True.
         model_name (str, optional): model name to save.
-
-    Examples::
-        >>> state = {
-        >>>     'state_dict': model.state_dict(),
-        >>>     'epoch': 10,
-        >>>     'optimizer': optimizer.state_dict()
-        >>> }
-        >>> save_checkpoint(state, 'log/my_model')
     """
     mkdir_if_missing(save_dir)
 
