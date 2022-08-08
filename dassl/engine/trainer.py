@@ -116,7 +116,7 @@ class TrainerBase:
             return names_real
 
     def save_model(
-        self, epoch, directory, is_best=False, result=None, model_name=""
+        self, epoch, directory, is_best=False, val_result=None, model_name=""
     ):
         names = self.get_model_names()
 
@@ -137,7 +137,7 @@ class TrainerBase:
                     "epoch": epoch + 1,
                     "optimizer": optim_dict,
                     "scheduler": sched_dict,
-                    "result": result
+                    "val_result": val_result
                 },
                 osp.join(directory, name),
                 is_best=is_best,
@@ -194,9 +194,9 @@ class TrainerBase:
             checkpoint = load_checkpoint(model_path)
             state_dict = checkpoint["state_dict"]
             epoch = checkpoint["epoch"]
-            result = checkpoint["result"]
+            val_result = checkpoint["val_result"]
             print(
-                f"Load {model_path} to {name} (epoch={epoch}, result={result:.1f})"
+                f"Load {model_path} to {name} (epoch={epoch}, val_result={val_result:.1f})"
             )
             self._models[name].load_state_dict(state_dict)
 
@@ -435,7 +435,7 @@ class SimpleTrainer(TrainerBase):
                 self.save_model(
                     self.epoch,
                     self.output_dir,
-                    result=curr_result,
+                    val_result=curr_result,
                     model_name="model-best.pth.tar"
                 )
 
