@@ -35,7 +35,9 @@ def create_onehot(label, num_classes):
         num_classes (int): number of classes.
     """
     onehot = torch.zeros(label.shape[0], num_classes)
-    return onehot.scatter(1, label.unsqueeze(1).data.cpu(), 1)
+    onehot = onehot.scatter(1, label.unsqueeze(1).data.cpu(), 1)
+    onehot = onehot.to(label.device)
+    return onehot
 
 
 def sigmoid_rampup(current, rampup_length):
