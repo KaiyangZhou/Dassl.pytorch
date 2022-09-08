@@ -267,10 +267,10 @@ We suggest you take a look at the datasets code in some projects like [this](htt
 
 We would like to share here our research relevant to Dassl.
 
+- [Domain Generalization: A Survey](https://arxiv.org/abs/2103.02503), TPAMI, 2022.
 - [Domain Adaptive Ensemble Learning](https://arxiv.org/abs/2003.07325), TIP, 2021.
 - [MixStyle Neural Networks for Domain Generalization and Adaptation](https://arxiv.org/abs/2107.02053), arxiv preprint, 2021.
 - [Semi-Supervised Domain Generalization with Stochastic StyleMatch](https://arxiv.org/abs/2106.00592), arxiv preprint, 2021.
-- [Domain Generalization: A Survey](https://arxiv.org/abs/2103.02503), arxiv preprint, 2021.
 - [Domain Generalization with MixStyle](https://openreview.net/forum?id=6xHJ37MVxxp), in ICLR 2021.
 - [Learning to Generate Novel Domains for Domain Generalization](https://arxiv.org/abs/2007.03304), in ECCV 2020.
 - [Deep Domain-Adversarial Image Generation for Domain Generalisation](https://arxiv.org/abs/2003.06054), in AAAI 2020.
