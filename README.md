@@ -20,20 +20,20 @@ A drawback of Dassl is that it doesn't (yet? hmm) support distributed multi-GPU 
 We don't provide detailed documentations for Dassl, unlike another [project](https://kaiyangzhou.github.io/deep-person-reid/) of ours. This is because Dassl is developed for research purpose and as a researcher, we think it's important to be able to read source code and we highly encourage you to do so---definitely not because we are lazy. :-)
 
 ## What's new
-- **Oct 2022**: New paper "[On-Device Domain Generalization](https://arxiv.org/abs/2209.07521)" is out! Code: https://github.com/KaiyangZhou/on-device-dg
+- **[Oct 2022]** New paper "[On-Device Domain Generalization](https://arxiv.org/abs/2209.07521)" is out! Code: https://github.com/KaiyangZhou/on-device-dg
 
 <details>
     <summary>More</summary>
 
-- **Jun 2022**: `v0.6.0`: Make `cfg.TRAINER.METHOD_NAME` consistent with the method class name.
-- **Jun 2022**: A new domain adaptation method [CDAC (CVPR'21)](https://openaccess.thecvf.com/content/CVPR2021/papers/Li_Cross-Domain_Adaptive_Clustering_for_Semi-Supervised_Domain_Adaptation_CVPR_2021_paper.pdf) is added by [Shreejal Trivedi](https://github.com/shreejalt). See [here](https://github.com/KaiyangZhou/Dassl.pytorch/pull/44) for more details.
-- **Jun 2022**: Adds three datasets from the [WILDS](https://wilds.stanford.edu/) benchmark: iWildCam, FMoW and Camelyon17. See [here](https://github.com/KaiyangZhou/Dassl.pytorch/commit/7f7eab8e22f6e176b97a539100eca12d6a403909) for more details.
-- **May 2022**: A new domain generalization method [DDG](https://arxiv.org/abs/2205.13913) developed by [Zhishu Sun](https://github.com/siaimes) and to appear at IJCAI'22 is added to this repo. See [here](https://github.com/MetaVisionLab/DDG) for more details.
-- **Mar 2022**: A new domain generalization method [EFDM](https://arxiv.org/abs/2203.07740) developed by [Yabin Zhang (PolyU)](https://ybzh.github.io/) and to appear at CVPR'22 is added to this repo. See [here](https://github.com/KaiyangZhou/Dassl.pytorch/pull/36) for more details.
-- **Feb 2022**: In case you don't know, a class in the painting domain of DomainNet (the official splits) only has test images (no training images), which could affect performance. See section 4.a in our [paper](https://arxiv.org/abs/2003.07325) for more details.
-- **Oct 2021**: `v0.5.0`: **Important changes** made to `transforms.py`. 1) `center_crop` becomes a default transform in testing (applied after resizing the smaller edge to a certain size to keep the image aspect ratio). 2) For training, `Resize(cfg.INPUT.SIZE)` is deactivated when `random_crop` or `random_resized_crop` is used. These changes won't make any difference to the training transforms used in existing config files, nor to the testing transforms unless the raw images are not squared (the only difference is that now the image aspect ratio is respected).
-- **Oct 2021**: `v0.4.3`: Copy the attributes in `self.dm` (data manager) to `SimpleTrainer` and make `self.dm` optional, which means from now on, you can build data loaders from any source you like rather than being forced to use `DataManager`.
-- **Sep 2021**: `v0.4.2`: An important update is to set `drop_last=is_train and len(data_source)>=batch_size` when constructing a data loader to avoid 0-length.
+- **[Jun 2022]** `v0.6.0`: Make `cfg.TRAINER.METHOD_NAME` consistent with the method class name.
+- **[Jun 2022]** A new domain adaptation method [CDAC (CVPR'21)](https://openaccess.thecvf.com/content/CVPR2021/papers/Li_Cross-Domain_Adaptive_Clustering_for_Semi-Supervised_Domain_Adaptation_CVPR_2021_paper.pdf) is added by [Shreejal Trivedi](https://github.com/shreejalt). See [here](https://github.com/KaiyangZhou/Dassl.pytorch/pull/44) for more details.
+- **[Jun 2022]** Adds three datasets from the [WILDS](https://wilds.stanford.edu/) benchmark: iWildCam, FMoW and Camelyon17. See [here](https://github.com/KaiyangZhou/Dassl.pytorch/commit/7f7eab8e22f6e176b97a539100eca12d6a403909) for more details.
+- **[May 2022]** A new domain generalization method [DDG](https://arxiv.org/abs/2205.13913) developed by [Zhishu Sun](https://github.com/siaimes) and to appear at IJCAI'22 is added to this repo. See [here](https://github.com/MetaVisionLab/DDG) for more details.
+- **[Mar 2022]** A new domain generalization method [EFDM](https://arxiv.org/abs/2203.07740) developed by [Yabin Zhang (PolyU)](https://ybzh.github.io/) and to appear at CVPR'22 is added to this repo. See [here](https://github.com/KaiyangZhou/Dassl.pytorch/pull/36) for more details.
+- **[Feb 2022]** In case you don't know, a class in the painting domain of DomainNet (the official splits) only has test images (no training images), which could affect performance. See section 4.a in our [paper](https://arxiv.org/abs/2003.07325) for more details.
+- **[Oct 2021]** `v0.5.0`: **Important changes** made to `transforms.py`. 1) `center_crop` becomes a default transform in testing (applied after resizing the smaller edge to a certain size to keep the image aspect ratio). 2) For training, `Resize(cfg.INPUT.SIZE)` is deactivated when `random_crop` or `random_resized_crop` is used. These changes won't make any difference to the training transforms used in existing config files, nor to the testing transforms unless the raw images are not squared (the only difference is that now the image aspect ratio is respected).
+- **[Oct 2021]** `v0.4.3`: Copy the attributes in `self.dm` (data manager) to `SimpleTrainer` and make `self.dm` optional, which means from now on, you can build data loaders from any source you like rather than being forced to use `DataManager`.
+- **[Sep 2021]** `v0.4.2`: An important update is to set `drop_last=is_train and len(data_source)>=batch_size` when constructing a data loader to avoid 0-length.
 
 </details>
 
