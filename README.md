@@ -20,6 +20,7 @@ A drawback of Dassl is that it doesn't (yet? hmm) support distributed multi-GPU 
 We don't provide detailed documentations for Dassl, unlike another [project](https://kaiyangzhou.github.io/deep-person-reid/) of ours. This is because Dassl is developed for research purpose and as a researcher, we think it's important to be able to read source code and we highly encourage you to do so---definitely not because we are lazy. :-)
 
 ## What's new
+- **[Oct 2023]** A new domain generalization method "[Parameter Exchange for Robust Dynamic Domain Generalization](https://dl.acm.org/doi/10.1145/3581783.3612318)" based on [DDG](https://arxiv.org/abs/2205.13913) in ACM MM'23 is added to this repo. See [here](https://github.com/MetaVisionLab/PE) for more details.
 - **[Oct 2022]** New paper "[On-Device Domain Generalization](https://arxiv.org/abs/2209.07521)" is out! Code, models and datasets: https://github.com/KaiyangZhou/on-device-dg.
 
 <details>
@@ -55,6 +56,7 @@ Dassl has implemented the following methods:
     - [Moment Matching for Multi-Source Domain Adaptation (ICCV'19)](https://arxiv.org/abs/1812.01754) [[dassl/engine/da/m3sda.py](dassl/engine/da/m3sda.py)]
 
 - Domain generalization
+    - [Parameter Exchange for Robust Dynamic Domain Generalization (ACM MM'23)](https://dl.acm.org/doi/10.1145/3581783.3612318) [[dassl/engine/dg/robust_ddg.py](dassl/engine/dg/robust_ddg.py)]
     - [Dynamic Domain Generalization (IJCAI'22)](https://arxiv.org/abs/2205.13913) [[dassl/modeling/backbone/resnet_dynamic.py](dassl/modeling/backbone/resnet_dynamic.py)] [[dassl/engine/dg/domain_mix.py](dassl/engine/dg/domain_mix.py)]
     - [Exact Feature Distribution Matching for Arbitrary Style Transfer and Domain Generalization (CVPR'22)](https://arxiv.org/abs/2203.07740) [[dassl/modeling/ops/efdmix.py](dassl/modeling/ops/efdmix.py)]
     - [Domain Generalization with MixStyle (ICLR'21)](https://openreview.net/forum?id=6xHJ37MVxxp) [[dassl/modeling/ops/mixstyle.py](dassl/modeling/ops/mixstyle.py)]
